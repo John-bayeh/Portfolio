@@ -119,7 +119,7 @@ export default function Projects() {
             <span className="text-white">MY </span>
             <span className="text-gold">WORK</span>
           </h2>
-          <p className="mt-2 text-sm text-white/55">Seven shipped products.</p>
+          <p className="mt-2 text-sm text-white/55">Eight shipped products.</p>
         </div>
 
         {/* Vertical list container with Framer Motion stagger */}

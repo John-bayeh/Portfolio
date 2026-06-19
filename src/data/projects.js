@@ -72,6 +72,16 @@ const projects = [
     live: null,
     screenshot: "/screenshots/project-07.png",
   },
+  {
+    number: "08",
+    name: "Hotel Master",
+    description: "Premium hotel services showcase and booking system.",
+    tech: ["React", "Node.js", "Tailwind CSS"],
+    year: "2024",
+    github: "https://github.com/John-bayeh/Hotel_Master",
+    live: "https://hotel-master-qfcz78r5v-john-bayehs-projects.vercel.app/#ReactJS",
+    screenshot: "/screenshots/project-08.png",
+  },
 ];
 
 export default projects;
