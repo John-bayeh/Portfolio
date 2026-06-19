@@ -80,7 +80,7 @@ const projects = [
     year: "2024",
     github: "https://github.com/John-bayeh/Hotel_Master",
     live: "https://hotel-master-qfcz78r5v-john-bayehs-projects.vercel.app/#ReactJS",
-    screenshot: "/screenshots/project-08.png",
+    screenshot: "/screenshots/Hotel_Master.png",
   },
 ];
 
