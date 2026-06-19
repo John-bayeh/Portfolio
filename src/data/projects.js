@@ -10,6 +10,7 @@ const projects = [
     github:
       "https://github.com/askualalink/AskualaLink-HR-Recruitment-System-front",
     live: null,
+    screenshot: "/screenshots/project-01.png",
   },
   {
     number: "02",
@@ -19,6 +20,7 @@ const projects = [
     year: "2024",
     github: "https://github.com/John-bayeh/BDU-Clearance_System",
     live: null,
+    screenshot: "/screenshots/project-02.png",
   },
   {
     number: "03",
@@ -28,6 +30,7 @@ const projects = [
     year: "2024",
     github: "https://github.com/John-bayeh/Hotelwebsite",
     live: null,
+    screenshot: "/screenshots/project-03.png",
   },
   {
     number: "04",
@@ -37,6 +40,7 @@ const projects = [
     year: "2024",
     github: "https://github.com/John-bayeh/Telegram_Award_Website",
     live: null,
+    screenshot: "/screenshots/project-04.png",
   },
   {
     number: "05",
@@ -46,6 +50,7 @@ const projects = [
     year: "2024",
     github: "https://github.com/John-bayeh/Todoappnew",
     live: null,
+    screenshot: "/screenshots/project-05.png",
   },
   {
     number: "06",
@@ -55,6 +60,7 @@ const projects = [
     year: "2025",
     github: "https://github.com/John-bayeh/hr-assistant",
     live: "https://hr-assistant-o1ktjq8e8-john-bayehs-projects.vercel.app",
+    screenshot: "/screenshots/project-06.png",
   },
   {
     number: "07",
@@ -64,6 +70,7 @@ const projects = [
     year: "2025",
     github: "https://github.com/askualalink/formula_mgmt",
     live: null,
+    screenshot: "/screenshots/project-07.png",
   },
 ];
 

@@ -1,137 +1,139 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 
-function ProjectCard({ project }) {
-  const { number, name, description, tech, year, github, live } = project;
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const rowVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
+function ProjectRow({ project }) {
+  const { number, name, tech, year, github, live, screenshot } = project;
+  const [imageError, setImageError] = useState(false);
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      whileHover={{ y: -8 }}
-      transition={{ type: "spring", stiffness: 200, damping: 22 }}
-      className="group relative flex h-[420px] w-[300px] shrink-0 snap-center flex-col justify-between overflow-hidden rounded-2xl border border-line bg-card p-7 transition-colors duration-300 hover:border-gold/60 sm:w-[360px]"
+    <motion.div
+      variants={rowVariants}
+      className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-line bg-card p-4 sm:p-5 transition-all duration-300 border-l-4 border-l-transparent hover:border-l-gold hover:border-gold/30 hover:-translate-y-1 hover:shadow-lg"
     >
-      {/* Clip-path gold reveal on hover */}
-      <div className="card-reveal pointer-events-none absolute inset-0 bg-gradient-to-br from-gold/[0.10] to-transparent" />
-
-      {/* Top row: number + year */}
-      <div className="relative flex items-start justify-between">
-        <span className="font-display text-5xl font-semibold text-white/10 transition-colors duration-300 group-hover:text-gold/30">
-          {number}
-        </span>
-        <span className="text-xs font-medium uppercase tracking-widest text-muted">
-          {year}
-        </span>
-      </div>
-
-      {/* Middle: name + description */}
-      <div className="relative">
-        <h3 className="font-display text-2xl font-semibold text-white">
-          {name}
-        </h3>
-        <p className="mt-3 text-sm leading-relaxed text-white/55">
-          {description}
-        </p>
-
-        {/* Tech badge pills */}
-        <div className="mt-5 flex flex-wrap gap-2">
-          {tech.map((t) => (
-            <span
-              key={t}
-              className="rounded-full border border-line bg-bg/60 px-3 py-1 text-[11px] font-medium text-white/70"
-            >
-              {t}
+      <div className="flex items-center gap-4 flex-1">
+        {/* Left side: Thumbnail */}
+        <div className="relative w-[80px] h-[60px] shrink-0 overflow-hidden rounded-lg border border-line bg-[#111111] flex items-center justify-center">
+          {!imageError && screenshot ? (
+            <img
+              src={screenshot}
+              alt={name}
+              onError={() => setImageError(true)}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <span className="font-mono text-lg font-semibold text-gold transition-transform duration-300 group-hover:scale-105">
+              {number}
             </span>
-          ))}
+          )}
+        </div>
+
+        {/* Middle: Number, Name, Tech stack */}
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs font-semibold text-gold">{number}</span>
+            <h3 className="font-display text-lg font-semibold text-white transition-colors duration-300 group-hover:text-gold">
+              {name}
+            </h3>
+          </div>
+          <p className="text-xs text-white/50">
+            {tech.join(" • ")}
+          </p>
         </div>
       </div>
 
-      {/* Bottom: links */}
-      <div className="relative flex items-center gap-3">
-        <a
-          href={github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 rounded-full border border-line px-4 py-2 text-xs font-medium text-white transition-colors hover:border-gold hover:text-gold"
-        >
-          <GithubIcon size={14} /> Code
-        </a>
-        {live && (
+      {/* Right side: Year, Github, Live demo */}
+      <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto border-t border-line/50 pt-3 sm:pt-0 sm:border-0">
+        <span className="text-sm font-medium text-white/40">{year}</span>
+        <div className="flex items-center gap-2">
+          {/* GitHub icon button */}
           <a
-            href={live}
+            href={github}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-xs font-semibold text-bg transition-transform hover:scale-105"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-white transition-colors hover:border-gold hover:text-gold"
+            aria-label="View Source Code"
           >
-            Live <ArrowUpRight size={14} />
+            <GithubIcon size={16} />
           </a>
-        )}
+          
+          {/* Live arrow button */}
+          {live ? (
+            <a
+              href={live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-white transition-colors hover:border-gold hover:text-gold"
+              aria-label="View Live Site"
+            >
+              <ArrowUpRight size={16} />
+            </a>
+          ) : (
+            <button
+              disabled
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted cursor-not-allowed"
+              aria-label="Live Site Not Available"
+            >
+              <ArrowUpRight size={16} />
+            </button>
+          )}
+        </div>
       </div>
-    </motion.article>
+    </motion.div>
   );
 }
 
 export default function Projects() {
-  const scrollerRef = useRef(null);
-
-  const scrollBy = (dir) => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * 380, behavior: "smooth" });
-  };
-
   return (
     <section id="projects" className="px-6 py-24 sm:px-10">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
-        <div className="mb-10 flex items-end justify-between gap-4">
-          <div>
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-gold">
-              Selected Work
-            </p>
-            <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-              <span className="text-white">MY </span>
-              <span className="text-gold">WORK</span>
-            </h2>
-          </div>
-
-          {/* Scroll arrows */}
-          <div className="hidden gap-2 sm:flex">
-            <button
-              type="button"
-              aria-label="Scroll left"
-              onClick={() => scrollBy(-1)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-white transition-colors hover:border-gold hover:text-gold"
-            >
-              <ArrowLeft size={16} />
-            </button>
-            <button
-              type="button"
-              aria-label="Scroll right"
-              onClick={() => scrollBy(1)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-white transition-colors hover:border-gold hover:text-gold"
-            >
-              <ArrowRight size={16} />
-            </button>
-          </div>
+        <div className="mb-10">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-gold">
+            Selected Work
+          </p>
+          <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+            <span className="text-white">MY </span>
+            <span className="text-gold">WORK</span>
+          </h2>
+          <p className="mt-2 text-sm text-white/55">Seven shipped products.</p>
         </div>
-      </div>
 
-      {/* Horizontal scroll-snap container */}
-      <div
-        ref={scrollerRef}
-        className="no-scrollbar flex snap-x snap-mandatory gap-6 overflow-x-auto px-6 pb-4 sm:px-10"
-      >
-        {projects.map((p) => (
-          <ProjectCard key={p.number} project={p} />
-        ))}
-        {/* trailing spacer so the last card can center-snap */}
-        <div className="w-2 shrink-0" aria-hidden="true" />
+        {/* Vertical list container with Framer Motion stagger */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          className="flex flex-col gap-4"
+        >
+          {projects.map((p) => (
+            <ProjectRow key={p.number} project={p} />
+          ))}
+        </motion.div>
       </div>
     </section>
   );
