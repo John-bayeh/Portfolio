@@ -168,7 +168,7 @@ export default function Hero() {
             className="absolute -right-2 bottom-8 rounded-xl border border-line bg-card/90 px-4 py-3 text-right backdrop-blur-sm sm:-right-4"
           >
             <div className="font-display text-2xl font-semibold text-gold">
-              7
+              8
             </div>
             <div className="text-[10px] uppercase tracking-widest text-white/60">
               Projects Shipped
