@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ArrowUpRight, CheckCircle2, X as XClose } from "lucide-react";
-import { GithubIcon, LinkedinIcon, XIcon } from "./BrandIcons";
+import { GithubIcon, LinkedinIcon, XIcon, WhatsAppIcon } from "./BrandIcons";
 
 const EMAIL = "yohannesbayeh41@gmail.com";
 const GITHUB = "https://github.com/John-bayeh";
 const LINKEDIN = "https://www.linkedin.com/in/yohannes-bayeh-b5bb47328";
 const X = "https://x.com/Yohannes_Bayeh";
+const WHATSAPP = "https://wa.me/251963293185";
 
 // Formspree endpoint — submissions are delivered to the form's notification email.
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrewbjgq";
 
 const cards = [
+  {
+    label: "WhatsApp",
+    value: "+251 96 329 3185",
+    href: WHATSAPP,
+    Icon: WhatsAppIcon,
+    external: true,
+  },
   {
     label: "Email",
     value: EMAIL,
