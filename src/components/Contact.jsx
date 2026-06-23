@@ -1,11 +1,15 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, ArrowUpRight } from "lucide-react";
-import { GithubIcon, LinkedinIcon } from "./BrandIcons";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, ArrowUpRight, CheckCircle2, X as XClose } from "lucide-react";
+import { GithubIcon, LinkedinIcon, XIcon } from "./BrandIcons";
 
 const EMAIL = "yohannesbayeh41@gmail.com";
 const GITHUB = "https://github.com/John-bayeh";
 const LINKEDIN = "https://www.linkedin.com/in/yohannes-bayeh-b5bb47328";
+const X = "https://x.com/Yohannes_Bayeh";
+
+// Formspree endpoint — submissions are delivered to the form's notification email.
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrewbjgq";
 
 const cards = [
   {
@@ -27,6 +31,13 @@ const cards = [
     value: "Yohannes Bayeh",
     href: LINKEDIN,
     Icon: LinkedinIcon,
+    external: true,
+  },
+  {
+    label: "X",
+    value: "@Yohannes_Bayeh",
+    href: X,
+    Icon: XIcon,
     external: true,
   },
 ];
@@ -61,23 +72,94 @@ function Field({ label, type = "text", name, textarea = false }) {
 }
 
 export default function Contact() {
-  const [sent, setSent] = useState(false);
+  // "idle" | "sending" | "sent" | "error"
+  const [status, setStatus] = useState("idle");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = encodeURIComponent(data.get("name") || "");
-    const message = encodeURIComponent(data.get("message") || "");
-    const from = data.get("email") || "";
-    // Open the user's mail client pre-filled.
-    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(
-      `Portfolio enquiry from ${decodeURIComponent(name)}`
-    )}&body=${message}%0A%0AReply to: ${from}`;
-    setSent(true);
+    const form = e.currentTarget;
+    setStatus("sending");
+
+    const data = new FormData(form);
+    const senderName = (data.get("name") || "Someone").toString().trim();
+
+    // Send only the essentials, nicely labelled, plus Formspree control fields
+    // (_subject, _replyto) so the email lands clean and is reply-able.
+    const payload = new FormData();
+    payload.append("Name", senderName);
+    payload.append("Email", data.get("email") || "");
+    payload.append("Message", data.get("message") || "");
+    payload.append(
+      "Submitted",
+      new Date().toLocaleString("en-GB", {
+        dateStyle: "long",
+        timeStyle: "short",
+      })
+    );
+    payload.append("_subject", `New portfolio message from ${senderName}`);
+    payload.append("_replyto", data.get("email") || "");
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: payload,
+      });
+
+      if (res.ok) {
+        setStatus("sent");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   };
+
+  const buttonLabel = {
+    idle: "Send Message",
+    sending: "Sending…",
+    sent: "Message sent ✓",
+    error: "Try again",
+  }[status];
+
+  // Auto-dismiss the success toast after a few seconds.
+  useEffect(() => {
+    if (status !== "sent") return;
+    const timer = setTimeout(() => setStatus("idle"), 4000);
+    return () => clearTimeout(timer);
+  }, [status]);
 
   return (
     <section id="contact" className="px-6 pb-10 pt-24 sm:px-10">
+      {/* Top-center success toast — auto-dismisses */}
+      <AnimatePresence>
+        {status === "sent" && (
+          <motion.div
+            initial={{ opacity: 0, y: -24 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -24 }}
+            transition={{ type: "spring", stiffness: 400, damping: 28 }}
+            className="fixed left-1/2 top-6 z-[9999] flex -translate-x-1/2 items-center gap-3 rounded-full border border-green-500/30 bg-card/95 px-5 py-3 shadow-lg backdrop-blur-md"
+            role="status"
+          >
+            <CheckCircle2 size={18} className="shrink-0 text-green-400" />
+            <span className="text-sm text-white">
+              Message sent — I'll get back to you soon.
+            </span>
+            <button
+              type="button"
+              onClick={() => setStatus("idle")}
+              aria-label="Dismiss"
+              className="ml-1 text-muted transition-colors hover:text-white"
+            >
+              <XClose size={16} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="mx-auto max-w-6xl">
         {/* Available badge */}
         <motion.div
@@ -121,12 +203,24 @@ export default function Contact() {
 
             <motion.button
               type="submit"
+              disabled={status === "sending"}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-sm font-semibold text-bg"
+              className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-sm font-semibold text-bg disabled:opacity-60"
             >
-              {sent ? "Opening mail…" : "Send Message"} <ArrowUpRight size={16} />
+              {buttonLabel} <ArrowUpRight size={16} />
             </motion.button>
+
+            {/* Error fallback (success is shown as a top toast) */}
+            {status === "error" && (
+              <p className="text-sm text-red-400">
+                Something went wrong. Please email me directly at{" "}
+                <a href={`mailto:${EMAIL}`} className="underline">
+                  {EMAIL}
+                </a>
+                .
+              </p>
+            )}
           </motion.form>
 
           {/* Contact cards */}
