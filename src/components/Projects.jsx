@@ -26,7 +26,8 @@ const rowVariants = {
 };
 
 function ProjectRow({ project }) {
-  const { number, name, tech, year, github, live, screenshot } = project;
+  const { number, name, description, tech, year, github, live, screenshot } =
+    project;
   const [imageError, setImageError] = useState(false);
 
   return (
@@ -59,6 +60,7 @@ function ProjectRow({ project }) {
               {name}
             </h3>
           </div>
+          <p className="text-xs text-white/40">{description}</p>
           <p className="text-xs text-white/50">
             {tech.join(" • ")}
           </p>
