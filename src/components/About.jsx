@@ -71,7 +71,7 @@ export default function About() {
               <span className="text-gold">web</span>.
             </h2>
             <p className="mt-6 max-w-md text-base leading-relaxed text-white/60">
-              I'm Yohannes Bayeh, a frontend developer from Addis Ababa,
+              I'm Yohannes Bayeh, a frontend developer from Bahir Dar,
               Ethiopia. I turn ideas into fast, accessible, and polished web
               experiences — pairing solid engineering with an eye for detail. I
               love shipping products that people actually enjoy using.

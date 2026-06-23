@@ -119,7 +119,7 @@ export default function Hero() {
             <span className="text-white">
               <AnimatedName text="Yohannes Bayeh" />
             </span>
-            , a frontend developer based in Addis Ababa, Ethiopia — crafting fast,
+            , a frontend developer based in Bahir Dar, Ethiopia — crafting fast,
             polished interfaces that feel as good as they look.
           </p>
 
@@ -190,7 +190,7 @@ export default function Hero() {
             "REACT",
             "NEXT.JS",
             "UI ENGINEERING",
-            "ADDIS ABABA",
+            "BAHIR DAR",
             "AVAILABLE FOR WORK",
           ]}
           className="text-sm font-medium uppercase tracking-[0.2em] text-white/50"
