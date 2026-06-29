@@ -2,18 +2,21 @@ import { useState } from "react";
 import { Link } from "react-scroll";
 import { motion } from "framer-motion";
 import { Home, FolderGit2, User, Mail } from "lucide-react";
-
-// macOS-style dock items. `to` matches each section's id.
-const items = [
-  { id: "home", label: "Home", Icon: Home },
-  { id: "projects", label: "Projects", Icon: FolderGit2 },
-  { id: "about", label: "About", Icon: User },
-  { id: "contact", label: "Contact", Icon: Mail },
-];
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Dock() {
   const [active, setActive] = useState("home");
   const [hovered, setHovered] = useState(null);
+  const { t } = useLanguage();
+  const nav = t.nav;
+
+  // macOS-style dock items. `to` matches each section's id.
+  const items = [
+    { id: "home", label: nav.home, Icon: Home },
+    { id: "projects", label: nav.projects, Icon: FolderGit2 },
+    { id: "about", label: nav.about, Icon: User },
+    { id: "contact", label: nav.contact, Icon: Mail },
+  ];
 
   return (
     <nav className="fixed bottom-6 left-1/2 z-[9000] -translate-x-1/2">

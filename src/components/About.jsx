@@ -4,46 +4,55 @@ import { Link } from "react-scroll";
 import { ArrowUpRight } from "lucide-react";
 import Marquee from "./Marquee";
 import skills from "../data/skills";
-
-const steps = [
-  { n: "01", label: "SCOPE", desc: "Understand the problem & define the goal." },
-  { n: "02", label: "DESIGN", desc: "Wireframe the flow and the interface." },
-  { n: "03", label: "BUILD", desc: "Write clean, component-driven code." },
-  { n: "04", label: "TEST", desc: "Verify behaviour across devices." },
-  { n: "05", label: "SHIP", desc: "Deploy and iterate on feedback." },
-];
-
-function PhotoBlob() {
-  const [errored, setErrored] = useState(false);
-  return (
-    <div className="relative mx-auto aspect-[4/5] w-[240px] sm:w-[280px]">
-      <div className="absolute inset-0 -z-10 scale-110 rounded-[58%_42%_40%_60%/55%_45%_55%_45%] bg-gold/10 blur-2xl" />
-      <div className="h-full w-full overflow-hidden rounded-[58%_42%_40%_60%/55%_45%_55%_45%] border border-line bg-card">
-        {!errored ? (
-          <img
-            src="/yohannes.png"
-            alt="Yohannes Bayeh"
-            onError={() => setErrored(true)}
-            className="h-full w-full object-cover object-top"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-card">
-            <span className="font-display text-6xl font-semibold text-gold">
-              YB
-            </span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
+import { useLanguage } from "../context/LanguageContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0 },
 };
 
+function PhotoBlob() {
+  const [errored, setErrored] = useState(false);
+  return (
+    <div className="relative mx-auto w-[320px] max-w-full">
+      {!errored ? (
+        <img
+          src="/yohannes2.png"
+          alt="Yohannes Bayeh"
+          onError={() => setErrored(true)}
+          style={{
+            width: '100%',
+            height: '420px',
+            objectFit: 'cover',
+            objectPosition: 'center top',
+            borderRadius: '12px',
+            border: 'var(--photo-border, 2px solid #C9A84C)',
+            boxShadow: 'var(--photo-shadow, 0 0 40px rgba(201, 168, 76, 0.25))',
+            display: 'block'
+          }}
+        />
+      ) : (
+        <div 
+          className="flex h-[420px] w-full items-center justify-center bg-card"
+          style={{
+            borderRadius: '12px',
+            border: 'var(--photo-border, 2px solid #C9A84C)',
+            boxShadow: 'var(--photo-shadow, 0 0 40px rgba(201, 168, 76, 0.25))',
+          }}
+        >
+          <span className="font-display text-6xl font-semibold text-gold">
+            YB
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function About() {
+  const { t } = useLanguage();
+  const a = t.about;
+
   return (
     <section id="about" className="px-6 py-24 sm:px-10">
       <div className="mx-auto max-w-6xl">
@@ -53,7 +62,7 @@ export default function About() {
           viewport={{ once: true }}
           className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-gold"
         >
-          About Me
+          {a.sectionLabel}
         </motion.p>
 
         {/* Two-column layout */}
@@ -67,14 +76,11 @@ export default function About() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
-              Designing & building for the{" "}
-              <span className="text-gold">web</span>.
+              {a.heading}{" "}
+              <span className="text-gold">{a.headingAccent}</span>.
             </h2>
             <p className="mt-6 max-w-md text-base leading-relaxed text-white/60">
-              I'm Yohannes Bayeh, a frontend developer from Bahir Dar,
-              Ethiopia. I turn ideas into fast, accessible, and polished web
-              experiences — pairing solid engineering with an eye for detail. I
-              love shipping products that people actually enjoy using.
+              {a.bio}
             </p>
 
             <Link to="contact" smooth duration={600} offset={-20}>
@@ -83,17 +89,17 @@ export default function About() {
                 whileTap={{ scale: 0.97 }}
                 className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-gold hover:text-gold"
               >
-                Let's work together <ArrowUpRight size={16} />
+                {a.cta} <ArrowUpRight size={16} />
               </motion.button>
             </Link>
 
             {/* Process timeline */}
             <div className="mt-12">
               <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-muted">
-                My Process
+                {a.processLabel}
               </p>
               <ol className="relative border-l border-line">
-                {steps.map((s) => (
+                {a.steps.map((s) => (
                   <li key={s.n} className="mb-7 ml-6 last:mb-0">
                     <span className="absolute -left-[7px] mt-1.5 h-3 w-3 rounded-full border border-gold bg-bg" />
                     <div className="flex items-baseline gap-3">
@@ -127,7 +133,7 @@ export default function About() {
                 2+
               </div>
               <div className="text-[10px] uppercase tracking-widest text-white/60">
-                Years Experience
+                {a.yearsExp}
               </div>
             </div>
 
@@ -136,7 +142,7 @@ export default function About() {
                 8
               </div>
               <div className="text-[10px] uppercase tracking-widest text-white/60">
-                Projects Shipped
+                {a.projectsShipped}
               </div>
             </div>
           </motion.div>

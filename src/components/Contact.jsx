@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ArrowUpRight, CheckCircle2, X as XClose } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XIcon, WhatsAppIcon } from "./BrandIcons";
+import { useLanguage } from "../context/LanguageContext";
 
 const EMAIL = "yohannesbayeh41@gmail.com";
 const GITHUB = "https://github.com/John-bayeh";
@@ -11,44 +12,6 @@ const WHATSAPP = "https://wa.me/251963293185";
 
 // Formspree endpoint — submissions are delivered to the form's notification email.
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrewbjgq";
-
-const cards = [
-  {
-    label: "WhatsApp",
-    value: "+251 96 329 3185",
-    href: WHATSAPP,
-    Icon: WhatsAppIcon,
-    external: true,
-  },
-  {
-    label: "Email",
-    value: EMAIL,
-    href: `mailto:${EMAIL}`,
-    Icon: Mail,
-    external: false,
-  },
-  {
-    label: "GitHub",
-    value: "John-bayeh",
-    href: GITHUB,
-    Icon: GithubIcon,
-    external: true,
-  },
-  {
-    label: "LinkedIn",
-    value: "Yohannes Bayeh",
-    href: LINKEDIN,
-    Icon: LinkedinIcon,
-    external: true,
-  },
-  {
-    label: "X",
-    value: "@Yohannes_Bayeh",
-    href: X,
-    Icon: XIcon,
-    external: true,
-  },
-];
 
 function Field({ label, type = "text", name, textarea = false }) {
   const base =
@@ -63,7 +26,7 @@ function Field({ label, type = "text", name, textarea = false }) {
           name={name}
           rows={3}
           required
-          placeholder={`Your ${label.toLowerCase()}...`}
+          placeholder={`${label}...`}
           className={`${base} resize-none`}
         />
       ) : (
@@ -71,7 +34,7 @@ function Field({ label, type = "text", name, textarea = false }) {
           type={type}
           name={name}
           required
-          placeholder={`Your ${label.toLowerCase()}...`}
+          placeholder={`${label}...`}
           className={base}
         />
       )}
@@ -80,8 +43,49 @@ function Field({ label, type = "text", name, textarea = false }) {
 }
 
 export default function Contact() {
+  const { t } = useLanguage();
+  const c = t.contact;
+
   // "idle" | "sending" | "sent" | "error"
   const [status, setStatus] = useState("idle");
+
+  const cards = [
+    {
+      label: "WhatsApp",
+      value: "+251 96 329 3185",
+      href: WHATSAPP,
+      Icon: WhatsAppIcon,
+      external: true,
+    },
+    {
+      label: "Email",
+      value: EMAIL,
+      href: `mailto:${EMAIL}`,
+      Icon: Mail,
+      external: false,
+    },
+    {
+      label: "GitHub",
+      value: "John-bayeh",
+      href: GITHUB,
+      Icon: GithubIcon,
+      external: true,
+    },
+    {
+      label: "LinkedIn",
+      value: "Yohannes Bayeh",
+      href: LINKEDIN,
+      Icon: LinkedinIcon,
+      external: true,
+    },
+    {
+      label: "X",
+      value: "@Yohannes_Bayeh",
+      href: X,
+      Icon: XIcon,
+      external: true,
+    },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,8 +95,6 @@ export default function Contact() {
     const data = new FormData(form);
     const senderName = (data.get("name") || "Someone").toString().trim();
 
-    // Send only the essentials, nicely labelled, plus Formspree control fields
-    // (_subject, _replyto) so the email lands clean and is reply-able.
     const payload = new FormData();
     payload.append("Name", senderName);
     payload.append("Email", data.get("email") || "");
@@ -126,10 +128,10 @@ export default function Contact() {
   };
 
   const buttonLabel = {
-    idle: "Send Message",
-    sending: "Sending…",
-    sent: "Message sent ✓",
-    error: "Try again",
+    idle: c.send,
+    sending: c.sending,
+    sent: c.sent,
+    error: c.tryAgain,
   }[status];
 
   // Auto-dismiss the success toast after a few seconds.
@@ -153,9 +155,7 @@ export default function Contact() {
             role="status"
           >
             <CheckCircle2 size={18} className="shrink-0 text-green-400" />
-            <span className="text-sm text-white">
-              Message sent — I'll get back to you soon.
-            </span>
+            <span className="text-sm text-white">{c.successToast}</span>
             <button
               type="button"
               onClick={() => setStatus("idle")}
@@ -180,7 +180,7 @@ export default function Contact() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
           </span>
-          Currently available
+          {c.available}
         </motion.div>
 
         {/* Heading */}
@@ -191,8 +191,8 @@ export default function Contact() {
           transition={{ duration: 0.6 }}
           className="font-display text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl"
         >
-          <span className="block">LET'S BUILD</span>
-          <span className="block text-gold">SOMETHING.</span>
+          <span className="block">{c.heading1}</span>
+          <span className="block text-gold">{c.heading2}</span>
         </motion.h2>
 
         <div className="mt-14 grid grid-cols-1 gap-14 lg:grid-cols-2">
@@ -205,9 +205,9 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
-            <Field label="Name" name="name" />
-            <Field label="Email" name="email" type="email" />
-            <Field label="Message" name="message" textarea />
+            <Field label={c.fieldName} name="name" />
+            <Field label={c.fieldEmail} name="email" type="email" />
+            <Field label={c.fieldMessage} name="message" textarea />
 
             <motion.button
               type="submit"
@@ -219,10 +219,10 @@ export default function Contact() {
               {buttonLabel} <ArrowUpRight size={16} />
             </motion.button>
 
-            {/* Error fallback (success is shown as a top toast) */}
+            {/* Error fallback */}
             {status === "error" && (
               <p className="text-sm text-red-400">
-                Something went wrong. Please email me directly at{" "}
+                {c.errorMsg}{" "}
                 <a href={`mailto:${EMAIL}`} className="underline">
                   {EMAIL}
                 </a>
@@ -270,8 +270,8 @@ export default function Contact() {
 
         {/* Footer */}
         <footer className="mt-24 border-t border-line pt-8 text-center text-xs text-muted">
-          Designed &amp; Built by{" "}
-          <span className="text-white/70">Yohannes Bayeh</span> · 2026
+          {c.footer}{" "}
+          <span className="text-white/70">{c.footerName}</span> · 2026
         </footer>
       </div>
     </section>

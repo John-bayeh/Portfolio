@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-scroll";
-import { ArrowUpRight, MoveDown } from "lucide-react";
+import { ArrowUpRight, MoveDown, Sun, Moon } from "lucide-react";
 import Marquee from "./Marquee";
+import { useLanguage } from "../context/LanguageContext";
 
 // Spring letter-by-letter animation config for the name.
 const container = {
@@ -36,59 +37,189 @@ function AnimatedName({ text }) {
           className="inline-block"
           aria-hidden="true"
         >
-          {char === " " ? " " : char}
+          {char === " " ? "\u00a0" : char}
         </motion.span>
       ))}
     </motion.span>
   );
 }
 
-// Photo blob with fallback to YB initials if the image fails to load.
+// Photo with no frame/background — just the face.
 function PhotoBlob() {
   const [errored, setErrored] = useState(false);
   return (
-    <div className="relative mx-auto aspect-[4/5] w-[260px] sm:w-[300px] lg:w-[340px]">
-      {/* Gold glow behind the blob */}
-      <div className="absolute inset-0 -z-10 scale-110 rounded-[42%_58%_60%_40%/45%_45%_55%_55%] bg-gold/10 blur-2xl" />
-      <div className="h-full w-full overflow-hidden rounded-[42%_58%_60%_40%/45%_45%_55%_55%] border border-line bg-card">
-        {!errored ? (
-          <img
-            src="/yohannes.png"
-            alt="Yohannes Bayeh"
-            onError={() => setErrored(true)}
-            className="h-full w-full object-cover object-top"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-card">
-            <span className="font-display text-7xl font-semibold text-gold">
-              YB
-            </span>
-          </div>
-        )}
-      </div>
+    <div className="relative mx-auto w-[320px] max-w-full">
+      {!errored ? (
+        <img
+          src="/yohannes2.png"
+          alt="Yohannes Bayeh"
+          onError={() => setErrored(true)}
+          style={{
+            width: '100%',
+            height: '420px',
+            objectFit: 'cover',
+            objectPosition: 'center top',
+            display: 'block',
+            borderRadius: '12px',
+            border: 'var(--photo-border, 2px solid #C9A84C)',
+            boxShadow: 'var(--photo-shadow, 0 0 40px rgba(201, 168, 76, 0.25))',
+          }}
+        />
+      ) : (
+        <div className="flex h-[420px] w-full items-center justify-center">
+          <span className="font-display text-7xl font-semibold text-gold">
+            YB
+          </span>
+        </div>
+      )}
     </div>
   );
 }
 
-export default function Hero() {
+// ─── Minimal inline EN / AM toggle ───────────────────────────────────────────
+function LanguageToggle() {
+  const { lang, setLang } = useLanguage();
+
+  const getStyle = (isActive) => {
+    if (isActive) {
+      return {
+        color: 'var(--nav-toggle-active, #C9A84C)',
+        border: '1px solid var(--nav-toggle-active, #C9A84C)',
+        borderRadius: '4px',
+        paddingLeft: '4px',
+        paddingRight: '4px',
+        paddingTop: '1px',
+        paddingBottom: '1px',
+      };
+    }
+    return {
+      color: 'var(--nav-toggle-inactive, #555555)',
+    };
+  };
+
+  return (
+    <div className="flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider">
+      <motion.button
+        id="lang-en-btn"
+        type="button"
+        onClick={() => setLang("en")}
+        style={getStyle(lang === "en")}
+        whileHover={{ color: 'var(--nav-toggle-active)' }}
+        className="transition-colors"
+        aria-label="Switch to English"
+      >
+        EN
+      </motion.button>
+      <span style={{ color: 'var(--nav-toggle-inactive, #555555)' }}>/</span>
+      <motion.button
+        id="lang-am-btn"
+        type="button"
+        onClick={() => setLang("am")}
+        style={getStyle(lang === "am")}
+        whileHover={{ color: 'var(--nav-toggle-active)' }}
+        className="transition-colors"
+        aria-label="Switch to Amharic"
+      >
+        AM
+      </motion.button>
+      <span style={{ color: 'var(--nav-toggle-inactive, #555555)' }}>/</span>
+      <motion.button
+        id="lang-fr-btn"
+        type="button"
+        onClick={() => setLang("fr")}
+        style={getStyle(lang === "fr")}
+        whileHover={{ color: 'var(--nav-toggle-active)' }}
+        className="transition-colors"
+        aria-label="Switch to French"
+      >
+        FR
+      </motion.button>
+    </div>
+  );
+}
+
+export default function Hero({ isDark, onToggleTheme }) {
+  const { t } = useLanguage();
+  const h = t.hero;
+
   return (
     <section
       id="home"
+      style={{
+        backgroundColor: 'var(--color-bg)',
+        color: 'var(--color-text)',
+        transition: 'background-color 0.35s ease, color 0.35s ease'
+      }}
       className="relative min-h-screen overflow-hidden px-6 pb-16 pt-6 sm:px-10"
     >
+      {/* Background Blobs */}
+      <div 
+        style={{ 
+          opacity: 'var(--blob-opacity, 0.15)',
+          backgroundColor: '#C9A84C'
+        }}
+        className="pointer-events-none absolute -left-48 -top-48 h-96 w-96 rounded-full blur-3xl transition-opacity duration-350" 
+      />
+      <div 
+        style={{ 
+          opacity: 'var(--blob-opacity, 0.15)',
+          backgroundColor: '#C9A84C'
+        }}
+        className="pointer-events-none absolute -right-48 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-350" 
+      />
+
       {/* Top bar */}
-      <div className="flex items-center justify-between">
-        <span className="font-display text-xl font-semibold tracking-tight text-white">
+      <div 
+        style={{
+          backgroundColor: 'var(--nav-bg, rgba(8,8,8,0.85))',
+          backdropFilter: 'blur(8px)',
+        }}
+        className="-mx-6 -mt-6 mb-6 flex items-center justify-between px-6 py-4 border-b border-line/10 sm:-mx-10"
+      >
+        <span 
+          style={{ color: 'var(--nav-logo, #C9A84C)' }}
+          className="font-display text-xl font-semibold tracking-tight transition-colors duration-200"
+        >
           YB
         </span>
-        <div className="flex items-center gap-2 text-xs text-white/70">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
-          </span>
-          Available for work
+
+        {/* Right side: status badge + EN/AM toggle */}
+        <div className="flex items-center gap-7">
+          <motion.div 
+            style={{ color: 'var(--nav-link, #888888)' }}
+            whileHover={{ color: 'var(--nav-link-hover, #ffffff)' }}
+            className="flex items-center gap-2 text-[11px] uppercase tracking-wider transition-colors duration-200 cursor-default"
+          >
+            <span className="relative flex h-2 w-2">
+              <span 
+                style={{ backgroundColor: 'var(--nav-dot, #22C55E)' }}
+                className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" 
+              />
+              <span 
+                style={{ backgroundColor: 'var(--nav-dot, #22C55E)' }}
+                className="relative inline-flex h-2 w-2 rounded-full" 
+              />
+            </span>
+            {h.available}
+          </motion.div>
+
+          <LanguageToggle />
+
+          {/* Theme toggle */}
+          <button
+            id="theme-toggle-btn"
+            type="button"
+            onClick={() => onToggleTheme()}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            className="transition-opacity hover:opacity-70"
+          >
+            {isDark
+              ? <Sun size={18} color="var(--nav-icon, #C9A84C)" strokeWidth={1.8} />
+              : <Moon size={18} color="var(--nav-icon, #B8860B)" strokeWidth={1.8} />}
+          </button>
         </div>
       </div>
+
 
       {/* Rotated YOHANNES on the left edge */}
       <span className="pointer-events-none absolute left-2 top-1/2 hidden -translate-y-1/2 -rotate-90 select-none text-[11px] font-medium uppercase tracking-[0.5em] text-muted lg:block">
@@ -96,31 +227,34 @@ export default function Hero() {
       </span>
 
       {/* Main two-column content */}
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 pt-10 lg:grid-cols-2 lg:pt-16">
-        {/* Left: copy */}
-        <div>
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-12 pt-10 lg:flex-row lg:pt-16">
+        {/* Left: copy (55%) */}
+        <div className="w-full lg:w-[55%] flex flex-col items-start text-left">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-gold"
+            style={{ color: 'var(--color-role, #C9A84C)' }}
+            className="mb-6 text-xs font-medium uppercase tracking-[0.25em]"
           >
-            Frontend Developer · ETH · 2026
+            {h.tagline}
           </motion.p>
 
           <h1 className="font-display text-5xl font-semibold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-            <span className="block">I BUILD</span>
-            <span className="block text-gold">THINGS</span>
-            <span className="block">FOR THE WEB.</span>
+            <span className="block">{h.heading1}</span>
+            <span style={{ color: 'var(--color-things, #C9A84C)' }} className="block">{h.heading2}</span>
+            <span className="block">{h.heading3}</span>
           </h1>
 
-          <p className="mt-6 max-w-md text-base leading-relaxed text-white/60">
+          <p 
+            style={{ color: 'var(--color-subtext, #888888)' }}
+            className="mt-6 max-w-md text-base leading-relaxed"
+          >
             I'm{" "}
-            <span className="text-white">
+            <span style={{ color: 'var(--color-text, #ffffff)' }}>
               <AnimatedName text="Yohannes Bayeh" />
             </span>
-            , a frontend developer based in Bahir Dar, Ethiopia — crafting fast,
-            polished interfaces that feel as good as they look.
+            , {h.bio1}
           </p>
 
           {/* CTA buttons */}
@@ -129,49 +263,68 @@ export default function Hero() {
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold text-bg"
+                style={{
+                  backgroundColor: 'var(--color-btn-primary-bg, #C9A84C)',
+                  color: 'var(--color-btn-primary-text, #080808)'
+                }}
+                className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200"
               >
-                View Work <ArrowUpRight size={16} />
+                {h.viewWork} <ArrowUpRight size={16} />
               </motion.button>
             </Link>
             <Link to="contact" smooth duration={600} offset={-20}>
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold text-white hover:border-gold"
+                style={{
+                  borderColor: 'var(--color-btn-secondary-border, #ffffff)',
+                  color: 'var(--color-btn-secondary-text, #ffffff)'
+                }}
+                className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-colors duration-200"
               >
-                Get In Touch
+                {h.getInTouch}
               </motion.button>
             </Link>
           </div>
-        </div>
-
-        {/* Right: photo blob + floating cards */}
-        <div className="relative flex justify-center">
-          <PhotoBlob />
 
           {/* Floating badge: tech stack */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="absolute -left-2 top-6 rounded-xl border border-line bg-card/90 px-4 py-2 text-xs text-white/80 backdrop-blur-sm sm:-left-6"
+            className="mt-8 inline-block rounded-xl border border-line bg-card/90 px-4 py-2 text-xs text-white/80 backdrop-blur-sm"
           >
             React · Next.js · Node.js
           </motion.div>
+        </div>
+
+        {/* Right: photo + stat card (40%) */}
+        <div className="relative w-full lg:w-[40%] flex justify-center lg:justify-end">
+          <PhotoBlob />
 
           {/* Floating stat: projects shipped */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.75 }}
-            className="absolute -right-2 bottom-8 rounded-xl border border-line bg-card/90 px-4 py-3 text-right backdrop-blur-sm sm:-right-4"
+            style={{
+              background: 'var(--stat-bg, #111111)',
+              border: 'var(--stat-border, 1px solid #222222)',
+              boxShadow: 'var(--stat-shadow, none)',
+            }}
+            className="absolute -right-2 bottom-8 rounded-xl px-4 py-3 text-right backdrop-blur-sm sm:-right-4"
           >
-            <div className="font-display text-2xl font-semibold text-gold">
+            <div 
+              style={{ color: 'var(--stat-number, #C9A84C)' }}
+              className="font-display text-2xl font-semibold"
+            >
               8
             </div>
-            <div className="text-[10px] uppercase tracking-widest text-white/60">
-              Projects Shipped
+            <div 
+              style={{ color: 'var(--stat-label, #555555)' }}
+              className="text-[10px] uppercase tracking-widest"
+            >
+              {h.projectsShipped}
             </div>
           </motion.div>
         </div>
@@ -179,7 +332,7 @@ export default function Hero() {
 
       {/* Scroll hint */}
       <div className="mt-10 flex items-center justify-center gap-2 text-xs text-muted lg:mt-16">
-        <MoveDown size={14} className="animate-bounce" /> Scroll
+        <MoveDown size={14} className="animate-bounce" /> {h.scroll}
       </div>
 
       {/* Bottom marquee ticker */}

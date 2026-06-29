@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
+import { useLanguage } from "../context/LanguageContext";
 
 const containerVariants = {
   hidden: {},
@@ -109,19 +110,22 @@ function ProjectRow({ project }) {
 }
 
 export default function Projects() {
+  const { t } = useLanguage();
+  const p = t.projects;
+
   return (
     <section id="projects" className="px-6 py-24 sm:px-10">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="mb-10">
           <p className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-gold">
-            Selected Work
+            {p.sectionLabel}
           </p>
           <h2 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-            <span className="text-white">MY </span>
-            <span className="text-gold">WORK</span>
+            <span className="text-white">{p.heading1}</span>
+            <span className="text-gold">{p.heading2}</span>
           </h2>
-          <p className="mt-2 text-sm text-white/55">Eight shipped products.</p>
+          <p className="mt-2 text-sm text-white/55">{p.subtitle}</p>
         </div>
 
         {/* Vertical list container with Framer Motion stagger */}
@@ -132,8 +136,8 @@ export default function Projects() {
           viewport={{ once: true, amount: 0.1 }}
           className="flex flex-col gap-4"
         >
-          {projects.map((p) => (
-            <ProjectRow key={p.number} project={p} />
+          {projects.map((proj) => (
+            <ProjectRow key={proj.number} project={proj} />
           ))}
         </motion.div>
       </div>
