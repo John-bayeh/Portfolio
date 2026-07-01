@@ -14,26 +14,6 @@ const projects = [
   },
   {
     number: "02",
-    name: "BDU Clearance",
-    description: "University campus leave-request workflow.",
-    tech: ["React", "Node.js"],
-    year: "2026",
-    github: "https://github.com/John-bayeh/BDU-Clearance_System",
-    live: null,
-    screenshot: "/screenshots/project-02.png",
-  },
-  {
-    number: "03",
-    name: "Hotel Website",
-    description: "Booking & management platform for hospitality.",
-    tech: ["React", "Node.js"],
-    year: "2025",
-    github: "https://github.com/John-bayeh/Hotelwebsite",
-    live: null,
-    screenshot: "/screenshots/project-03.png",
-  },
-  {
-    number: "04",
     name: "Telegram Award",
     description: "Voting & awards platform for Telegram channels.",
     tech: ["React", "Node.js"],
@@ -43,7 +23,7 @@ const projects = [
     screenshot: "/screenshots/project-04.png",
   },
   {
-    number: "05",
+    number: "03",
     name: "Todo App",
     description: "Task manager with done / not-done filter.",
     tech: ["React", "Node.js"],
@@ -53,7 +33,7 @@ const projects = [
     screenshot: "/screenshots/project-05.png",
   },
   {
-    number: "06",
+    number: "04",
     name: "HR Assistant AI",
     description: "AI chatbot for HR queries.",
     tech: ["React", "Python"],
@@ -63,7 +43,7 @@ const projects = [
     screenshot: "/screenshots/project-06.png",
   },
   {
-    number: "07",
+    number: "05",
     name: "Formula Management",
     description: "Web-based project management system.",
     tech: ["React"],
@@ -73,7 +53,7 @@ const projects = [
     screenshot: "/screenshots/project-07.png",
   },
   {
-    number: "08",
+    number: "06",
     name: "Hotel Master",
     description: "Premium hotel services showcase and booking system.",
     tech: ["React", "Node.js", "Tailwind CSS"],
