@@ -55,12 +55,13 @@ const authorize = (...roles) => {
     },
     stages: {
       scope: {
-        summary: "Defined the core HR modules: employee records, attendance tracking, leave management, and recruitment pipeline.",
+        summary: "AskualaLink-HR is an integrated HR management platform designed to modernize workplace operations through four core pillars: Identity-Verified Attendance, AI-Driven Talent Acquisition, Automated Candidate Engagement, and Precision Payroll Management. The system bridges the gap between hiring a candidate and ensuring they are paid accurately for their physical presence.",
         items: [
-          "User roles: Admin, HR Manager, Employee",
-          "Modules: Attendance, Leave, Recruitment, Payroll summary",
-          "Constraints: Multi-tenant, mobile-responsive",
-          "Non-goals: Full payroll processing, biometric hardware",
+          "Zero-Trust Attendance: 3-way check (SSO Identity + GPS Geofence + specific Router BSSID MAC address) to prevent proxy clock-ins",
+          "Prompt-Driven AI Ranking: Gemini/Grok AI-powered CV parser & semantic resume scoring (0-100) using custom natural-language instructions",
+          "One-Click Communication: NodeMailer SMTP service that triggers automated HTML templates to a dynamic Top-N shortlist of candidates",
+          "Seamless Hire-to-Pay Automation: Monthly salaries, overtime, and deductions calculated automatically from verified attendance logs",
+          "User Roles: Secure role-based access control (RBAC) separating Admin, HR / Manager, and Employee self-service views",
         ],
       },
       design: {
