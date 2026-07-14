@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Github, ExternalLink, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Github, ExternalLink, X, ChevronLeft, ChevronRight, FileText } from "lucide-react";
 import projects from "../data/projects";
 import extraProjectDetails from "../data/extraProjectDetails";
 
@@ -238,6 +238,16 @@ export default function CaseStudyPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            {project.requirementsDoc && (
+              <a
+                href={project.requirementsDoc}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-[#111111] border border-[#222222] hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300"
+              >
+                <FileText size={14} /> Requirements Doc
+              </a>
+            )}
             {project.github && (
               <a
                 href={project.github}
@@ -319,19 +329,7 @@ export default function CaseStudyPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">Project Requirements</h3>
-                  {project.requirementsDoc && (
-                    <a
-                      href={project.requirementsDoc}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 bg-gold/15 text-gold border border-gold/20 hover:bg-gold/25 px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider transition-colors"
-                    >
-                      VIEW PRD DOC <ExternalLink size={10} />
-                    </a>
-                  )}
-                </div>
+                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Project Requirements</h3>
                 <ul className="space-y-2">
                   {project.stages.scope.items.map((item, idx) => (
                     <li key={idx} className="flex items-start gap-2.5 text-xs text-[#888888] leading-relaxed">
