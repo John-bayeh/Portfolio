@@ -9,6 +9,7 @@ const projects = [
     year: "2026",
     github: "https://github.com/askualalink/AskualaLink-HR-Recruitment-System-front",
     live: null,
+    requirementsDoc: "https://docs.google.com/document/d/1XeCw6PAjrqdjem1k-BbSE4sZjFWMz-fyzKbf5FqXF9g/edit?tab=t.0",
     screenshots: {
       thumbnail: '/screenshots/askualalink-hr/admin-dashboard.png',
       design: [

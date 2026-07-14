@@ -110,7 +110,7 @@ const tabItemVariants = {
 };
 
 function ProjectRow({ project, isExpanded, onToggleExpanded }) {
-  const { number, name, description, tech, year, github, live, screenshot, screenshots, slug, stages } =
+  const { number, name, description, tech, year, github, live, screenshot, screenshots, requirementsDoc, slug, stages } =
     project;
   const thumbnail = screenshots?.thumbnail || screenshot;
   const [imageError, setImageError] = useState(false);
@@ -284,7 +284,19 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
                         {stages.scope?.items && (
                           <motion.div variants={tabItemVariants}>
-                            <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Scope Requirements</h4>
+                             <div className="flex items-center justify-between mb-2">
+                               <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">Scope Requirements</h4>
+                               {requirementsDoc && (
+                                 <a
+                                   href={requirementsDoc}
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   className="inline-flex items-center gap-1 bg-gold/15 text-gold border border-gold/20 hover:bg-gold/25 px-2 py-0.5 rounded text-[9px] font-mono tracking-wider transition-colors"
+                                 >
+                                   VIEW PRD DOC <ArrowUpRight size={10} />
+                                 </a>
+                               )}
+                             </div>
                             <ul className="space-y-2">
                               {stages.scope.items.map((item, idx) => (
                                 <li key={idx} className="flex items-start gap-2 text-xs">
