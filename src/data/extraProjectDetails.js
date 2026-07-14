@@ -7,8 +7,8 @@ const extraProjectDetails = {
     ],
     design: {
       colors: [
-        { name: "Teal", hex: "#0F766E" },
-        { name: "Mint", hex: "#14B8A6" },
+        { name: "Royal Blue", hex: "#2563EB" },
+        { name: "Brand Blue", hex: "#3B82F6" },
         { name: "Slate Dark", hex: "#0F172A" },
         { name: "Slate Light", hex: "#F8FAFC" }
       ],
