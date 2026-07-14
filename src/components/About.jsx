@@ -17,7 +17,7 @@ function PhotoBlob() {
     <div className="relative mx-auto w-[320px] max-w-full">
       {!errored ? (
         <img
-          src="/yohannes2.png"
+          src="/profile.jpg"
           alt="Yohannes Bayeh"
           onError={() => setErrored(true)}
           style={{
@@ -33,8 +33,9 @@ function PhotoBlob() {
         />
       ) : (
         <div 
-          className="flex h-[420px] w-full items-center justify-center bg-card"
+          className="flex h-[420px] w-full items-center justify-center"
           style={{
+            background: '#0D0D0D',
             borderRadius: '12px',
             border: 'var(--photo-border, 2px solid #C9A84C)',
             boxShadow: 'var(--photo-shadow, 0 0 40px rgba(201, 168, 76, 0.25))',
@@ -79,7 +80,7 @@ export default function About() {
               {a.heading}{" "}
               <span className="text-gold">{a.headingAccent}</span>.
             </h2>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-white/60">
+            <p className="mt-6 max-w-md text-base leading-relaxed" style={{ color: 'var(--th-text-60)' }}>
               {a.bio}
             </p>
 
@@ -87,7 +88,8 @@ export default function About() {
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-gold hover:text-gold"
+                className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold transition-colors hover:border-gold hover:text-gold"
+                style={{ color: 'var(--th-text)', borderColor: 'var(--th-line)' }}
               >
                 {a.cta} <ArrowUpRight size={16} />
               </motion.button>
@@ -101,16 +103,16 @@ export default function About() {
               <ol className="relative border-l border-line">
                 {a.steps.map((s) => (
                   <li key={s.n} className="mb-7 ml-6 last:mb-0">
-                    <span className="absolute -left-[7px] mt-1.5 h-3 w-3 rounded-full border border-gold bg-bg" />
+                    <span className="absolute -left-[7px] mt-1.5 h-3 w-3 rounded-full border border-gold" style={{ backgroundColor: 'var(--th-bg)' }} />
                     <div className="flex items-baseline gap-3">
                       <span className="font-display text-sm font-semibold text-gold">
                         {s.n}
                       </span>
-                      <span className="font-display text-lg font-semibold text-white">
+                      <span className="font-display text-lg font-semibold" style={{ color: 'var(--th-text)' }}>
                         {s.label}
                       </span>
                     </div>
-                    <p className="mt-1 text-sm text-white/50">{s.desc}</p>
+                    <p className="mt-1 text-sm" style={{ color: 'var(--th-text-40)' }}>{s.desc}</p>
                   </li>
                 ))}
               </ol>
@@ -126,34 +128,42 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="relative flex items-center justify-center lg:justify-end"
           >
-            <PhotoBlob />
+            {/* Inner wrapper sized to photo so absolute cards anchor to it */}
+            <div className="relative w-[320px]" style={{ overflow: 'visible' }}>
+              <PhotoBlob />
 
-            <div className="absolute -left-2 top-10 rounded-xl border border-line bg-card/90 px-4 py-3 backdrop-blur-sm sm:left-2">
-              <div className="font-display text-2xl font-semibold text-gold">
-                2+
+              <div
+                className="absolute -left-6 top-6 rounded-xl px-4 py-3 backdrop-blur-sm"
+                style={{ background: 'var(--stat-bg)', border: 'var(--stat-border)', boxShadow: 'var(--stat-shadow)' }}
+              >
+                <div className="font-display text-2xl font-semibold" style={{ color: 'var(--stat-number)' }}>
+                  2+
+                </div>
+                <div className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--stat-label)' }}>
+                  {a.yearsExp}
+                </div>
               </div>
-              <div className="text-[10px] uppercase tracking-widest text-white/60">
-                {a.yearsExp}
-              </div>
-            </div>
 
-            <div className="absolute -right-2 bottom-10 rounded-xl border border-line bg-card/90 px-4 py-3 text-right backdrop-blur-sm sm:right-2">
-              <div className="font-display text-2xl font-semibold text-gold">
-                8
-              </div>
-              <div className="text-[10px] uppercase tracking-widest text-white/60">
-                {a.projectsShipped}
+              <div
+                className="absolute -right-6 bottom-6 rounded-xl px-4 py-3 text-right backdrop-blur-sm"
+                style={{ background: 'var(--stat-bg)', border: 'var(--stat-border)', boxShadow: 'var(--stat-shadow)' }}
+              >
+                <div className="font-display text-2xl font-semibold" style={{ color: 'var(--stat-number)' }}>
+                  6
+                </div>
+                <div className="text-[10px] uppercase tracking-widest" style={{ color: 'var(--stat-label)' }}>
+                  {a.projectsShipped}
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
 
         {/* Skills infinite marquee */}
-        <div className="mt-20 border-y border-line py-6">
-          <Marquee
-            items={skills}
-            className="text-lg font-medium text-white/40"
-          />
+        <div className="mt-20 border-y py-6" style={{ borderColor: 'var(--th-line)' }}>
+          <div style={{ color: 'var(--th-text-40)' }}>
+            <Marquee items={skills} className="text-lg font-medium" />
+          </div>
         </div>
       </div>
     </section>

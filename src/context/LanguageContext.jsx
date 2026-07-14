@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 
 // ─── Translation dictionary ───────────────────────────────────────────────────
@@ -28,7 +29,7 @@ export const translations = {
       sectionLabel: "Selected Work",
       heading1: "MY ",
       heading2: "WORK",
-      subtitle: "Eight shipped products.",
+      subtitle: "Six shipped products.",
     },
     // About
     about: {
@@ -89,7 +90,7 @@ export const translations = {
       sectionLabel: "የተመረጡ ሥራዎች",
       heading1: "ሥራዎቼ",
       heading2: "",
-      subtitle: "ስምንት የተጠናቀቁ ፕሮጀክቶች።",
+      subtitle: "ስድስት የተጠናቀቁ ፕሮጀክቶች።",
     },
     about: {
       sectionLabel: "ስለኔ",
@@ -148,7 +149,7 @@ export const translations = {
       sectionLabel: "Travaux sélectionnés",
       heading1: "MES ",
       heading2: "PROJETS",
-      subtitle: "Huit produits livrés.",
+      subtitle: "Six produits livrés.",
     },
     about: {
       sectionLabel: "À propos de moi",

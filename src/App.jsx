@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./context/LanguageContext";
 import CustomCursor from "./components/CustomCursor";
 import ScrollProgress from "./components/ScrollProgress";
-import Dock from "./components/Dock";
+import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Projects from "./components/Projects";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import CaseStudyPage from "./pages/CaseStudyPage";
+
 
 // Theme palettes — applied as CSS custom properties on the root element
 // so every component that reads var(--th-*) responds instantly.
@@ -55,12 +58,12 @@ const LIGHT = {
   "--th-text-60": "rgba(10,10,10,0.60)",
   "--th-text-40": "rgba(10,10,10,0.40)",
   "--th-card-90": "rgba(255,255,255,0.90)",
-  "--photo-border": "2px solid #B8860B",
-  "--photo-shadow": "0 0 40px rgba(184, 134, 11, 0.2)",
-  "--stat-bg": "#ffffff",
-  "--stat-border": "1px solid #E0DDD8",
-  "--stat-shadow": "0 4px 20px rgba(0,0,0,0.08)",
-  "--stat-number": "#B8860B",
+  "--photo-border": "2px solid #C9A84C",
+  "--photo-shadow": "0 0 40px rgba(201, 168, 76, 0.25)",
+  "--stat-bg": "#111111",
+  "--stat-border": "1px solid #222222",
+  "--stat-shadow": "0 8px 32px rgba(0,0,0,0.18)",
+  "--stat-number": "#C9A84C",
   "--stat-label": "#888888",
   "--color-bg": "#F8F5F0",
   "--color-text": "#0A0A0A",
@@ -82,34 +85,46 @@ const LIGHT = {
   "--nav-icon": "#B8860B",
 };
 
+function HomePage({ isDark, onToggleTheme }) {
+  return (
+    <>
+      <Hero isDark={isDark} onToggleTheme={onToggleTheme} />
+      <Projects />
+      <About />
+      <Contact />
+    </>
+  );
+}
+
 function App() {
   const [isDark, setIsDark] = useState(true);
   const theme = isDark ? DARK : LIGHT;
 
+  const toggleTheme = () => setIsDark((v) => !v);
+
   return (
-    <LanguageProvider>
-      <div
-        style={{
-          ...theme,
-          backgroundColor: theme["--th-bg"],
-          color: theme["--th-text"],
-          transition: "background-color 0.35s ease, color 0.35s ease",
-        }}
-        className="min-h-screen"
-      >
-        <CustomCursor />
-        <ScrollProgress />
-        <Dock />
+    <BrowserRouter>
+      <LanguageProvider>
+        <div
+          style={{
+            ...theme,
+            backgroundColor: theme["--th-bg"],
+            color: theme["--th-text"],
+            transition: "background-color 0.35s ease, color 0.35s ease",
+          }}
+          className="min-h-screen"
+        >
+          <CustomCursor />
+          <ScrollProgress />
+          <Navbar isDark={isDark} onToggleTheme={toggleTheme} />
 
-        <Hero isDark={isDark} onToggleTheme={() => setIsDark((v) => !v)} />
-
-        <Projects />
-
-        <About />
-
-        <Contact />
-      </div>
-    </LanguageProvider>
+          <Routes>
+            <Route path="/" element={<HomePage isDark={isDark} onToggleTheme={toggleTheme} />} />
+            <Route path="/projects/:id" element={<CaseStudyPage />} />
+          </Routes>
+        </div>
+      </LanguageProvider>
+    </BrowserRouter>
   );
 }
 

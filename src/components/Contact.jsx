@@ -15,7 +15,7 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrewbjgq";
 
 function Field({ label, type = "text", name, textarea = false }) {
   const base =
-    "w-full border-b border-line bg-transparent py-3 text-white placeholder-muted outline-none transition-colors focus:border-gold";
+    "w-full border-b border-line bg-transparent py-3 placeholder-muted outline-none transition-colors focus:border-gold";
   return (
     <label className="block">
       <span className="mb-1 block text-xs uppercase tracking-widest text-muted">
@@ -28,6 +28,7 @@ function Field({ label, type = "text", name, textarea = false }) {
           required
           placeholder={`${label}...`}
           className={`${base} resize-none`}
+          style={{ color: 'var(--th-text)' }}
         />
       ) : (
         <input
@@ -36,6 +37,7 @@ function Field({ label, type = "text", name, textarea = false }) {
           required
           placeholder={`${label}...`}
           className={base}
+          style={{ color: 'var(--th-text)' }}
         />
       )}
     </label>
@@ -155,12 +157,12 @@ export default function Contact() {
             role="status"
           >
             <CheckCircle2 size={18} className="shrink-0 text-green-400" />
-            <span className="text-sm text-white">{c.successToast}</span>
+            <span className="text-sm" style={{ color: 'var(--th-text)' }}>{c.successToast}</span>
             <button
               type="button"
               onClick={() => setStatus("idle")}
               aria-label="Dismiss"
-              className="ml-1 text-muted transition-colors hover:text-white"
+              className="ml-1 text-muted transition-colors hover:opacity-100"
             >
               <XClose size={16} />
             </button>
@@ -174,7 +176,8 @@ export default function Contact() {
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border border-line bg-card px-4 py-1.5 text-xs text-white/70"
+          className="mb-8 inline-flex items-center gap-2 rounded-full border border-line bg-card px-4 py-1.5 text-xs"
+          style={{ color: 'var(--th-text-60)' }}
         >
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-75" />
@@ -190,6 +193,7 @@ export default function Contact() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="font-display text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl"
+          style={{ color: 'var(--th-text)' }}
         >
           <span className="block">{c.heading1}</span>
           <span className="block text-gold">{c.heading2}</span>
@@ -256,7 +260,7 @@ export default function Contact() {
                     <div className="text-xs uppercase tracking-widest text-muted">
                       {label}
                     </div>
-                    <div className="text-sm text-white">{value}</div>
+                    <div className="text-sm" style={{ color: 'var(--th-text)' }}>{value}</div>
                   </div>
                 </div>
                 <ArrowUpRight
@@ -271,7 +275,7 @@ export default function Contact() {
         {/* Footer */}
         <footer className="mt-24 border-t border-line pt-8 text-center text-xs text-muted">
           {c.footer}{" "}
-          <span className="text-white/70">{c.footerName}</span> · 2026
+          <span style={{ color: 'var(--th-text-60)' }}>{c.footerName}</span> · 2026
         </footer>
       </div>
     </section>

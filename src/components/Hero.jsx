@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-scroll";
-import { ArrowUpRight, MoveDown, Sun, Moon } from "lucide-react";
+import { ArrowUpRight, MoveDown } from "lucide-react";
 import Marquee from "./Marquee";
 import { useLanguage } from "../context/LanguageContext";
 
@@ -51,7 +51,7 @@ function PhotoBlob() {
     <div className="relative mx-auto w-[320px] max-w-full">
       {!errored ? (
         <img
-          src="/yohannes2.png"
+          src="/profile.jpg"
           alt="Yohannes Bayeh"
           onError={() => setErrored(true)}
           style={{
@@ -66,7 +66,15 @@ function PhotoBlob() {
           }}
         />
       ) : (
-        <div className="flex h-[420px] w-full items-center justify-center">
+        <div
+          className="flex h-[420px] w-full items-center justify-center"
+          style={{
+            background: '#0D0D0D',
+            borderRadius: '12px',
+            border: 'var(--photo-border, 2px solid #C9A84C)',
+            boxShadow: 'var(--photo-shadow, 0 0 40px rgba(201, 168, 76, 0.25))',
+          }}
+        >
           <span className="font-display text-7xl font-semibold text-gold">
             YB
           </span>
@@ -76,69 +84,7 @@ function PhotoBlob() {
   );
 }
 
-// ─── Minimal inline EN / AM toggle ───────────────────────────────────────────
-function LanguageToggle() {
-  const { lang, setLang } = useLanguage();
-
-  const getStyle = (isActive) => {
-    if (isActive) {
-      return {
-        color: 'var(--nav-toggle-active, #C9A84C)',
-        border: '1px solid var(--nav-toggle-active, #C9A84C)',
-        borderRadius: '4px',
-        paddingLeft: '4px',
-        paddingRight: '4px',
-        paddingTop: '1px',
-        paddingBottom: '1px',
-      };
-    }
-    return {
-      color: 'var(--nav-toggle-inactive, #555555)',
-    };
-  };
-
-  return (
-    <div className="flex items-center gap-1 text-[11px] font-medium uppercase tracking-wider">
-      <motion.button
-        id="lang-en-btn"
-        type="button"
-        onClick={() => setLang("en")}
-        style={getStyle(lang === "en")}
-        whileHover={{ color: 'var(--nav-toggle-active)' }}
-        className="transition-colors"
-        aria-label="Switch to English"
-      >
-        EN
-      </motion.button>
-      <span style={{ color: 'var(--nav-toggle-inactive, #555555)' }}>/</span>
-      <motion.button
-        id="lang-am-btn"
-        type="button"
-        onClick={() => setLang("am")}
-        style={getStyle(lang === "am")}
-        whileHover={{ color: 'var(--nav-toggle-active)' }}
-        className="transition-colors"
-        aria-label="Switch to Amharic"
-      >
-        AM
-      </motion.button>
-      <span style={{ color: 'var(--nav-toggle-inactive, #555555)' }}>/</span>
-      <motion.button
-        id="lang-fr-btn"
-        type="button"
-        onClick={() => setLang("fr")}
-        style={getStyle(lang === "fr")}
-        whileHover={{ color: 'var(--nav-toggle-active)' }}
-        className="transition-colors"
-        aria-label="Switch to French"
-      >
-        FR
-      </motion.button>
-    </div>
-  );
-}
-
-export default function Hero({ isDark, onToggleTheme }) {
+export default function Hero() {
   const { t } = useLanguage();
   const h = t.hero;
 
@@ -150,7 +96,7 @@ export default function Hero({ isDark, onToggleTheme }) {
         color: 'var(--color-text)',
         transition: 'background-color 0.35s ease, color 0.35s ease'
       }}
-      className="relative min-h-screen overflow-hidden px-6 pb-16 pt-6 sm:px-10"
+      className="relative min-h-screen overflow-hidden px-6 pb-16 pt-24 sm:px-10 sm:pt-28"
     >
       {/* Background Blobs */}
       <div 
@@ -158,67 +104,15 @@ export default function Hero({ isDark, onToggleTheme }) {
           opacity: 'var(--blob-opacity, 0.15)',
           backgroundColor: '#C9A84C'
         }}
-        className="pointer-events-none absolute -left-48 -top-48 h-96 w-96 rounded-full blur-3xl transition-opacity duration-350" 
+        className="pointer-events-none absolute -left-48 -top-48 h-96 w-96 rounded-full blur-3xl transition-opacity duration-300" 
       />
       <div 
         style={{ 
           opacity: 'var(--blob-opacity, 0.15)',
           backgroundColor: '#C9A84C'
         }}
-        className="pointer-events-none absolute -right-48 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-350" 
+        className="pointer-events-none absolute -right-48 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full blur-3xl transition-opacity duration-300" 
       />
-
-      {/* Top bar */}
-      <div 
-        style={{
-          backgroundColor: 'var(--nav-bg, rgba(8,8,8,0.85))',
-          backdropFilter: 'blur(8px)',
-        }}
-        className="-mx-6 -mt-6 mb-6 flex items-center justify-between px-6 py-4 border-b border-line/10 sm:-mx-10"
-      >
-        <span 
-          style={{ color: 'var(--nav-logo, #C9A84C)' }}
-          className="font-display text-xl font-semibold tracking-tight transition-colors duration-200"
-        >
-          YB
-        </span>
-
-        {/* Right side: status badge + EN/AM toggle */}
-        <div className="flex items-center gap-7">
-          <motion.div 
-            style={{ color: 'var(--nav-link, #888888)' }}
-            whileHover={{ color: 'var(--nav-link-hover, #ffffff)' }}
-            className="flex items-center gap-2 text-[11px] uppercase tracking-wider transition-colors duration-200 cursor-default"
-          >
-            <span className="relative flex h-2 w-2">
-              <span 
-                style={{ backgroundColor: 'var(--nav-dot, #22C55E)' }}
-                className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" 
-              />
-              <span 
-                style={{ backgroundColor: 'var(--nav-dot, #22C55E)' }}
-                className="relative inline-flex h-2 w-2 rounded-full" 
-              />
-            </span>
-            {h.available}
-          </motion.div>
-
-          <LanguageToggle />
-
-          {/* Theme toggle */}
-          <button
-            id="theme-toggle-btn"
-            type="button"
-            onClick={() => onToggleTheme()}
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            className="transition-opacity hover:opacity-70"
-          >
-            {isDark
-              ? <Sun size={18} color="var(--nav-icon, #C9A84C)" strokeWidth={1.8} />
-              : <Moon size={18} color="var(--nav-icon, #B8860B)" strokeWidth={1.8} />}
-          </button>
-        </div>
-      </div>
 
 
       {/* Rotated YOHANNES on the left edge */}
@@ -292,41 +186,45 @@ export default function Hero({ isDark, onToggleTheme }) {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-8 inline-block rounded-xl border border-line bg-card/90 px-4 py-2 text-xs text-white/80 backdrop-blur-sm"
+            className="mt-8 inline-block rounded-xl border px-4 py-2 text-xs backdrop-blur-sm"
+            style={{ borderColor: 'var(--th-line)', background: 'var(--th-card)', color: 'var(--th-text-60)' }}
           >
             React · Next.js · Node.js
           </motion.div>
         </div>
 
         {/* Right: photo + stat card (40%) */}
-        <div className="relative w-full lg:w-[40%] flex justify-center lg:justify-end">
-          <PhotoBlob />
+        <div className="w-full lg:w-[40%] flex justify-center lg:justify-end">
+          {/* Inner wrapper sized to photo so stat card anchors to it */}
+          <div className="relative w-[320px]" style={{ overflow: 'visible' }}>
+            <PhotoBlob />
 
-          {/* Floating stat: projects shipped */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75 }}
-            style={{
-              background: 'var(--stat-bg, #111111)',
-              border: 'var(--stat-border, 1px solid #222222)',
-              boxShadow: 'var(--stat-shadow, none)',
-            }}
-            className="absolute -right-2 bottom-8 rounded-xl px-4 py-3 text-right backdrop-blur-sm sm:-right-4"
-          >
-            <div 
-              style={{ color: 'var(--stat-number, #C9A84C)' }}
-              className="font-display text-2xl font-semibold"
+            {/* Floating stat: projects shipped */}
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.75 }}
+              style={{
+                background: 'var(--stat-bg, #111111)',
+                border: 'var(--stat-border, 1px solid #222222)',
+                boxShadow: 'var(--stat-shadow, none)',
+              }}
+              className="absolute -right-6 bottom-6 rounded-xl px-4 py-3 text-right backdrop-blur-sm"
             >
-              8
-            </div>
-            <div 
-              style={{ color: 'var(--stat-label, #555555)' }}
-              className="text-[10px] uppercase tracking-widest"
-            >
-              {h.projectsShipped}
-            </div>
-          </motion.div>
+              <div 
+                style={{ color: 'var(--stat-number, #C9A84C)' }}
+                className="font-display text-2xl font-semibold"
+              >
+                6
+              </div>
+              <div 
+                style={{ color: 'var(--stat-label, #555555)' }}
+                className="text-[10px] uppercase tracking-widest"
+              >
+                {h.projectsShipped}
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
@@ -336,18 +234,20 @@ export default function Hero({ isDark, onToggleTheme }) {
       </div>
 
       {/* Bottom marquee ticker */}
-      <div className="absolute bottom-0 left-0 w-full border-t border-line bg-bg/60 py-3">
-        <Marquee
-          items={[
-            "FRONTEND DEVELOPER",
-            "REACT",
-            "NEXT.JS",
-            "UI ENGINEERING",
-            "BAHIR DAR",
-            "AVAILABLE FOR WORK",
-          ]}
-          className="text-sm font-medium uppercase tracking-[0.2em] text-white/50"
-        />
+      <div className="absolute bottom-0 left-0 w-full border-t py-3" style={{ borderColor: 'var(--th-line)', background: 'var(--th-card)' }}>
+        <div style={{ color: 'var(--th-text-40)' }}>
+          <Marquee
+            items={[
+              "FRONTEND DEVELOPER",
+              "REACT",
+              "NEXT.JS",
+              "UI ENGINEERING",
+              "BAHIR DAR",
+              "AVAILABLE FOR WORK",
+            ]}
+            className="text-sm font-medium uppercase tracking-[0.2em]"
+          />
+        </div>
       </div>
     </section>
   );
