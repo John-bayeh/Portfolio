@@ -6,6 +6,14 @@ import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import { useLanguage } from "../context/LanguageContext";
 import extraProjectDetails from "../data/extraProjectDetails";
+import { ARCH_ICONS_MAP } from "../assets/icons/ArchIcons";
+import TestSection from "./TestSection";
+
+function ArchIcon({ iconKey, size = 18 }) {
+  const Component = ARCH_ICONS_MAP[iconKey];
+  if (!Component) return null;
+  return <Component width={size} height={size} style={{ display: "block", flexShrink: 0 }} />;
+}
 
 // Simple custom regex-based syntax highlighter for the code snippets
 function highlightCode(code) {
@@ -110,7 +118,7 @@ const tabItemVariants = {
 };
 
 function ProjectRow({ project, isExpanded, onToggleExpanded }) {
-  const { number, name, description, tech, year, github, live, screenshot, screenshots, requirementsDoc, slug, stages } =
+  const { number, name, description, tech, year, github, live, screenshot, screenshots, requirementsDoc, slug, stages, codeSnippet } =
     project;
   const thumbnail = screenshots?.thumbnail || screenshot;
   const [imageError, setImageError] = useState(false);
@@ -433,45 +441,135 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
 
                   {/* BUILD TAB */}
                   {activeTab === "BUILD" && (
-                    <div className="space-y-4">
+                    <div className="space-y-5">
                       {stages.build?.summary && (
                         <motion.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.build.summary}
                         </motion.p>
                       )}
 
-                      {extra.build?.architecture && (
+                      {/* PART 1 — Architecture Diagram */}
+                      {extra.build?.architectureDiagram && (
                         <motion.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Architecture</h4>
-                          <div className="inline-flex items-center gap-2 bg-[#141414] border border-line/40 px-3 py-2 rounded-lg text-xs font-mono text-[#c0c0c0]">
-                            {extra.build.architecture}
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-3">Architecture Diagram</h4>
+                          <div className="bg-[#0a0a0a] border border-line/40 rounded-xl p-4 flex flex-col items-center gap-0">
+                            {extra.build.architectureDiagram.map((node, idx, arr) => (
+                              <div key={idx} className="flex flex-col items-center w-full max-w-xs">
+                                {/* Node box */}
+                                {!node.services && (
+                                  <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border w-full justify-center ${
+                                    node.primary
+                                      ? "bg-gold/10 border-gold/40"
+                                      : "bg-[#141414] border-line/40"
+                                  }`}>
+                                    {node.iconKey && <ArchIcon iconKey={node.iconKey} size={18} />}
+                                    <div className="text-center">
+                                      <div className={`font-mono font-bold text-[10px] ${node.primary ? "text-gold" : "text-white"}`}>
+                                        {node.label}
+                                      </div>
+                                      {node.sub && (
+                                        <div className="text-[8px] text-[#555555] mt-0.5 font-mono">{node.sub}</div>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Arrow connector */}
+                                {!node.services && idx < arr.length - 1 && !arr[idx + 1]?.services && (
+                                  <div className="flex flex-col items-center my-1">
+                                    <div className="w-px h-3 bg-[#333]" />
+                                    <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
+                                      <path d="M4 6L0 0H8L4 6Z" fill="#444" />
+                                    </svg>
+                                  </div>
+                                )}
+
+                                {/* Services row (side-by-side) */}
+                                {node.services && (
+                                  <div className="flex flex-col items-center w-full">
+                                    <div className="flex flex-col items-center my-1">
+                                      <div className="w-px h-3 bg-[#333]" />
+                                      <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
+                                        <path d="M4 6L0 0H8L4 6Z" fill="#444" />
+                                      </svg>
+                                    </div>
+                                    <div className="flex flex-wrap justify-center gap-1.5 w-full">
+                                      {node.services.map((svc, si) => (
+                                        <div
+                                          key={si}
+                                          className="flex items-center gap-1.5 bg-[#141414] border border-line/40 rounded-lg px-2.5 py-1.5 flex-1 min-w-[90px]"
+                                        >
+                                          {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={15} />}
+                                          <div>
+                                            <div className="text-[9px] font-mono font-semibold text-white">{svc.label}</div>
+                                            <div className="text-[7px] text-[#555] font-mono">{svc.sub}</div>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
                           </div>
                         </motion.div>
                       )}
 
-                      {stages.build?.snippet && (
-                        <motion.div variants={tabItemVariants} className="space-y-1">
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">Implementation Snippet</h4>
-                          <pre className="overflow-x-auto rounded-lg border-l-4 border-gold bg-[#0D0D0D] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[220px] border border-line/40">
-                            <code dangerouslySetInnerHTML={{ __html: highlightCode(stages.build.snippet) }} />
-                          </pre>
+                      {/* PART 2 — Code Snippet */}
+                      {(codeSnippet || stages.build?.snippet) && (
+                        <motion.div variants={tabItemVariants} className="space-y-2">
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">
+                            {codeSnippet ? codeSnippet.title : "Implementation Snippet"}
+                          </h4>
+                          <div className="rounded-lg border border-line/40 overflow-hidden">
+                            {/* Editor chrome */}
+                            <div className="flex items-center gap-1.5 bg-[#141414] border-b border-line/30 px-3 py-2">
+                              <span className="w-2 h-2 rounded-full bg-[#FF5F56]" />
+                              <span className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
+                              <span className="w-2 h-2 rounded-full bg-[#27C93F]" />
+                              <span className="ml-2 text-[8px] font-mono text-[#555]">
+                                {codeSnippet ? (codeSnippet.language || "javascript") : "javascript"}
+                              </span>
+                            </div>
+                            <pre className="overflow-x-auto border-l-4 border-gold bg-[#0D0D0D] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[220px]">
+                              <code dangerouslySetInnerHTML={{ __html: highlightCode(codeSnippet ? codeSnippet.code : stages.build.snippet) }} />
+                            </pre>
+                          </div>
                         </motion.div>
                       )}
 
-                      {stages.design?.decisions && (
+                      {/* PART 3 — Key Technical Decisions */}
+                      {extra.build?.techDecisions && extra.build.techDecisions.length > 0 && (
                         <motion.div variants={tabItemVariants}>
                           <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Key Technical Decisions</h4>
-                          <ul className="list-disc pl-4 space-y-1 text-xs text-[#a0a0a0]">
-                            {stages.design.decisions.map((dec, idx) => (
-                              <li key={idx}>{dec}</li>
+                          <div className="space-y-1.5">
+                            {extra.build.techDecisions.map((decision, idx) => (
+                              <div
+                                key={idx}
+                                className="flex items-start gap-2.5 bg-[#0d0d0d] border border-line/30 hover:border-gold/20 rounded-lg px-3 py-2 transition-colors duration-200 group"
+                              >
+                                <div className="w-4 h-4 rounded bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+                                  <span className="text-gold text-[7px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
+                                </div>
+                                <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                                  <span className="text-[10px] font-semibold text-white group-hover:text-gold transition-colors">
+                                    {decision.choice}
+                                  </span>
+                                  <span className="text-[9px] text-[#666] leading-relaxed">{decision.reason}</span>
+                                </div>
+                                {decision.badge && (
+                                  <span className="ml-auto shrink-0 text-[7px] font-mono font-semibold px-1.5 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
+                                    {decision.badge}
+                                  </span>
+                                )}
+                              </div>
                             ))}
-                          </ul>
+                          </div>
                         </motion.div>
                       )}
                     </div>
                   )}
-
-                  {/* TEST TAB */}
+                              {/* TEST TAB */}
                   {activeTab === "TEST" && (
                     <div className="space-y-4">
                       {stages.test?.summary && (
@@ -480,31 +578,37 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                         </motion.p>
                       )}
 
-                      {extra.test?.cases && (
-                        <motion.div variants={tabItemVariants} className="overflow-x-auto border border-line/40 rounded-lg">
-                          <table className="w-full border-collapse text-left text-[11px]">
-                            <thead>
-                              <tr className="border-b border-line bg-[#141414] text-muted">
-                                <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Test Case</th>
-                                <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
-                                <th className="py-2 px-3 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-line/40 text-[#a0a0a0]">
-                              {extra.test.cases.map((tc, idx) => (
-                                <tr key={idx} className="hover:bg-white/[0.01]">
-                                  <td className="py-2.5 px-3 font-medium text-white">{tc.test}</td>
-                                  <td className="py-2.5 px-3">{tc.expected}</td>
-                                  <td className="py-2.5 px-3 text-right">
-                                    <span className="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded bg-green-950/40 text-green-400 border border-green-900/60">
-                                      PASS ✅
-                                    </span>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                      {extra.test?.testCases ? (
+                        <motion.div variants={tabItemVariants}>
+                          <TestSection testData={extra.test} />
                         </motion.div>
+                      ) : (
+                        extra.test?.cases && (
+                          <motion.div variants={tabItemVariants} className="overflow-x-auto border border-line/40 rounded-lg">
+                            <table className="w-full border-collapse text-left text-[11px]">
+                              <thead>
+                                <tr className="border-b border-line bg-[#141414] text-muted">
+                                  <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Test Case</th>
+                                  <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
+                                  <th className="py-2 px-3 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-line/40 text-[#a0a0a0]">
+                                {extra.test.cases.map((tc, idx) => (
+                                  <tr key={idx} className="hover:bg-white/[0.01]">
+                                    <td className="py-2.5 px-3 font-medium text-white">{tc.test}</td>
+                                    <td className="py-2.5 px-3">{tc.expected}</td>
+                                    <td className="py-2.5 px-3 text-right">
+                                      <span className="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded bg-green-950/40 text-green-400 border border-green-900/60">
+                                        PASS ✅
+                                      </span>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </motion.div>
+                        )
                       )}
 
                       <motion.div variants={tabItemVariants} className="flex items-center gap-6 mt-2 bg-[#141414] border border-line/40 p-3 rounded-lg w-fit">

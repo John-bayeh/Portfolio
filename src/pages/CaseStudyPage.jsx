@@ -4,6 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Github, ExternalLink, X, ChevronLeft, ChevronRight, FileText } from "lucide-react";
 import projects from "../data/projects";
 import extraProjectDetails from "../data/extraProjectDetails";
+import { ARCH_ICONS_MAP } from "../assets/icons/ArchIcons";
+import TestSection from "../components/TestSection";
+
+function ArchIcon({ iconKey, size = 22 }) {
+  const Component = ARCH_ICONS_MAP[iconKey];
+  if (!Component) return null;
+  return <Component width={size} height={size} style={{ display: "block", flexShrink: 0 }} />;
+}
 
 // Custom simple syntax highlighter
 function highlightCode(code) {
@@ -450,49 +458,140 @@ export default function CaseStudyPage() {
               <h2 className="font-display text-lg font-bold tracking-wider uppercase">Architecture &amp; Build</h2>
             </div>
 
-            <p className="text-sm text-[#aaaaaa] leading-relaxed mb-6">
+            <p className="text-sm text-[#aaaaaa] leading-relaxed mb-8">
               {project.stages.build.summary}
             </p>
 
-            {/* Architecture Node */}
-            <div className="mb-6">
-              <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-2 font-mono">Architecture Stack</h3>
-              <div className="inline-flex items-center gap-2 bg-[#151515] border border-[#222222]/80 px-3.5 py-2.5 rounded-lg text-xs font-mono text-[#c0c0c0]">
-                {extra.build.architecture}
-              </div>
-            </div>
+            {/* PART 1 — Architecture Diagram */}
+            {extra.build?.architectureDiagram && (
+              <div className="mb-8">
+                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">Architecture Diagram</h3>
+                <div className="bg-[#0a0a0a] border border-[#222222]/80 rounded-xl p-6 flex flex-col items-center gap-0 overflow-x-auto">
+                  {extra.build.architectureDiagram.map((node, idx, arr) => (
+                    <div key={idx} className="flex flex-col items-center w-full max-w-sm">
+                      {/* Node box */}
+                      <div className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border w-full justify-center ${
+                        node.primary
+                          ? "bg-gold/10 border-gold/40 text-gold"
+                          : node.services
+                          ? "bg-[#141414] border-[#222222]/60 text-[#aaaaaa]"
+                          : "bg-[#141414] border-[#222222]/60 text-[#888888]"
+                      }`}>
+                        {node.iconKey && <ArchIcon iconKey={node.iconKey} size={22} />}
+                        <div className="text-center">
+                          <div className={`font-mono font-bold text-xs ${node.primary ? "text-gold" : "text-white"}`}>
+                            {node.label}
+                          </div>
+                          {node.sub && (
+                            <div className="text-[9px] text-[#555555] mt-0.5 font-mono">{node.sub}</div>
+                          )}
+                        </div>
+                      </div>
 
-            {/* Code Snippet */}
+                      {/* Connector arrow (not on last node) */}
+                      {idx < arr.length - 1 && !arr[idx + 1]?.services && (
+                        <div className="flex flex-col items-center my-1">
+                          <div className="w-px h-4 bg-[#333333]" />
+                          <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+                            <path d="M4 6L0 0H8L4 6Z" fill="#444444" />
+                          </svg>
+                        </div>
+                      )}
+
+                      {/* Side-by-side services row */}
+                      {node.services && (
+                        <div className="flex flex-col items-center w-full">
+                          <div className="flex flex-col items-center my-1">
+                            <div className="w-px h-4 bg-[#333333]" />
+                            <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
+                              <path d="M4 6L0 0H8L4 6Z" fill="#444444" />
+                            </svg>
+                          </div>
+                          <div className="flex flex-wrap justify-center gap-2 w-full">
+                            {node.services.map((svc, si) => (
+                              <div
+                                key={si}
+                                className="flex items-center gap-1.5 bg-[#141414] border border-[#222222]/60 rounded-lg px-3 py-2 min-w-[120px] flex-1"
+                              >
+                                {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={18} />}
+                                <div>
+                                  <div className="text-[10px] font-mono font-semibold text-white">{svc.label}</div>
+                                  <div className="text-[8px] text-[#555555] font-mono">{svc.sub}</div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* PART 2 — Code Snippet */}
             {project.codeSnippet ? (
-              <div className="mb-6 space-y-2">
+              <div className="mb-8 space-y-3">
                 <h3 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">
                   {project.codeSnippet.title}
                 </h3>
-                <pre className="overflow-x-auto rounded-xl border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[300px] border border-[#222222]/80 shadow-inner">
-                  <code dangerouslySetInnerHTML={{ __html: highlightCode(project.codeSnippet.code) }} />
-                </pre>
+                <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-inner">
+                  {/* Code editor top bar */}
+                  <div className="flex items-center gap-1.5 bg-[#141414] border-b border-[#222222] px-4 py-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                    <span className="ml-3 text-[9px] font-mono text-[#555555]">
+                      {project.codeSnippet.language || "javascript"} — {project.codeSnippet.title}
+                    </span>
+                  </div>
+                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[300px]">
+                    <code dangerouslySetInnerHTML={{ __html: highlightCode(project.codeSnippet.code) }} />
+                  </pre>
+                </div>
               </div>
             ) : project.stages.build.snippet ? (
-              <div className="mb-6 space-y-2">
+              <div className="mb-8 space-y-3">
                 <h3 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">Implementation Snippet</h3>
-                <pre className="overflow-x-auto rounded-xl border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[300px] border border-[#222222]/80 shadow-inner">
-                  <code dangerouslySetInnerHTML={{ __html: highlightCode(project.stages.build.snippet) }} />
-                </pre>
+                <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-inner">
+                  <div className="flex items-center gap-1.5 bg-[#141414] border-b border-[#222222] px-4 py-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                    <span className="ml-3 text-[9px] font-mono text-[#555555]">javascript — implementation.js</span>
+                  </div>
+                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[300px]">
+                    <code dangerouslySetInnerHTML={{ __html: highlightCode(project.stages.build.snippet) }} />
+                  </pre>
+                </div>
               </div>
             ) : null}
 
-            {/* Highlights */}
-            {project.stages.build.highlights && (
+            {/* PART 3 — Key Technical Decisions */}
+            {extra.build?.techDecisions && extra.build.techDecisions.length > 0 && (
               <div>
-                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Implementation Highlights</h3>
-                <div className="flex flex-wrap gap-2">
-                  {project.stages.build.highlights.map((h, idx) => (
-                    <span
+                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">Key Technical Decisions</h3>
+                <div className="space-y-2">
+                  {extra.build.techDecisions.map((decision, idx) => (
+                    <div
                       key={idx}
-                      className="bg-[#151515] border border-[#222222] text-[#888888] text-[9px] uppercase tracking-wider font-semibold px-3 py-1.5 rounded"
+                      className="flex items-start gap-3 bg-[#0d0d0d] border border-[#1e1e1e] hover:border-gold/20 rounded-xl px-4 py-3 transition-colors duration-200 group"
                     >
-                      {h}
-                    </span>
+                      <div className="w-5 h-5 rounded-md bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="text-gold text-[9px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
+                      </div>
+                      <div className="flex flex-col gap-0.5 min-w-0">
+                        <span className="text-[11px] font-semibold text-white group-hover:text-gold transition-colors">
+                          {decision.choice}
+                        </span>
+                        <span className="text-[10px] text-[#666666] leading-relaxed">{decision.reason}</span>
+                      </div>
+                      {decision.badge && (
+                        <span className="ml-auto shrink-0 text-[8px] font-mono font-semibold px-2 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
+                          {decision.badge}
+                        </span>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -515,34 +614,40 @@ export default function CaseStudyPage() {
             </p>
 
             {/* Test Cases Table */}
-            {extra.test?.cases && extra.test.cases.length > 0 && (
+            {extra.test?.testCases ? (
               <div className="mb-6">
-                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Verification Matrix</h3>
-                <div className="overflow-x-auto border border-[#222222] rounded-xl bg-[#0a0a0a]">
-                  <table className="w-full border-collapse text-left text-[11px] font-sans">
-                    <thead>
-                      <tr className="border-b border-[#222222] bg-[#141414] text-[#888888]">
-                        <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Test Description</th>
-                        <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
-                        <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#222222]/40 text-[#aaaaaa]">
-                      {extra.test.cases.map((tc, idx) => (
-                        <tr key={idx} className="hover:bg-[#111111]/30 transition-colors">
-                          <td className="py-2.5 px-4 font-medium text-white">{tc.test}</td>
-                          <td className="py-2.5 px-4">{tc.expected}</td>
-                          <td className="py-2.5 px-4 text-right">
-                            <span className="inline-flex items-center bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] text-[8px] font-mono px-2 py-0.5 rounded font-bold uppercase">
-                              {tc.result || "pass"}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <TestSection testData={extra.test} />
               </div>
+            ) : (
+              extra.test?.cases && extra.test.cases.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Verification Matrix</h3>
+                  <div className="overflow-x-auto border border-[#222222] rounded-xl bg-[#0a0a0a]">
+                    <table className="w-full border-collapse text-left text-[11px] font-sans">
+                      <thead>
+                        <tr className="border-b border-[#222222] bg-[#141414] text-[#888888]">
+                          <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Test Description</th>
+                          <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
+                          <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#222222]/40 text-[#aaaaaa]">
+                        {extra.test.cases.map((tc, idx) => (
+                          <tr key={idx} className="hover:bg-[#111111]/30 transition-colors">
+                            <td className="py-2.5 px-4 font-medium text-white">{tc.test}</td>
+                            <td className="py-2.5 px-4">{tc.expected}</td>
+                            <td className="py-2.5 px-4 text-right">
+                              <span className="inline-flex items-center bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] text-[8px] font-mono px-2 py-0.5 rounded font-bold uppercase">
+                                {tc.result || "pass"}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )
             )}
 
             {/* Devices Tested */}
