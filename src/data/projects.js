@@ -129,8 +129,13 @@ app.post('/api/attendance/checkin', authenticate, async (req, res) => {
     github: "https://github.com/John-bayeh/Telegram_Award_Website",
     live: null,
     requirementsDoc: "/docs/telegram-award-requirements.html",
-    screenshot: "/screenshots/project-04.png",
+    screenshot: "/screenshots/telegram-award/home.png",
     tagline: "Community-driven awards, powered by Telegram.",
+    screenshots: [
+      { src: "/screenshots/telegram-award/home.png",    type: "desktop", caption: "Category grid — home page" },
+      { src: "/screenshots/telegram-award/chatbot.png", type: "mobile",  caption: "AI Award Assistant chatbot" },
+      { src: "/screenshots/telegram-award/signin.png",  type: "mobile",  caption: "One-time code sign-in flow" },
+    ],
     stages: {
       scope: {
         summary: "Public voting site where Telegram channel admins nominate members and audiences vote for winners.",
@@ -142,14 +147,14 @@ app.post('/api/attendance/checkin', authenticate, async (req, res) => {
         ],
       },
       design: {
-        summary: "Award-show aesthetic — dark background, gold accents, animated vote counters.",
+        summary: "Award-show aesthetic — dark navy background, cyan branding, animated vote counters, mobile-first layout.",
         decisions: [
-          "React SPA — no SSR needed",
+          "React SPA — no SSR needed, runs in Telegram in-app browser",
           "Node.js REST API for vote submission",
           "MongoDB for flexible nominee/category schema",
           "Framer Motion for vote count animations",
         ],
-        screenshot: "/screenshots/project-04.png",
+        screenshot: "/screenshots/telegram-award/home.png",
       },
       build: {
         summary: "Vote submission uses IP + fingerprint check to prevent duplicates without requiring login.",

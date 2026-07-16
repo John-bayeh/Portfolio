@@ -380,13 +380,20 @@ export default function CaseStudyPage() {
               {project.stages.design.summary}
             </p>
 
-            {/* Screenshots Grid (2x2) */}
+            {/* Screenshots Grid */}
             <div className="mb-8">
               <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">System Interfaces</h3>
-              {project.screenshots?.design?.length > 0 ? (
+              {(project.screenshots?.length > 0 || project.screenshots?.design?.length > 0) ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {project.screenshots.design.map((src, idx) => {
-                    const isMobile = src.includes('mobile') || src.includes('photo');
+                  {(project.screenshots?.design
+                    ? project.screenshots.design.map(src => ({ src, type: src.includes('mobile') || src.includes('photo') ? 'mobile' : 'desktop', caption: '' }))
+                    : project.screenshots
+                  ).map((item, idx) => {
+                    const src     = typeof item === 'string' ? item : item.src;
+                    const isMobile = (typeof item === 'string')
+                      ? (src.includes('mobile') || src.includes('photo'))
+                      : item.type === 'mobile';
+                    const caption = typeof item === 'string' ? getPortalLabel(src) : (item.caption || getPortalLabel(src));
                     return (
                       <div key={idx} className="group flex flex-col gap-1.5">
                         <div
@@ -403,7 +410,7 @@ export default function CaseStudyPage() {
                           </div>
                         </div>
                         <span className="text-[10px] tracking-wider text-muted font-semibold uppercase text-[#555555]">
-                          {getPortalLabel(src)}
+                          {caption}
                         </span>
                       </div>
                     );

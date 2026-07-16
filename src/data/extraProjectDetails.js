@@ -415,15 +415,54 @@ jobs:
     ],
     design: {
       colors: [
-        { name: "Gold", hex: "#C9A84C" },
-        { name: "Deep Charcoal", hex: "#111111" },
-        { name: "Royal Blue", hex: "#1D4ED8" },
-        { name: "Muted Gray", hex: "#6B7280" }
+        { name: "Telegram Cyan",  hex: "#2AABEE" },
+        { name: "Dark Navy",      hex: "#0D1117" },
+        { name: "Card Surface",   hex: "#1A1F2E" },
+        { name: "Pure White",     hex: "#FFFFFF" },
+        { name: "Muted Text",     hex: "#8B8FA8" },
       ],
-      components: ["VotingCard", "LiveCounter", "NomineeList", "CategoryTabs", "AdminDashboard"]
+      components: ["CategoryCard", "AIChatbot", "SignInModal", "NomineeList", "LiveVoteCounter", "AdminDashboard"],
     },
     build: {
-      architecture: "React SPA → Node.js (Express) → MongoDB (Mongoose)"
+      architecture: "React SPA → Node.js (Express) → MongoDB (Mongoose)",
+      architectureDiagram: [
+        {
+          iconKey: "react",
+          label: "React SPA (Vite)",
+          sub: "Fingerprint Generation · Framer Motion · Tailwind",
+          primary: true,
+        },
+        {
+          iconKey: "nodejs",
+          label: "Node.js + Express API",
+          sub: "Deduplication Rules · Rate Limiting · Fraud Checks",
+        },
+        {
+          // services row — rendered side by side
+          label: "Data & Caching Layer",
+          services: [
+            { iconKey: "redis",   label: "Redis Cache Buffer", sub: "Lock-free increments" },
+            { iconKey: "mongodb", label: "MongoDB Database",   sub: "Persistent storage" },
+          ],
+        },
+      ],
+      techDecisions: [
+        {
+          choice: "React (Vite) SPA over Next.js",
+          reason: "Platform runs inside Telegram's in-app webview; requires ultra-lightweight client bundle and instant static loading.",
+          badge: "Performance",
+        },
+        {
+          choice: "MongoDB over SQL (PostgreSQL)",
+          reason: "Flexible nominee documents accommodate varying Telegram metadata, handles, and custom profiles.",
+          badge: "Flexibility",
+        },
+        {
+          choice: "Redis Write Buffering",
+          reason: "Buffers high-frequency voting bursts in memory before flushing in batches to protect MongoDB from connection exhausts.",
+          badge: "Scalability",
+        },
+      ],
     },
     test: {
       cases: [

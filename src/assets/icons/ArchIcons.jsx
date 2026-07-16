@@ -90,6 +90,44 @@ export function GroqIcon({ width = 22, height = 22, style }) {
   );
 }
 
+export function ReactIcon({ width = 22, height = 22, style }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348" width={width} height={height} style={style}>
+      <circle cx="0" cy="0" r="2.05" fill="#61dafb"/>
+      <g stroke="#61dafb" strokeWidth="1" fill="none">
+        <ellipse rx="11" ry="4.2"/>
+        <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+        <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+      </g>
+    </svg>
+  );
+}
+
+export function MongodbIcon({ width = 22, height = 22, style }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width={width} height={height} style={style}>
+      <path fill="#4DB33D" d="M84.1 63.8c-2.3-9.5-6.8-19.1-13-27.1-2.4-3.1-5.1-6.1-7.1-9.2-.7-1-1.3-2.1-1.9-3.2-.2-.4-.4-.8-.7-1.3-.2.5-.4.9-.7 1.3-.6 1.1-1.2 2.2-1.9 3.2-2 3.1-4.7 6.1-7.1 9.2-6.2 8-10.7 17.6-13 27.1-2.6 10.9-1.3 22 3.4 31.9 4.3 9.1 11.2 16.5 19.3 21v.7c0 .4.3.7.7.7h1.4c.4 0 .7-.3.7-.7v-.7c8.1-4.5 15-11.9 19.3-21 4.7-9.9 6-21 3.4-31.9z"/>
+      <path fill="#3F3E3E" d="M62.6 19.5c0-.1 0-.1-.1-.1.1.1.1.1.1.1zM64 18.2c-.3 0-.6.1-.8.3l-.1.1v97.1c.3.1.6.2.9.2h1.4c.3 0 .6-.1.9-.2V18.6l-.1-.1c-.2-.2-.5-.3-.8-.3z"/>
+    </svg>
+  );
+}
+
+export function RedisIcon({ width = 22, height = 22, style }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width={width} height={height} style={style}>
+      <path fill="#D82C20" d="M119.5 28.5L64 3.5 8.5 28.5 64 53.5l55.5-25z"/>
+      <path fill="#A31F16" d="M8.5 28.5v22.5L64 76v-22.5L8.5 28.5z"/>
+      <path fill="#C1271D" d="M119.5 28.5v22.5L64 76v-22.5l55.5-25z"/>
+      <path fill="#D82C20" d="M119.5 58.5L64 33.5 8.5 58.5 64 83.5l55.5-25z"/>
+      <path fill="#A31F16" d="M8.5 58.5v22.5L64 106v-22.5L8.5 58.5z"/>
+      <path fill="#C1271D" d="M119.5 58.5v22.5L64 106v-22.5l55.5-25z"/>
+      <path fill="#D82C20" d="M119.5 88.5L64 63.5 8.5 88.5 64 113.5l55.5-25z"/>
+      <path fill="#A31F16" d="M8.5 88.5v22.5l55.5 12.5V111L64 106v-22.5L8.5 88.5z"/>
+      <path fill="#C1271D" d="M119.5 88.5v22.5l-55.5 12.5V111L64 106v-22.5l55.5-25z"/>
+    </svg>
+  );
+}
+
 // Re-export as a map for dynamic lookup
 export const ARCH_ICONS_MAP = {
   nextjs:     (props) => <NextjsIcon {...props} />,
@@ -100,4 +138,7 @@ export const ARCH_ICONS_MAP = {
   cloudflare: (props) => <CloudflareIcon {...props} />,
   brevo:      (props) => <BrevoIcon {...props} />,
   groq:       (props) => <GroqIcon {...props} />,
+  react:      (props) => <ReactIcon {...props} />,
+  mongodb:    (props) => <MongodbIcon {...props} />,
+  redis:      (props) => <RedisIcon {...props} />,
 };
