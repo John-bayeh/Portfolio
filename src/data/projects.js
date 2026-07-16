@@ -11,8 +11,12 @@ const projects = [
     live: null,
     requirementsDoc: "https://docs.google.com/document/d/1XeCw6PAjrqdjem1k-BbSE4sZjFWMz-fyzKbf5FqXF9g/edit?tab=t.0",
     screenshots: {
-      thumbnail: '/screenshots/askualalink-hr/admin-dashboard.png',
+      thumbnail: '/screenshots/askualalink-hr/home_mobile.jpg',
       design: [
+        '/screenshots/askualalink-hr/home_mobile.jpg',
+        '/screenshots/askualalink-hr/mobile_1.jpg',
+        '/screenshots/askualalink-hr/mobile_2.jpg',
+        '/screenshots/askualalink-hr/mobile_3.jpg',
         '/screenshots/askualalink-hr/admin-dashboard.png',
         '/screenshots/askualalink-hr/admin-employees.png',
         '/screenshots/askualalink-hr/admin-payroll.png',
