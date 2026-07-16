@@ -199,6 +199,7 @@ export default function CaseStudyPage() {
     if (filename.includes("admin")) return "ADMIN PORTAL";
     if (filename.includes("employee") || filename.includes("leave") || filename.includes("payslip")) return "EMPLOYEE PORTAL";
     if (filename.includes("career") || filename.includes("carrer") || filename.includes("jobs")) return "CAREERS PORTAL";
+    if (filename.includes("mobile") || filename.includes("photo")) return "MOBILE APPLICATION";
     return "USER PORTAL";
   };
 
@@ -384,24 +385,29 @@ export default function CaseStudyPage() {
               <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">System Interfaces</h3>
               {project.screenshots?.design?.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {project.screenshots.design.map((src, idx) => (
-                    <div key={idx} className="group flex flex-col gap-1.5">
-                      <div
-                        onClick={() => setLightboxSrc(src)}
-                        className="relative border border-[#222222] rounded-xl overflow-hidden bg-[#0a0a0a] aspect-video cursor-zoom-in group-hover:border-gold/40 transition-all duration-300 shadow-md"
-                      >
-                        <CaseStudyImage src={src} alt={`${project.name} design screenshot ${idx + 1}`} />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
-                          <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/75 px-3 py-1 rounded-full border border-white/5">
-                            Expand View
-                          </span>
+                  {project.screenshots.design.map((src, idx) => {
+                    const isMobile = src.includes('mobile') || src.includes('photo');
+                    return (
+                      <div key={idx} className="group flex flex-col gap-1.5">
+                        <div
+                          onClick={() => setLightboxSrc(src)}
+                          className={`relative border border-[#222222] rounded-xl overflow-hidden bg-[#0a0a0a] cursor-zoom-in group-hover:border-gold/40 transition-all duration-300 shadow-md ${
+                            isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
+                          }`}
+                        >
+                          <CaseStudyImage src={src} alt={`${project.name} design screenshot ${idx + 1}`} />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/75 px-3 py-1 rounded-full border border-white/5">
+                              Expand View
+                            </span>
+                          </div>
                         </div>
+                        <span className="text-[10px] tracking-wider text-muted font-semibold uppercase text-[#555555]">
+                          {getPortalLabel(src)}
+                        </span>
                       </div>
-                      <span className="text-[10px] tracking-wider text-muted font-semibold uppercase text-[#555555]">
-                        {getPortalLabel(src)}
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="border border-[#222222] rounded-xl overflow-hidden bg-[#0d0d0d] flex items-center justify-center p-8 text-center text-xs text-[#555555] aspect-video">

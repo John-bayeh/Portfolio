@@ -367,23 +367,28 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                           <motion.div variants={tabItemVariants} className="flex flex-col">
                             <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Interface Preview</h4>
                             {screenshots?.design?.length > 0 ? (
-                              <div className="grid grid-cols-2 gap-2">
-                                {screenshots.design.slice(0, 4).map((src, i) => (
-                                  <div
-                                    key={i}
-                                    onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
-                                    className="border border-line rounded-lg overflow-hidden bg-[#070707] aspect-video cursor-zoom-in group/thumb relative"
-                                  >
-                                    <img
-                                      src={src}
-                                      alt={`${name} screenshot ${i + 1}`}
-                                      className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
-                                    />
-                                    <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                                      <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
+                              <div className="grid grid-cols-2 gap-3.5">
+                                {screenshots.design.slice(0, 4).map((src, i) => {
+                                  const isMobile = src.includes('mobile') || src.includes('photo');
+                                  return (
+                                    <div
+                                      key={i}
+                                      onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
+                                      className={`border border-line rounded-lg overflow-hidden bg-[#070707] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
+                                        isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
+                                      }`}
+                                    >
+                                      <img
+                                        src={src}
+                                        alt={`${name} screenshot ${i + 1}`}
+                                        className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
+                                      />
+                                      <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                        <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
+                                      </div>
                                     </div>
-                                  </div>
-                                ))}
+                                  );
+                                })}
                               </div>
                             ) : (
                               <div

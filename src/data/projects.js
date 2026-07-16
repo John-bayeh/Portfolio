@@ -15,10 +15,10 @@ const projects = [
       design: [
         '/screenshots/askualalink-hr/home_mobile.jpg',
         '/screenshots/askualalink-hr/mobile_1.jpg',
-        '/screenshots/askualalink-hr/mobile_2.jpg',
-        '/screenshots/askualalink-hr/mobile_3.jpg',
         '/screenshots/askualalink-hr/admin-dashboard.png',
         '/screenshots/askualalink-hr/admin-employees.png',
+        '/screenshots/askualalink-hr/mobile_2.jpg',
+        '/screenshots/askualalink-hr/mobile_3.jpg',
         '/screenshots/askualalink-hr/admin-payroll.png',
         '/screenshots/askualalink-hr/employee-dashboard.png',
       ]
