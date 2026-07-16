@@ -362,44 +362,56 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                           )}
                         </div>
 
-                        {/* Screenshot grid (2x2) for projects with screenshots.design, fallback to single screenshot */}
-                        {(screenshots?.design?.length > 0 || thumbnail) && (
-                          <motion.div variants={tabItemVariants} className="flex flex-col">
-                            <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Interface Preview</h4>
-                            {screenshots?.design?.length > 0 ? (
-                              <div className="grid grid-cols-2 gap-3.5">
-                                {screenshots.design.slice(0, 4).map((src, i) => {
-                                  const isMobile = src.includes('mobile') || src.includes('photo');
-                                  return (
-                                    <div
-                                      key={i}
-                                      onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
-                                      className={`border border-line rounded-lg overflow-hidden bg-[#070707] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
-                                        isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
-                                      }`}
-                                    >
-                                      <img
-                                        src={src}
-                                        alt={`${name} screenshot ${i + 1}`}
-                                        className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
-                                      />
-                                      <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                                        <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
+                        {/* Screenshot grid (2x2) — handles new array format {src,type,caption} and old .design[] */}
+                        {(() => {
+                          // Normalise: new format is top-level array of objects; old format is screenshots.design[]
+                          const items = Array.isArray(screenshots) && screenshots.length > 0
+                            ? screenshots
+                            : screenshots?.design?.length > 0
+                              ? screenshots.design.map(src => ({ src, type: src.includes('mobile') || src.includes('photo') ? 'mobile' : 'desktop' }))
+                              : null;
+                          if (!items && !thumbnail) return null;
+                          return (
+                            <motion.div variants={tabItemVariants} className="flex flex-col">
+                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Interface Preview</h4>
+                              {items ? (
+                                <div className="grid grid-cols-2 gap-3.5">
+                                  {items.slice(0, 4).map((item, i) => {
+                                    const src      = typeof item === 'string' ? item : item.src;
+                                    const isMobile = typeof item === 'string'
+                                      ? (src.includes('mobile') || src.includes('photo'))
+                                      : item.type === 'mobile';
+                                    return (
+                                      <div
+                                        key={i}
+                                        onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
+                                        className={`border border-line rounded-lg overflow-hidden bg-[#070707] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
+                                          isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
+                                        }`}
+                                      >
+                                        <img
+                                          src={src}
+                                          alt={`${name} screenshot ${i + 1}`}
+                                          className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                          <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
+                                        </div>
                                       </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            ) : (
-                              <div
-                                onClick={(e) => { e.stopPropagation(); setLightboxSrc(thumbnail); }}
-                                className="border border-line rounded-lg overflow-hidden bg-[#070707] flex items-center justify-center max-h-[160px] cursor-zoom-in"
-                              >
-                                <img src={thumbnail} alt={name} className="w-full h-auto object-cover max-h-[160px]" />
-                              </div>
-                            )}
-                          </motion.div>
-                        )}
+                                    );
+                                  })}
+                                </div>
+                              ) : (
+                                <div
+                                  onClick={(e) => { e.stopPropagation(); setLightboxSrc(thumbnail); }}
+                                  className="border border-line rounded-lg overflow-hidden bg-[#070707] cursor-zoom-in aspect-video"
+                                >
+                                  <img src={thumbnail} alt={name} className="w-full h-full object-cover object-top" />
+                                </div>
+                              )}
+                            </motion.div>
+                          );
+                        })()}
 
                         {/* Lightbox */}
                         <AnimatePresence>
