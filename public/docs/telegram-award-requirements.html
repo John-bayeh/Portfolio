@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram Award | Product Requirements Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080808;
+      --card-bg: #111111;
+      --border: #222222;
+      --text-main: #f8fafc;
+      --text-muted: #888888;
+      --gold: #D4AF37;
+      --gold-dark: #C9A84C;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1rem;
+    }
+    
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: var(--gold);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      background-color: rgba(212, 175, 55, 0.05);
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    
+    .meta-grid {
+      display: grid;
+      grid-template-cols: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    
+    .meta-item {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 12px;
+    }
+    
+    .meta-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      display: block;
+    }
+    
+    .meta-val {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-top: 3rem;
+      margin-bottom: 1.25rem;
+      color: var(--gold-dark);
+      border-bottom: 1px solid rgba(34, 34, 34, 0.5);
+      padding-bottom: 0.5rem;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 1.75rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    p {
+      color: #cccccc;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    
+    ul, ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.25rem;
+    }
+    
+    li {
+      color: #cccccc;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    strong {
+      color: var(--text-main);
+    }
+    
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #e06c75;
+    }
+    
+    pre {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      padding: 1.25rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    
+    pre code {
+      color: #abb2bf;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    
+    .callout {
+      background-color: rgba(212, 175, 55, 0.04);
+      border-left: 4px solid var(--gold);
+      padding: 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .callout-title {
+      font-weight: bold;
+      color: var(--gold);
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    
+    th {
+      background-color: var(--card-bg);
+      color: var(--gold);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      color: #cccccc;
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .floating-print {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background-color: var(--gold);
+      color: #080808;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
+      transition: all 0.2s ease;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+    }
+    
+    .floating-print:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .back-link:hover {
+      color: var(--gold);
+    }
+    
+    @media print {
+      body {
+        background: white;
+        color: black;
+        padding: 0;
+      }
+      .floating-print, .back-link {
+        display: none;
+      }
+      h2 {
+        color: black;
+        border-bottom-color: black;
+      }
+      .meta-item, pre, .callout {
+        border-color: #ccc;
+        background: #f9f9f9;
+        color: black;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="floating-print" onclick="window.print()">Print Document</button>
+
+  <div class="container">
+    <a href="/" class="back-link">← Back to Portfolio</a>
+    <header>
+      <div class="logo-container">
+        <span class="badge">SPECIFICATION v1.0</span>
+      </div>
+      <h1>Telegram Award Voting Platform</h1>
+      <p class="subtitle">Product Requirements Document (PRD) for Community Award Campaigns</p>
+      
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Client/Target</span>
+          <span class="meta-val">Telegram Communities</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Architecture</span>
+          <span class="meta-val">React SPA &middot; Node.js &middot; MongoDB</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Security Focus</span>
+          <span class="meta-val">Zero-Auth Deduplication</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- SECTION 1: SYSTEM OVERVIEW -->
+      <h2>1. System Overview</h2>
+      <p>
+        The <strong>Telegram Award Voting Platform</strong> is a fast, lightweight web application designed to host public award voting campaigns for Telegram channels and group communities. Administrators define categories (e.g., "Most Helpful Member", "Top Developer") and nominate community members. Users visit the site to cast votes for their favorite nominees.
+      </p>
+      <p>
+        A key constraint is the <strong>frictionless voting requirement</strong>: users must be able to vote with a single click without the hurdle of creating accounts, logging in via Telegram, or verifying phone numbers. To support this while maintaining campaign integrity, the backend employs a <strong>Zero-Auth Anti-Fraud Engine</strong> combining client device fingerprinting and IP tracking.
+      </p>
+
+      <!-- SECTION 2: USER ROLES & FLOWS -->
+      <h2>2. User Roles &amp; Use Cases</h2>
+      
+      <h3>2.1 End User (Voter)</h3>
+      <ul>
+        <li><strong>Browse Nominees:</strong> View categories, nominees' details (Telegram username, profile tag), and real-time vote metrics.</li>
+        <li><strong>Cast Vote:</strong> Select a nominee in a category and vote. The vote must register instantly without requiring account creation.</li>
+        <li><strong>View Current Standings:</strong> See live updates of nominee rankings once they have voted (or if the category is closed).</li>
+      </ul>
+
+      <h3>2.2 Admin (Channel Owner)</h3>
+      <ul>
+        <li><strong>Category Management:</strong> Create, edit, and delete award categories (with start/end dates).</li>
+        <li><strong>Nomination Management:</strong> Nominate handles with custom bios and images.</li>
+        <li><strong>Campaign Dashboard:</strong> View vote logs, inspect fraud markers, reset anomalous categories, and open/close voting windows manually.</li>
+      </ul>
+
+      <!-- SECTION 3: FUNCTIONAL REQUIREMENTS -->
+      <h2>3. Functional Requirements</h2>
+
+      <h3>3.1 Dynamic Category Landing</h3>
+      <p>
+        The home page presents active categories in a tabbed layout.
+        When a category is active, it displays a card list of nominees in randomized positions (to prevent left-to-right bias).
+      </p>
+
+      <h3>3.2 Zero-Auth Anti-Fraud Engine</h3>
+      <p>
+        To prevent automated voting scripts and click-farms without forcing users to sign in, the system enforces a strict verification schema:
+      </p>
+      <div class="callout">
+        <div class="callout-title">Deduplication Logic</div>
+        <p>
+          Each vote payload submitted to <code>POST /api/vote</code> requires a <code>fingerprint</code> parameter generated on the client-side. The backend stores the combined unique signature:
+        </p>
+        <p style="font-family: monospace; font-size: 0.9rem; text-align: center; margin: 10px 0; font-weight: bold; color: var(--gold);">
+          UniqueKey = Hash(CategoryID + ClientFingerprint + VoterIP)
+        </p>
+        <p>
+          If a record with this key already exists in MongoDB, the vote is blocked with an HTTP 429 Status.
+        </p>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature ID</th>
+              <th>Requirement Description</th>
+              <th>Acceptance Criteria</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>FR-01</strong></td>
+              <td>Deduplication Checks</td>
+              <td>Verifies that the incoming voter fingerprint hasn't already voted in the requested category.</td>
+            </tr>
+            <tr>
+              <td><strong>FR-02</strong></td>
+              <td>Rate Limiting</td>
+              <td>Limits requests per IP (max 5 votes/min) to prevent brute-force API flood attempts.</td>
+            </tr>
+            <tr>
+              <td><strong>FR-03</strong></td>
+              <td>Admin Authentication</td>
+              <td>Admin panel actions require a secure session token validated in Express headers.</td>
+            </tr>
+            <tr>
+              <td><strong>FR-04</strong></td>
+              <td>Real-time Counter Sync</td>
+              <td>Nominee cards refresh vote tallies dynamically using Server-Sent Events or polling.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SECTION 4: DATA MODELS -->
+      <h2>4. Data Schema (MongoDB)</h2>
+      <p>
+        MongoDB is selected for schema flexibility (allowing nominees to have dynamic Telegram metadata, user tags, or bios).
+      </p>
+
+      <pre><code>// 1. Nominee Schema
+const NomineeSchema = new Schema({
+  name: { type: String, required: true },
+  telegramHandle: { type: String, required: true },
+  avatarUrl: String,
+  bio: String,
+  votes: { type: Number, default: 0 },
+  categoryId: { type: Schema.Types.ObjectId, ref: 'Category', index: true }
+});
+
+// 2. VoteLog Schema (Enforces Deduplication)
+const VoteLogSchema = new Schema({
+  categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
+  fingerprint: { type: String, required: true },
+  ipHash: { type: String, required: true },
+  timestamp: { type: Date, default: Date.now }
+});
+
+// Compound unique index prevents race conditions/duplicate writes in MongoDB
+VoteLogSchema.index({ categoryId: 1, fingerprint: 1 }, { unique: true });
+VoteLogSchema.index({ categoryId: 1, ipHash: 1 }, { unique: true });
+</code></pre>
+
+      <!-- SECTION 5: PERFORMANCE & SECURITY -->
+      <h2>5. Non-Functional Requirements</h2>
+      <h3>5.1 Performance Under Spike Loads</h3>
+      <ul>
+        <li>When a Telegram channel broadcasts the voting URL to 20,000+ members simultaneously, the database must not lock.</li>
+        <li><strong>Solution:</strong> Express uses MongoDB atomic increments (<code>$inc</code>) on the nominee records to avoid transactional database locks. Memory-level caching is deployed on active counter routes.</li>
+      </ul>
+
+      <h3>5.2 Accessibility &amp; Responsive Layout</h3>
+      <ul>
+        <li>The voting experience must be fully optimized for mobile devices because 90%+ of Telegram users open links inside the internal Telegram in-app browser.</li>
+        <li>Clean, lightweight CSS is used with no bulky frameworks, achieving a Mobile performance score of &gt;95 in audits.</li>
+      </ul>
+    </main>
+  </div>
+</body>
+</html>

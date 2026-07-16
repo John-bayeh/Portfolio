@@ -128,6 +128,7 @@ app.post('/api/attendance/checkin', authenticate, async (req, res) => {
     year: "2025",
     github: "https://github.com/John-bayeh/Telegram_Award_Website",
     live: null,
+    requirementsDoc: "/docs/telegram-award-requirements.html",
     screenshot: "/screenshots/project-04.png",
     tagline: "Community-driven awards, powered by Telegram.",
     stages: {
