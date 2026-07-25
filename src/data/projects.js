@@ -127,7 +127,7 @@ app.post('/api/attendance/checkin', authenticate, async (req, res) => {
     tech: ["React", "Node.js"],
     year: "2025",
     github: "https://github.com/John-bayeh/Telegram_Award_Website",
-    live: null,
+    live: "https://telegram-award-website-dpnq.vercel.app/",
     requirementsDoc: "/docs/telegram-award-requirements.html",
     screenshot: "/screenshots/telegram-award/home.png",
     tagline: "Community-driven awards, powered by Telegram.",
