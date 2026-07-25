@@ -95,33 +95,38 @@ export default function TestSection({ testData }) {
             <span className="text-[10px] text-[#666666] font-mono">Click screenshot to enlarge</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {testingScreenshots.map((img, idx) => (
-              <div
-                key={idx}
-                onClick={() => setActiveImageModal(img)}
-                className="group relative bg-[#0e0e0e] border border-[#222222] hover:border-gold/50 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-md hover:shadow-gold/10"
-              >
-                <div className="aspect-video overflow-hidden bg-black/40">
-                  <img
-                    src={img.url}
-                    alt={img.title || `Test Proof ${idx + 1}`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 items-start">
+            {testingScreenshots.map((img, idx) => {
+              const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
+                `${img.url} ${img.title || ''} ${img.badge || ''}`
+              );
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setActiveImageModal(img)}
+                  className="group relative bg-[#0e0e0e] border border-[#222222] hover:border-gold/50 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-md hover:shadow-gold/10 flex flex-col h-full"
+                >
+                  <div className={`overflow-hidden bg-[#050505] flex items-center justify-center ${isVertical ? 'aspect-[9/16] p-2' : 'aspect-video'}`}>
+                    <img
+                      src={img.url}
+                      alt={img.title || `Test Proof ${idx + 1}`}
+                      className={`w-full h-full group-hover:scale-105 transition-transform duration-300 ${isVertical ? 'object-contain rounded-md' : 'object-cover'}`}
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-2.5 bg-[#121212] mt-auto">
+                    <p className="text-[11px] font-bold text-white group-hover:text-gold transition-colors truncate">
+                      {img.title}
+                    </p>
+                    {img.badge && (
+                      <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
+                        {img.badge}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="p-2.5 bg-[#121212]">
-                  <p className="text-[11px] font-bold text-white group-hover:text-gold transition-colors truncate">
-                    {img.title}
-                  </p>
-                  {img.badge && (
-                    <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
-                      {img.badge}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

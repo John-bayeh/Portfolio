@@ -687,6 +687,19 @@ export default function () {
       ],
     },
     test: {
+      testingScreenshots: [
+        { url: "/testing-screenshots/todo-app/add-task.png",           title: "New Task Creation Form",                   badge: "Task Creation" },
+        { url: "/testing-screenshots/todo-app/todo-list.png",          title: "Interactive Task List View",               badge: "List View" },
+        { url: "/testing-screenshots/todo-app/task-actions.png",       title: "Task Action Toolbar (Complete / Delete)", badge: "Actions" },
+        { url: "/testing-screenshots/todo-app/filtered-tasks.png",     title: "Filtered Active / Completed Tasks",       badge: "Filtering" },
+        { url: "/testing-screenshots/todo-app/k6.png",                 title: "k6 API Load Testing Results",             badge: "⭐ UNIQUE TEST (k6 Load Proof)" },
+        { url: "/testing-screenshots/todo-app/desktop.png",            title: "Full Desktop View",                        badge: "Desktop UI" },
+        { url: "/testing-screenshots/todo-app/mobile-todo.png",        title: "Mobile Responsive View (390px)",           badge: "Mobile UI" },
+        { url: "/testing-screenshots/todo-app/table-todo.png",         title: "Tablet Responsive Layout",                 badge: "Tablet UI" },
+        { url: "/testing-screenshots/todo-app/lighthouse-desktop.png", title: "Lighthouse Desktop Audit",                 badge: "Performance" },
+        { url: "/testing-screenshots/todo-app/lighthouse-mobile.png",  title: "Lighthouse Mobile Audit",                  badge: "Mobile Audit" },
+        { url: "/testing-screenshots/todo-app/firefox.png",            title: "Firefox Cross-Browser View",              badge: "Compatibility" },
+      ],
       testCases: [
         {
           category: "UI Component",
@@ -798,6 +811,19 @@ export default function () {
       ],
     },
     test: {
+      testingScreenshots: [
+        { url: "/testing-screenshots/hr-assistant-ai/chat-response.png",     title: "AI Chat Response Streaming",            badge: "AI Response" },
+        { url: "/testing-screenshots/hr-assistant-ai/chat-empty.png",        title: "Empty Chat Interface",                  badge: "Chat UI" },
+        { url: "/testing-screenshots/hr-assistant-ai/chat-cleared.png",      title: "Cleared Conversation History",          badge: "Clear History" },
+        { url: "/testing-screenshots/hr-assistant-ai/api-health.png",        title: "API Health Check Endpoint Test",         badge: "API Verification" },
+        { url: "/testing-screenshots/hr-assistant-ai/k6.png",                title: "k6 API Load Testing Results",          badge: "⭐ UNIQUE TEST (k6 Load Proof)" },
+        { url: "/testing-screenshots/hr-assistant-ai/desktop-chat.png",    title: "Full Desktop Chat View",               badge: "Desktop UI" },
+        { url: "/testing-screenshots/hr-assistant-ai/mobile-chat.png",     title: "Mobile Responsive Chat (390px)",        badge: "Mobile UI" },
+        { url: "/testing-screenshots/hr-assistant-ai/table-chat.png",      title: "Tablet Responsive Layout",              badge: "Tablet UI" },
+        { url: "/testing-screenshots/hr-assistant-ai/lighthouse-desktop.png",title: "Lighthouse Desktop Audit",             badge: "Performance" },
+        { url: "/testing-screenshots/hr-assistant-ai/llighthouse-mobile.png",title: "Lighthouse Mobile Audit",              badge: "Mobile Audit" },
+        { url: "/testing-screenshots/hr-assistant-ai/firefox-chat.png",     title: "Firefox Cross-Browser View",           badge: "Compatibility" },
+      ],
       testCases: [
         {
           category: "Chat Interface",
@@ -1060,6 +1086,19 @@ services:
       ],
     },
     test: {
+      testingScreenshots: [
+        { url: "/testing-screenshots/formula-management/admin-appshell.png",      title: "Admin Dashboard Shell View",             badge: "Role View (Admin)" },
+        { url: "/testing-screenshots/formula-management/engineering-view.png",    title: "Engineering Role View",                  badge: "Role View (Engineer)" },
+        { url: "/testing-screenshots/formula-management/officer-view.png",        title: "Project Officer View",                   badge: "Role View (Officer)" },
+        { url: "/testing-screenshots/formula-management/formula-builder.png",     title: "Interactive Formula Builder UI",          badge: "Formula Engine" },
+        { url: "/testing-screenshots/formula-management/formula-results.png",     title: "Formula Execution Output & Results",    badge: "Formula Results" },
+        { url: "/testing-screenshots/formula-management/formula-errors.png",      title: "Validation Error Handling",               badge: "Validation" },
+        { url: "/testing-screenshots/formula-management/corridor-green.png",      title: "Corridor Compliance — Safe (GREEN)",     badge: "⭐ UNIQUE TEST (Safe)" },
+        { url: "/testing-screenshots/formula-management/corridor-red.png",        title: "Corridor Boundary Exceeded (RED Alert)", badge: "⭐ UNIQUE TEST (Violation Alert)" },
+        { url: "/testing-screenshots/formula-management/mobile-formula.png",      title: "Mobile View — iPhone 12 Pro (390px)",     badge: "Responsive" },
+        { url: "/testing-screenshots/formula-management/lighthouse-desktop.png",  title: "Lighthouse Desktop Audit",                badge: "Performance" },
+        { url: "/testing-screenshots/formula-management/lighthouse-mobile.png",   title: "Lighthouse Mobile Audit",                 badge: "Mobile Audit" },
+      ],
       testCases: [
         {
           category: "Formula Versioning",
@@ -1333,12 +1372,12 @@ jobs:
         { url: "/testing-screenshots/hotel-master/lighthouse-mobile.png", title: "Lighthouse Mobile Audit", badge: "Mobile Audit" },
         { url: "/testing-screenshots/hotel-master/firefox.png", title: "Firefox Cross-Browser View", badge: "Compatibility" },
       ],
-      cases: [
-        { test: "Date conflict detection", expected: "Count of conflicting reservations returns > 0; blocks booking", result: "pass" },
-        { test: "Form validation triggers", expected: "Checkout before checkin returns custom error validation", result: "pass" },
-        { test: "Room filter functionality", expected: "Filters rooms by room class and pricing accurately", result: "pass" },
-        { test: "Email booking notification", expected: "Postgres/MongoDB logs status; triggers nodemailer confirm", result: "pass" },
-        { test: "Responsive grid layout", expected: "Adapts 3-column desktop view into 1-column mobile flow", result: "pass" }
+      testCases: [
+        { category: "Booking", scenario: "Date conflict detection", expected: "Count of conflicting reservations returns > 0; blocks booking", result: "pass", tool: "Jest" },
+        { category: "Validation", scenario: "Form validation triggers", expected: "Checkout before checkin returns custom error validation", result: "pass", tool: "React Testing Library" },
+        { category: "Filtering", scenario: "Room filter functionality", expected: "Filters rooms by room class and pricing accurately", result: "pass", tool: "Jest" },
+        { category: "Notification", scenario: "Email booking notification", expected: "Brevo SMTP triggers email confirmation to management", result: "pass", tool: "Nodemailer / Brevo" },
+        { category: "Responsive", scenario: "Responsive grid layout", expected: "Adapts 3-column desktop view into 1-column mobile flow", result: "pass", tool: "Chrome DevTools" }
       ]
     },
     ship: {
