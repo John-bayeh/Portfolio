@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formula Management System — Product Requirements</title>
+  <meta name="description" content="Full product requirements for Formula Management System: A configurable, audit-ready platform that replaces spreadsheet-based resource allocation with rule-driven formula engines, corridor monitoring, Gantt scheduling, and structured concept-to-feasibility workflows — fully integrated with the existing Project Management System (PMS)." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #07090F;
+      --bg-card:   #0D1117;
+      --bg-hover:  #111827;
+      --border:    #1F2937;
+      --border-hi: #374151;
+      --accent:    #2563EB;
+      --emerald:   #10B981;
+      --text:      #F9FAFB;
+      --muted:     #6B7280;
+      --mono:      'JetBrains Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(37,99,235,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Back bar ── */
+    .back-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(7,9,15,.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(1rem,5vw,3rem);
+    }
+    .back-bar-inner {
+      max-width: 1100px; margin: 0 auto;
+      height: 52px; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted); text-decoration: none;
+      font-size: 13px; font-weight: 500; transition: color .2s;
+    }
+    .back-link:hover { color: #60A5FA; }
+    .doc-label { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+
+    /* ── Page ── */
+    .page {
+      position: relative; z-index: 1;
+      max-width: 1100px; margin: 0 auto;
+      padding: clamp(2rem,6vw,4rem) clamp(1rem,5vw,3rem) 6rem;
+    }
+
+    /* ── Hero ── */
+    .hero { border-bottom: 1px solid var(--border); padding-bottom: 2.5rem; margin-bottom: 3rem; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 12px; border-radius: 999px;
+      font-family: var(--mono); font-size: 11px; font-weight: 600;
+      letter-spacing: .06em; border: 1px solid;
+    }
+    .pill-blue { color: #60A5FA;        border-color: rgba(96,165,250,.35);  background: rgba(96,165,250,.06); }
+    .pill-em   { color: var(--emerald); border-color: rgba(16,185,129,.35);  background: rgba(16,185,129,.06); }
+    .pill-sl   { color: #94A3B8;        border-color: rgba(148,163,184,.35); background: rgba(148,163,184,.06); }
+    .pill-gr   { color: var(--muted);   border-color: var(--border);         background: rgba(255,255,255,.03); }
+
+    .hero-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700; letter-spacing: -.02em;
+      line-height: 1.15; margin-bottom: .75rem;
+    }
+    .hero-title span { color: #60A5FA; }
+    .hero-sub { color: var(--muted); font-size: 1rem; max-width: 680px; margin-bottom: 1.5rem; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 1.5rem; }
+    .meta-item { font-family: var(--mono); font-size: 12px; }
+    .meta-item strong { display: block; color: var(--muted); font-weight: 500; margin-bottom: 2px; letter-spacing: .06em; }
+    .meta-item span { color: var(--text); }
+
+    /* ── Section ── */
+    .section { margin-bottom: 3rem; }
+    .section-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 1.25rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-num { font-family: var(--mono); font-size: 11px; color: #60A5FA; font-weight: 600; }
+    .section-title { font-size: 1rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ── Table ── */
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    thead { background: #0D1117; }
+    th {
+      padding: 10px 16px; text-align: left;
+      font-family: var(--mono); font-size: 10px; font-weight: 600;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 11px 16px; border-bottom: 1px solid rgba(31,41,55,.6); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.015); }
+    .id-cell { font-family: var(--mono); font-size: 11px; color: #60A5FA; font-weight: 600; white-space: nowrap; }
+    .priority-high   { color: #F87171; font-family: var(--mono); font-size: 11px; font-weight: 600; }
+    .priority-medium { color: #FCD34D; font-family: var(--mono); font-size: 11px; font-weight: 600; }
+    .priority-low    { color: var(--muted); font-family: var(--mono); font-size: 11px; font-weight: 600; }
+    .nfr-target { font-family: var(--mono); font-size: 12px; color: var(--emerald); }
+
+    /* ── Cards ── */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .cards-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.1rem 1.25rem;
+      transition: border-color .2s;
+    }
+    .card:hover { border-color: rgba(96,165,250,.3); }
+    .card-label { font-family: var(--mono); font-size: 10px; color: #60A5FA; font-weight: 600; letter-spacing: .08em; margin-bottom: .35rem; }
+    .card-value { font-size: 13.5px; font-weight: 500; }
+    .card-sub { font-size: 12.5px; color: #94A3B8; margin-top: .35rem; }
+
+    /* ── Constraint list ── */
+    .constraint-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .constraint-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 13.5px; color: #94A3B8;
+    }
+    .constraint-list li::before { content: '—'; color: #60A5FA; flex-shrink: 0; }
+
+    /* ── Section prose ── */
+    .section-prose { color: #94A3B8; max-width: 780px; margin-bottom: 1.5rem; font-size: 13.5px; }
+
+    /* ── Print button ── */
+    .print-btn {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 50px;
+      padding: 10px 20px; font-size: 13px; font-weight: 600;
+      font-family: var(--mono); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 4px 24px rgba(37,99,235,.35);
+      transition: background .2s, box-shadow .2s;
+    }
+    .print-btn:hover { background: #1D4ED8; box-shadow: 0 6px 30px rgba(37,99,235,.5); }
+    @media print { .print-btn, .back-bar { display: none; } }
+    @media (max-width: 640px) { .print-btn { bottom: 1rem; right: 1rem; padding: 8px 14px; font-size: 12px; } }
+  </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+    <rect x="6" y="14" width="12" height="8"/>
+  </svg>
+  Print / Save PDF
+</button>
+
+<!-- Back bar -->
+<nav class="back-bar">
+  <div class="back-bar-inner">
+    <a class="back-link" href="/#projects">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 5l-7 7 7 7"/>
+      </svg>
+      Back to Projects
+    </a>
+    <span class="doc-label">REQUIREMENTS DOC · v1.0</span>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="pills">
+      <span class="pill pill-blue">Enterprise · APB</span>
+      <span class="pill pill-sl">React · Node.js</span>
+      <span class="pill pill-em">PMS Integration</span>
+      <span class="pill pill-gr">2026</span>
+    </div>
+    <h1 class="hero-title">Formula Management <span>System</span></h1>
+    <p class="hero-sub">
+      A configurable, audit-ready platform that replaces spreadsheet-based resource allocation with rule-driven formula engines, corridor monitoring, Gantt scheduling, and structured concept-to-feasibility workflows — fully integrated with the existing Project Management System (PMS).
+    </p>
+    <div class="meta-row">
+      <div class="meta-item"><strong>VERSION</strong><span>1.0</span></div>
+      <div class="meta-item"><strong>YEAR</strong><span>2026</span></div>
+      <div class="meta-item"><strong>STACK</strong><span>React · Node.js · PostgreSQL</span></div>
+      <div class="meta-item"><strong>STATUS</strong><span>In Development</span></div>
+    </div>
+  </header>
+
+  <!-- 01 System Overview -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">System Overview</h2>
+    </div>
+    <p class="section-prose">
+      The Formula Management System sits as a governance layer above the existing PMS. It introduces six modules — Formula Engine, Corridor Engine, Schedule Matrix, Concept Administration, Feasibility Administration, and a Common Layer — without modifying the existing PMS database or codebase. Integration is non-destructive: the system reads from and writes back through defined interfaces only.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">PHASE 1</div>
+        <div class="card-value">Weeks 1–2: Technical Assessment</div>
+        <div class="card-sub">Full technical assessment of existing PMS API, database schema, and data model.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">NON-DESTRUCTIVE</div>
+        <div class="card-value">Zero PMS Changes</div>
+        <div class="card-sub">No changes to existing PMS database schema or codebase.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">API-FIRST</div>
+        <div class="card-value">REST or ETL Fallback</div>
+        <div class="card-sub">Connect in real time via REST endpoints; ETL pipeline fallback if no API available.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">BI-DIRECTIONAL</div>
+        <div class="card-value">Allocation Write-Back</div>
+        <div class="card-sub">Allocation outputs written back to PMS so project officers see results in their existing interface.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Module Overview -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">System Module Overview</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">MODULE 1</div>
+        <div class="card-value">Formula Engine</div>
+        <div class="card-sub">Configurable rule-based allocation and scoring</div>
+      </div>
+      <div class="card">
+        <div class="card-label">MODULE 2</div>
+        <div class="card-value">Corridor Engine</div>
+        <div class="card-sub">Min/max/threshold definitions and compliance monitoring</div>
+      </div>
+      <div class="card">
+        <div class="card-label">MODULE 3</div>
+        <div class="card-value">Schedule Matrix</div>
+        <div class="card-sub">Gantt visualization, resource conflict detection, forecasting</div>
+      </div>
+      <div class="card">
+        <div class="card-label">MODULE 4</div>
+        <div class="card-value">Concept Administration</div>
+        <div class="card-sub">Digital project idea registration through approval</div>
+      </div>
+      <div class="card">
+        <div class="card-label">MODULE 5</div>
+        <div class="card-value">Feasibility Administration</div>
+        <div class="card-sub">Structured feasibility study workflow and scoring</div>
+      </div>
+      <div class="card">
+        <div class="card-label">MODULE 6</div>
+        <div class="card-value">Common Layer</div>
+        <div class="card-sub">RBAC, PMS integration connector, audit trail, notification service</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Module 1: Formula Management -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Module 1: Project Allocation &amp; Formula Management</h2>
+    </div>
+    <p class="section-prose">
+      Automates resource, budget, and priority allocation through configurable formulas — replacing manual spreadsheet-based allocation with a transparent, auditable, rule-driven system.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-cell">FR-01</td>
+            <td><strong>Formula Configuration Interface</strong> — admins define allocation formulas using configurable parameters (budget ceiling, project capacity, priority level, risk score, geographic weight, resource availability). No code change when rules change.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-02</td>
+            <td><strong>Dynamic Calculation Engine</strong> — calculates allocation values in real time when parameters are updated. Supports complex multi-parameter formulas with weighted scoring.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-03</td>
+            <td><strong>Version Control for Formulas</strong> — each formula version saved. Historical allocations reference the formula version that produced them.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-04</td>
+            <td><strong>Allocation Audit Trail</strong> — every allocation result is traceable (formula, parameters, calculated value, approving official). Non-editable record.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-05</td>
+            <td><strong>Override Workflow</strong> — authorized officials apply manual overrides with mandatory documented justification. Override carries approving official identity, timestamp, and reason.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-06</td>
+            <td><strong>PMS Integration</strong> — reads project data directly from existing PMS. Allocation outputs written back in real time.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-07</td>
+            <td><strong>Reporting</strong> — allocation comparison across projects, time periods, and administrative units. Export to PDF and Excel.</td>
+            <td class="priority-medium">MEDIUM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 04 Module 2: Corridor Management -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Module 2: Corridor Management</h2>
+    </div>
+    <p class="section-prose">
+      Defines and enforces operational boundary frameworks — acceptable ranges for key project parameters — to ensure projects remain within approved governance limits throughout execution.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-cell">FR-08</td>
+            <td><strong>Corridor Definition</strong> — define corridors with min, max, and threshold values for budget range, duration, staffing levels, geographic coverage, risk score. Separate profiles per project type/region.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-09</td>
+            <td><strong>Project-Corridor Assignment</strong> — assign projects to corridor profiles based on type, scale, location. Assignments logged and auditable.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-10</td>
+            <td><strong>Real-Time Compliance Monitoring</strong> — continuous monitoring of all active projects against corridor boundaries. Regional dashboard shows every project's status.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-11</td>
+            <td><strong>Threshold Alert System</strong> — automatic alerts when projects approach (warning) or exceed (breach) corridor limits. Alerts routed to responsible official with required response time.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-12</td>
+            <td><strong>Corridor Data in Schedule Matrix</strong> — corridor boundaries visible in the schedule matrix view. Scheduling decisions constrained by corridor definitions.</td>
+            <td class="priority-medium">MEDIUM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 05 Module 3: Schedule Matrix & Forecasting -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Module 3: Schedule Matrix &amp; Forecasting</h2>
+    </div>
+    <p class="section-prose">
+      Provides integrated scheduling visualization and data-driven forecasting based on current PMS data and historical performance from 4,000+ encoded projects.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-cell">FR-13</td>
+            <td><strong>Schedule Matrix View</strong> — visual matrix of all projects by administrative unit, time period, and resource allocation. Filterable by zone, woreda, project type, and status. Color-coded compliance indicators.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-14</td>
+            <td><strong>Gantt Timeline View</strong> — project timelines in Gantt format. Overlapping schedules and resource conflicts highlighted automatically. Critical path identification.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-15</td>
+            <td><strong>Forecasting Engine</strong> — uses 4,000+ historical project records to generate completion probability forecasts for active projects. Forecasts updated as new data arrives. Confidence intervals shown.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-16</td>
+            <td><strong>Scenario Modeling</strong> — create what-if scenarios by adjusting resource allocations, timeline parameters, or budget inputs. Compare projected outcomes side by side.</td>
+            <td class="priority-medium">MEDIUM</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-17</td>
+            <td><strong>Resource Conflict Detection</strong> — identifies projects competing for the same resources at the same time. Suggests resolution options.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-18</td>
+            <td><strong>PMS Synchronization</strong> — schedule data reflects PMS project statuses in real time.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 06 Module 4: Concept Administration -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Module 4: Project Concept Administration</h2>
+    </div>
+    <p class="section-prose">
+      Replaces paper files, email chains, and scattered documents with a structured digital system for managing project ideas from concept submission to approval decision.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-cell">FR-19</td>
+            <td><strong>Digital Concept Submission</strong> — structured online form (project title, objective, estimated cost, beneficiary population, implementing body, timeline, supporting document uploads).</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-20</td>
+            <td><strong>Evaluation &amp; Scoring Rubrics</strong> — configurable scoring criteria applied by evaluators. Multi-criteria scoring aggregated automatically. Evaluators cannot see each other's scores before submission.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-21</td>
+            <td><strong>Three-Stage Approval Workflow</strong> — Reviewer → Committee → Management. Each stage requires documented approval or rejection with reason. Notifications sent at every transition.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-22</td>
+            <td><strong>Status Transparency</strong> — submitting body sees real-time status (Draft, Submitted, Under Review, Approved, Rejected).</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-23</td>
+            <td><strong>Concept Archive</strong> — approved concepts archived and searchable for future implementation reference.</td>
+            <td class="priority-medium">MEDIUM</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-24</td>
+            <td><strong>Analytics Dashboard</strong> — concept pipeline by stage, approval rates, average review time, submission trends by organization.</td>
+            <td class="priority-medium">MEDIUM</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 07 Module 5: Feasibility Study Administration -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Module 5: Feasibility Study Administration</h2>
+    </div>
+    <p class="section-prose">
+      Automates the planning, assignment, evaluation, and approval of project feasibility studies — replacing manual Word/Excel-based processes with a structured, traceable system.
+    </p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-cell">FR-25</td>
+            <td><strong>Feasibility Study Registration</strong> — digital registration with project information, study type (Technical, Financial, Legal, Operational, Environmental), requesting body, required timeline.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-26</td>
+            <td><strong>Evaluator Assignment &amp; Workload Management</strong> — assign qualified evaluators per study. Track workload and availability. Prevent over-assignment.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-27</td>
+            <td><strong>Standardized Scoring</strong> — apply defined criteria per feasibility category. System generates recommendation outputs based on scoring thresholds. Manual override available with documentation.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-28</td>
+            <td><strong>Approval Workflow</strong> — Reviewer → Committee → Management chain. Explicit sign-off required at each stage. Escalation triggers if response time exceeded.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-29</td>
+            <td><strong>Document Versioning</strong> — upload, store, and archive all feasibility documents. Full version history maintained. Documents linked to PMS project records.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+          <tr>
+            <td class="id-cell">FR-30</td>
+            <td><strong>Audit Trail &amp; Reporting</strong> — full record of who reviewed what, when, and with what outcome. Non-editable. Feasibility pipeline dashboards for management.</td>
+            <td class="priority-high">HIGH</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 08 Common Layer -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Common Layer</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-label">RBAC</div>
+        <div class="card-value">Role-Based Access Control</div>
+        <div class="card-sub">Roles: System Admin, Formula Admin, Evaluator, Viewer, PMS Integration Service. All routes protected.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">PMS CONNECTOR</div>
+        <div class="card-value">Integration Connector</div>
+        <div class="card-sub">API-first connection to existing PMS. ETL fallback if no API available. Bi-directional sync.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">AUDIT TRAIL</div>
+        <div class="card-value">Non-Editable Log</div>
+        <div class="card-sub">Non-editable log of all actions across all modules. Timestamped, user-attributed. 7-year retention.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">NOTIFICATIONS</div>
+        <div class="card-value">Notification Service</div>
+        <div class="card-sub">Automated alerts for threshold breaches, workflow transitions, and escalations.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 Non-Functional Requirements -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <h2 class="section-title">Non-Functional Requirements</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Requirement</th><th>Target</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="id-cell">NFR-01</td>
+            <td>Real-time allocation calculation response time</td>
+            <td class="nfr-target">&lt; 500ms</td>
+          </tr>
+          <tr>
+            <td class="id-cell">NFR-02</td>
+            <td>Schedule matrix load time (all active projects)</td>
+            <td class="nfr-target">&lt; 2s</td>
+          </tr>
+          <tr>
+            <td class="id-cell">NFR-03</td>
+            <td>PMS data sync frequency (ETL fallback)</td>
+            <td class="nfr-target">Every 15 minutes</td>
+          </tr>
+          <tr>
+            <td class="id-cell">NFR-04</td>
+            <td>Audit trail retention</td>
+            <td class="nfr-target">7 years non-editable</td>
+          </tr>
+          <tr>
+            <td class="id-cell">NFR-05</td>
+            <td>System availability during business hours</td>
+            <td class="nfr-target">99.9% uptime</td>
+          </tr>
+          <tr>
+            <td class="id-cell">NFR-06</td>
+            <td>Role-based access enforcement</td>
+            <td class="nfr-target">All routes protected</td>
+          </tr>
+          <tr>
+            <td class="id-cell">NFR-07</td>
+            <td>Export formats supported</td>
+            <td class="nfr-target">PDF and Excel</td>
+          </tr>
+          <tr>
+            <td class="id-cell">NFR-08</td>
+            <td>Mobile responsive</td>
+            <td class="nfr-target">All views</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 10 Tech Stack -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <h2 class="section-title">Tech Stack</h2>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="card-label">FRONTEND</div><div class="card-value">React · Vite · Tailwind CSS</div></div>
+      <div class="card"><div class="card-label">BACKEND</div><div class="card-value">Node.js · Express</div></div>
+      <div class="card"><div class="card-label">DATABASE</div><div class="card-value">PostgreSQL</div></div>
+      <div class="card"><div class="card-label">PMS CONNECTOR</div><div class="card-value">REST API / ETL Pipeline</div></div>
+      <div class="card"><div class="card-label">AUTH</div><div class="card-value">JWT · RBAC Middleware</div></div>
+      <div class="card"><div class="card-label">HOSTING</div><div class="card-value">Vercel (Frontend) · Railway (Backend)</div></div>
+    </div>
+  </section>
+
+</div>
+
+<footer style="text-align:center; padding: 2rem clamp(1rem,5vw,3rem) 3rem; font-family: var(--mono); font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); position: relative; z-index: 1;">
+  Formula Management System · PRD v1.0 · 2026 &nbsp;|&nbsp;
+  <a href="https://github.com/askualalink/formula_mgmt" target="_blank" style="color: #60A5FA; text-decoration: none;">GitHub ↗</a>
+</footer>
+
+</body>
+</html>

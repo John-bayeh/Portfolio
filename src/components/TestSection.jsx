@@ -48,9 +48,10 @@ function highlightCode(code) {
 }
 
 export default function TestSection({ testData }) {
-  const { testCases = [], jestSnippet, k6Snippet } = testData || {};
+  const { testCases = [], jestSnippet, k6Snippet, testingScreenshots = [] } = testData || {};
   const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [activeCodeTab, setActiveCodeTab] = useState("jest"); // "jest" | "k6"
+  const [activeImageModal, setActiveImageModal] = useState(null);
 
   // Get unique categories
   const categories = ["ALL", ...new Set(testCases.map((tc) => tc.category))];
@@ -83,6 +84,73 @@ export default function TestSection({ testData }) {
 
   return (
     <div className="space-y-8 select-text text-left">
+      {/* 1. TESTING SCREENSHOTS PROOF GALLERY */}
+      {testingScreenshots.length > 0 && (
+        <div className="space-y-3 pb-6 border-b border-[#222222]/80">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xs font-bold font-mono text-gold uppercase tracking-wider flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-gold animate-ping" />
+              🖼️ Testing Evidence &amp; Visual Proof ({testingScreenshots.length} Screenshots)
+            </h3>
+            <span className="text-[10px] text-[#666666] font-mono">Click screenshot to enlarge</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {testingScreenshots.map((img, idx) => (
+              <div
+                key={idx}
+                onClick={() => setActiveImageModal(img)}
+                className="group relative bg-[#0e0e0e] border border-[#222222] hover:border-gold/50 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-md hover:shadow-gold/10"
+              >
+                <div className="aspect-video overflow-hidden bg-black/40">
+                  <img
+                    src={img.url}
+                    alt={img.title || `Test Proof ${idx + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-2.5 bg-[#121212]">
+                  <p className="text-[11px] font-bold text-white group-hover:text-gold transition-colors truncate">
+                    {img.title}
+                  </p>
+                  {img.badge && (
+                    <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
+                      {img.badge}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* LIGHTBOX IMAGE MODAL */}
+      <AnimatePresence>
+        {activeImageModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveImageModal(null)}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 cursor-zoom-out"
+          >
+            <div className="max-w-5xl max-h-[90vh] relative bg-[#121212] border border-[#333333] rounded-2xl overflow-hidden p-2 shadow-2xl">
+              <img
+                src={activeImageModal.url}
+                alt={activeImageModal.title}
+                className="max-h-[75vh] w-auto mx-auto object-contain rounded-xl"
+              />
+              <div className="p-3 text-center">
+                <p className="text-sm font-bold text-white">{activeImageModal.title}</p>
+                <p className="text-xs text-[#aaaaaa] mt-0.5">{activeImageModal.description || activeImageModal.badge}</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Category Filter Tabs */}
       <div className="flex flex-wrap gap-1.5 border-b border-[#222222]/80 pb-3">
         {categories.map((cat) => (

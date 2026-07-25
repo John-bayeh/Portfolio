@@ -200,69 +200,87 @@ router.post('/vote', async (req, res) => {
     number: "03",
     slug: "todo-app",
     name: "Todo App",
-    description: "Task manager with done / not-done filter.",
-    tech: ["React", "Node.js"],
+    description: "Task management web application with priority tracking, due dates, sorting, and filtering.",
+    tech: ["React", "JavaScript", "CSS3"],
     year: "2025",
     github: "https://github.com/John-bayeh/Todoappnew",
     live: null,
-    screenshot: "/screenshots/project-05.png",
-    tagline: "Simple, fast, and distraction-free task management.",
+    requirementsDoc: "/docs/todo-app-requirements.html",
+    screenshot: "/screenshots/Todoapp.png",
+    screenshots: {
+      thumbnail: "/screenshots/Todoapp.png",
+      design: ["/screenshots/Todoapp.png"],
+    },
+    tagline: "Streamlined task management interface with priority tracking and due dates.",
+    codeSnippet: {
+      title: 'React Task State Management & Filtering',
+      language: 'javascript',
+      code: `const [tasks, setTasks] = useState([]);
+const [filter, setFilter] = useState("All");
+const [sortBy, setSortBy] = useState("dueDate");
+
+const filteredTasks = useMemo(() => {
+  return tasks
+    .filter((task) => {
+      if (filter === "Completed") return task.completed;
+      if (filter === "Active") return !task.completed;
+      return true;
+    })
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+}, [tasks, filter, sortBy]);`
+    },
     stages: {
       scope: {
-        summary: "Minimal full-stack todo app focused on speed — add, complete, filter, delete tasks without friction.",
+        summary: "A clean and functional task management app designed for daily productivity. Built to offer intuitive task creation, priority assignment, category filtering, and deadline tracking.",
         items: [
-          "Add tasks with a single input + enter",
-          "Mark tasks done/undone",
-          "Filter: All / Active / Completed",
-          "Persist tasks in a backend database",
+          "Interactive Task Creation: Add tasks with custom titles, descriptions, due dates, and priority levels (High, Medium, Low)",
+          "Filtering & Sorting: Filter by status (All, Active, Completed) and sort by due date or priority",
+          "Task Status Toggle: Quick inline status completion toggle with immediate UI feedback",
+          "Rich Card UI: Visual indicators for high-priority tasks and upcoming due dates",
+          "Responsive Layout: Dark purple theme optimized for desktop and mobile viewports",
         ],
       },
       design: {
-        summary: "Minimal single-column layout. No sidebar, no modals — everything in one view.",
+        summary: "Modern dark purple productivity UI. Task form and list structured as hero components with visual priority indicators and clear action buttons.",
         decisions: [
-          "React functional components with hooks",
-          "Express REST API — 4 endpoints only",
-          "SQLite for zero-config local persistence",
-          "CSS Modules for scoped styling",
+          "React functional components with useState and useMemo for efficient state filtering",
+          "Vibrant action buttons (Green for complete, Gold for edit, Red for delete) for clear visual hierarchy",
+          "Dark indigo and violet theme for low eye strain during task planning",
         ],
-        screenshot: "/screenshots/project-05.png",
+        screenshot: "/screenshots/Todoapp.png",
       },
       build: {
-        summary: "Optimistic UI updates — tasks appear instantly before the API confirms.",
-        snippet: `// Optimistic toggle
-function toggleTask(id) {
-  setTasks(prev =>
-    prev.map(t => t.id === id ? { ...t, done: !t.done } : t)
+        summary: "Built with React and Vite. Components structured into TaskForm, TaskCard, and FilterBar with clean state propagation.",
+        snippet: `// Task completion handler
+const toggleTaskCompletion = (id) => {
+  setTasks((prev) =>
+    prev.map((task) =>
+      task.id === id ? { ...task, completed: !task.completed } : task
+    )
   );
-  api.patch(\`/tasks/\${id}/toggle\`).catch(() => {
-    setTasks(prev =>
-      prev.map(t => t.id === id ? { ...t, done: !t.done } : t)
-    );
-  });
-}`,
+};`,
         highlights: [
-          "Optimistic UI",
-          "Filter state preserved on reload",
-          "Keyboard-first UX",
+          "Component-driven architecture with modular subcomponents",
+          "Optimized list re-rendering with React hooks",
+          "Clean form validation for required task fields",
         ],
       },
       test: {
-        summary: "Manual smoke tests covering all CRUD operations and filter states.",
+        summary: "Tested interactive UI flows, filter states, and form inputs for smooth user experience.",
         cases: [
-          "Adding an empty task is prevented",
-          "Completed tasks appear in Completed filter",
-          "Deleting a task removes it from all filters",
-          "Tasks persist after page refresh",
-          "Filter state preserved in URL params",
+          "Adding a task updates the task list immediately",
+          "Filtering by 'Completed' hides active tasks",
+          "Priority badges render with correct color coding",
+          "Form prevents submission with empty task titles",
         ],
       },
       ship: {
-        summary: "Frontend and backend deployed together on Railway as a monorepo.",
+        summary: "Frontend SPA build optimized for static hosting.",
         details: [
-          "Frontend: Served as static build from Express",
-          "Backend: Railway — Node + SQLite",
-          "Deploy: push to main triggers auto-deploy",
-          "No external services or secrets needed",
+          "Platform: Static Web App",
+          "Frontend: React (Vite)",
+          "Build Tool: Vite",
+          "Deployment: Web Host",
         ],
       },
     },
@@ -276,7 +294,12 @@ function toggleTask(id) {
     year: "2026",
     github: "https://github.com/John-bayeh/hr-assistant",
     live: "https://hr-assistant-o1ktjq8e8-john-bayehs-projects.vercel.app",
-    screenshot: "/screenshots/project-06.png",
+    requirementsDoc: "/docs/hr-assistant-requirements.html",
+    screenshot: "/screenshots/hr-assistant.png",
+    screenshots: {
+      thumbnail: "/screenshots/hr-assistant.png",
+      design: ["/screenshots/hr-assistant.png"],
+    },
     tagline: "Instant answers to HR policy questions, powered by AI.",
     stages: {
       scope: {
@@ -346,29 +369,39 @@ def answer_query(question: str):
     tech: ["React"],
     year: "2026",
     github: "https://github.com/askualalink/formula_mgmt",
+    requirementsDoc: "/docs/formula-management-requirements.html",
+    allocationDoc: "/docs/formula_management_allocation.pdf",
     live: null,
-    screenshot: "/screenshots/project-07.png",
+    screenshot: "/screenshots/formula_management.png",
     tagline: "Project tracking built for formula-driven workflows.",
     stages: {
       scope: {
-        summary: "Project management tool for teams working with formula-based calculations — tracking projects, formulas, versions, and approvals.",
+        summary: "A governance platform built above the existing PMS — replacing spreadsheet-based resource allocation with 5 configurable modules: Formula Engine, Corridor Engine, Schedule Matrix, Concept Administration, and Feasibility Administration. Non-destructive PMS integration via REST API or ETL fallback.",
         items: [
-          "Create and manage projects with associated formulas",
-          "Version control for formula changes",
-          "Approval workflow: Draft → Review → Approved",
-          "Dashboard with project status overview",
-          "Export approved formulas as PDF/CSV",
+          "Module 1 — Formula Engine: configurable rule-based allocation with version control, audit trail, and override workflow",
+          "Module 2 — Corridor Engine: min/max/threshold compliance monitoring with real-time alerts",
+          "Module 3 — Schedule Matrix: Gantt visualization, forecasting from 4,000+ historical projects, resource conflict detection",
+          "Module 4 — Concept Administration: digital submission → 3-stage approval workflow (Reviewer → Committee → Management)",
+          "Module 5 — Feasibility Administration: structured study registration, evaluator assignment, standardized scoring",
+          "Common Layer: RBAC, PMS integration connector, non-editable audit trail (7-year retention), notification service",
+          "Non-destructive PMS integration — API-first with ETL fallback, bi-directional data sync",
+          "Non-goals: modifying existing PMS database schema or codebase",
         ],
       },
       design: {
-        summary: "Data-dense dashboard layout with sidebar navigation and tables with detail panels.",
+        summary: "Data-dense enterprise dashboard — sidebar navigation, tabbed module views, sortable data grids, and approval workflow panels. Built for governance users who need dense information at a glance.",
         decisions: [
-          "React with Context API for global state",
-          "React Table for sortable/filterable data grids",
-          "localStorage persistence for demo",
-          "Modular components for easy backend integration later",
+          "React with Context API for global module state",
+          "React Table for sortable/filterable data grids across formula and corridor views",
+          "PostgreSQL for relational governance data (formulas, corridors, feasibility records)",
+          "Node.js + Express REST API with RBAC middleware",
+          "Modular component architecture — each module is an independent route",
         ],
-        screenshot: "/screenshots/project-07.png",
+        screenshot: "/screenshots/formula_management.png",
+        screenshots: [
+          { src: "/screenshots/formula_management.png", type: "desktop", caption: "FORMULA DASHBOARD" },
+          { src: "/screenshots/formula_Magement2.png", type: "desktop", caption: "ALLOCATION VIEW" },
+        ],
       },
       build: {
         summary: "Formula versioning stores each change as an immutable record with a parent reference.",
@@ -419,28 +452,41 @@ function createNewVersion(formula, changes) {
     year: "2026",
     github: "https://github.com/John-bayeh/Hotel_Master",
     live: "https://hotel-master-qfcz78r5v-john-bayehs-projects.vercel.app/#ReactJS",
+    requirementsDoc: "/docs/hotel-master-requirements.html",
     screenshot: "/screenshots/Hotel_Master.png",
     tagline: "A premium hotel experience, from landing page to booking.",
     stages: {
       scope: {
-        summary: "Full hotel website with room showcase, amenities, booking form, and contact — targeted at boutique hotels.",
+        summary: "A high-end hotel showcase website for boutique hotels — visitors explore technology integrations, amenities, and service offerings, then submit consultation/booking requests via an Express backend integrated with Brevo transactional email delivery.",
         items: [
-          "Landing hero with CTA to book",
-          "Room listings with photos, pricing, and availability",
-          "Amenities and services section",
-          "Booking form with date picker and room selection",
-          "Mobile-responsive, fast-loading",
+          "FR-01: Interactive Service & Amenity Showcase with filterable categories",
+          "FR-02: Consultation / Booking Request form with validation and submit status",
+          "FR-03: Express backend API endpoint (POST /api/contact) handling contact dispatches",
+          "FR-04: Brevo API integration for transactional notification emails to management",
+          "FR-05: Dynamic service data API endpoint (GET /api/services)",
+          "FR-06: CORS origin restrictions allowing only trusted frontend deployments",
+          "Stakeholders: Hotel Visitor/Guest (browses & submits inquiries), Hotel Management (receives email notifications)",
+          "Non-goals: Full booking engine with payment processing or room inventory management",
         ],
       },
       design: {
-        summary: "Luxury aesthetic — dark backgrounds, gold accents, large typography, full-bleed imagery.",
+        summary: "Luxury aesthetic — deep dark backgrounds, gold accents, large serif typography, and full-bleed imagery. Built with React 19 and Tailwind CSS v4 for a premium hospitality feel.",
         decisions: [
-          "React SPA with react-scroll for smooth navigation",
-          "Tailwind CSS for utility-first styling",
-          "Framer Motion for entrance animations",
-          "Node.js backend for booking form submission",
+          "React 19 SPA with react-scroll for smooth section navigation",
+          "Tailwind CSS v4 for utility-first luxury styling",
+          "Framer Motion for entrance animations and scroll reveals",
+          "Node.js + Express backend for contact/booking form submission",
+          "Brevo API for transactional email delivery to hotel management",
         ],
         screenshot: "/screenshots/Hotel_Master.png",
+        screenshots: [
+          { src: "/screenshots/Hotel_Master.png", type: "desktop", caption: "HERO SECTION" },
+          { src: "/screenshots/Hotel_Master2.png", type: "desktop", caption: "SERVICES SHOWCASE" },
+          { src: "/screenshots/Hotel_Master3.png", type: "desktop", caption: "AMENITIES SECTION" },
+          { src: "/screenshots/Hotel_Master4.png", type: "desktop", caption: "BOOKING FORM" },
+          { src: "/screenshots/Hotel_Master5.png", type: "desktop", caption: "CONTACT SECTION" },
+          { src: "/screenshots/image.png", type: "desktop", caption: "MOBILE VIEW" },
+        ],
       },
       build: {
         summary: "Booking form validates availability client-side and submits to Node backend which stores the reservation.",
