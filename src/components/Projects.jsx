@@ -118,7 +118,7 @@ const tabItemVariants = {
 };
 
 function ProjectRow({ project, isExpanded, onToggleExpanded }) {
-  const { number, name, description, tech, year, github, live, screenshot, screenshots, requirementsDoc, slug, stages, codeSnippet } =
+  const { number, name, description, tech, year, github, live, privateReason, screenshot, screenshots, requirementsDoc, slug, stages, codeSnippet } =
     project;
   const thumbnail = screenshots?.thumbnail || screenshot;
   const [imageError, setImageError] = useState(false);
@@ -217,14 +217,21 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                 <ArrowUpRight size={16} />
               </a>
             ) : (
-              <button
-                disabled
-                onClick={(e) => e.stopPropagation()}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted cursor-not-allowed"
-                aria-label="Live Site Not Available"
-              >
-                <ArrowUpRight size={16} />
-              </button>
+              <div className="relative" onClick={(e) => e.stopPropagation()}>
+                <button
+                  disabled
+                  className="peer flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted cursor-not-allowed"
+                  aria-label="Live Site Not Available"
+                >
+                  <ArrowUpRight size={16} />
+                </button>
+                {privateReason && (
+                  <div className="absolute bottom-full right-0 mb-2 w-64 rounded-lg border border-line bg-surface p-3 text-xs opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
+                    <span className="font-bold block mb-1" style={{ color: '#ef4444' }}>🔒 Private Project</span>
+                    <span className="font-bold" style={{ color: '#ef4444' }}>{privateReason}</span>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
