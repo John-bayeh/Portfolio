@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 
-// ─── Translation dictionary ───────────────────────────────────────────────────
+// ─── Translation dictionary (English only) ─────────────────────────────────────
 export const translations = {
   en: {
     // Dock / nav labels
@@ -66,123 +66,45 @@ export const translations = {
       footer: "Designed & Built by",
       footerName: "Yohannes Bayeh",
     },
-  },
-  am: {
-    nav: {
-      home: "መነሻ",
-      projects: "ፕሮጀክቶች",
-      about: "ስለኔ",
-      contact: "ያግኙኝ",
+    tabs: {
+      scope: "SCOPE",
+      design: "DESIGN",
+      build: "BUILD",
+      test: "TEST",
+      ship: "SHIP",
     },
-    hero: {
-      available: "ለሥራ ዝግጁ ነኝ",
-      tagline: "ፊደ ዲቬሎፐር · ኢትዮጵያ · 2026",
-      heading1: "እገነባለሁ",
-      heading2: "ነገሮችን",
-      heading3: "ለዌብ።",
-      bio1: "ከባሕር ዳር፣ ኢትዮጵያ የተነሳ ፊደ ዲቬሎፐር — ፈጣን፣ ጥራት ያለው ዩዘር ኢንተርፌስ እገነባለሁ።",
-      viewWork: "ሥራዎቼን ይመልከቱ",
-      getInTouch: "ያግኙኝ",
-      scroll: "ወደ ታች",
-      projectsShipped: "የተሰሩ ፕሮጀክቶች",
-    },
-    projects: {
-      sectionLabel: "የተመረጡ ሥራዎች",
-      heading1: "ሥራዎቼ",
-      heading2: "",
-      subtitle: "ስድስት የተጠናቀቁ ፕሮጀክቶች።",
-    },
-    about: {
-      sectionLabel: "ስለኔ",
-      heading: "ለዌቡ ዲዛይን እና",
-      headingAccent: "ልማት",
-      bio: "እኔ ዮሐንስ ባዬህ ነኝ፣ ከባሕር ዳር፣ ኢትዮጵያ የተነሳ ፊደ ዲቬሎፐር። ሀሳቦችን ወደ ፈጣን፣ ተደራሽ እና ጥራት ያለው ዌብ ልምዶች እቀይራለሁ — ጠንካራ ምህንድስናን ከዝርዝር ነጥቦች ጋር አዋህዳለሁ።",
-      cta: "አብሮ እንሥራ",
-      processLabel: "ሂደቴ",
-      yearsExp: "ዓመታት ልምድ",
-      projectsShipped: "የተሰሩ ፕሮጀክቶች",
-      steps: [
-        { n: "01", label: "ዕቅድ", desc: "ችግሩን ተረዳ እና ግቡን አስቀምጥ።" },
-        { n: "02", label: "ዲዛይን", desc: "ፍሰቱን እና ኢንተርፌሱን አቅድ።" },
-        { n: "03", label: "ልማት", desc: "ንጹህ፣ ኮምፖነንት-ተኮር ኮድ ፃፍ።" },
-        { n: "04", label: "ፈተና", desc: "ባህሪውን በተለያዩ ዳቴዎች ላይ አረጋግጥ።" },
-        { n: "05", label: "ልቀት", desc: "ዒላማ ተወ እና ግብረ-ሰጥዕ ላይ ሙከራ አድርግ።" },
-      ],
-    },
-    contact: {
-      available: "አሁን ዝግጁ ነኝ",
-      heading1: "አብሮ",
-      heading2: "እንሥራ።",
-      fieldName: "ስም",
-      fieldEmail: "ኢሜይል",
-      fieldMessage: "መልዕክት",
-      send: "ላክ",
-      sending: "በመላክ ላይ…",
-      sent: "ተልኳል ✓",
-      tryAgain: "እንደገና ሞክር",
-      successToast: "መልዕክቱ ተልኳል — በቅርቡ እመልሳለሁ።",
-      errorMsg: "ችግር ተፈጠረ። በቀጥታ ኢሜይሌ ላይ ደርሰኝ",
-      footer: "የተዘጋጀ እና የተሠራ በ",
-      footerName: "ዮሐንስ ባዬህ",
-    },
-  },
-  fr: {
-    nav: {
-      home: "Accueil",
-      projects: "Projets",
-      about: "À propos",
-      contact: "Contact",
-    },
-    hero: {
-      available: "Disponible pour travailler",
-      tagline: "Développeur Frontend · ÉTH · 2026",
-      heading1: "JE CONSTRUIS",
-      heading2: "DES CHOSES",
-      heading3: "POUR LE WEB.",
-      bio1: "développeur frontend basé à Bahir Dar, Éthiopie — créant des interfaces rapides et soignées qui sont aussi belles que fonctionnelles.",
-      viewWork: "Voir mes travaux",
-      getInTouch: "Me contacter",
-      scroll: "Défiler",
-      projectsShipped: "Projets livrés",
-    },
-    projects: {
-      sectionLabel: "Travaux sélectionnés",
-      heading1: "MES ",
-      heading2: "PROJETS",
-      subtitle: "Six produits livrés.",
-    },
-    about: {
-      sectionLabel: "À propos de moi",
-      heading: "Concevoir & construire pour le",
-      headingAccent: "web",
-      bio: "Je suis Yohannes Bayeh, développeur frontend de Bahir Dar, Éthiopie. Je transforme des idées en expériences web rapides, accessibles et soignées — alliant ingénierie solide et souci du détail. J'adore livrer des produits que les gens aiment vraiment utiliser.",
-      cta: "Travaillons ensemble",
-      processLabel: "Mon Processus",
-      yearsExp: "Ans d'Expérience",
-      projectsShipped: "Projets Livrés",
-      steps: [
-        { n: "01", label: "ANALYSE", desc: "Comprendre le problème et définir l'objectif." },
-        { n: "02", label: "DESIGN", desc: "Créer le flux et l'interface." },
-        { n: "03", label: "BUILD", desc: "Écrire un code propre et orienté composants." },
-        { n: "04", label: "TEST", desc: "Vérifier le comportement sur tous les appareils." },
-        { n: "05", label: "LIVRAISON", desc: "Déployer et itérer sur les retours." },
-      ],
-    },
-    contact: {
-      available: "Actuellement disponible",
-      heading1: "CONSTRUISONS",
-      heading2: "QUELQUE CHOSE.",
-      fieldName: "Nom",
-      fieldEmail: "Email",
-      fieldMessage: "Message",
-      send: "Envoyer",
-      sending: "Envoi en cours…",
-      sent: "Message envoyé ✓",
-      tryAgain: "Réessayer",
-      successToast: "Message envoyé — je vous répondrai bientôt.",
-      errorMsg: "Une erreur s'est produite. Contactez-moi directement à",
-      footer: "Conçu & Développé par",
-      footerName: "Yohannes Bayeh",
+    labels: {
+      scopeReqs: "Scope Requirements",
+      userStories: "User Stories",
+      colorPalette: "Color Palette",
+      uiComponents: "Modular UI Components",
+      interfacePreview: "Interface Preview",
+      archDiagram: "Architecture Diagram",
+      implSnippet: "Implementation Snippet",
+      techDecisions: "Key Technical Decisions",
+      devicesTested: "Devices Tested",
+      lighthouseMetrics: "Lighthouse Audit Metrics",
+      deployEnv: "Deployment Environment",
+      deployPipeline: "Deployment Pipeline Configuration",
+      reqDoc: "Requirements Doc",
+      fullCaseStudy: "View Full Case Study →",
+      repository: "Repository",
+      liveDemo: "Live Demo",
+      backToProjects: "Back to Projects",
+      projectNotFound: "Project Not Found",
+      testScripts: "Embedded Test Scripts",
+      expected: "Expected:",
+      rootCause: "Root Cause & Resolution:",
+      loadMetrics: "Load Test Metrics:",
+      desktop: "Desktop",
+      tablet: "Tablet",
+      mobile: "Mobile",
+      version: "Version:",
+      date: "Date:",
+      frontend: "Frontend",
+      backend: "Backend",
+      database: "Database",
+      infraHost: "Infrastructure Host",
     },
   },
 };
@@ -192,7 +114,7 @@ const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
   const [lang, setLang] = useState("en");
-  const t = translations[lang];
+  const t = translations[lang] || translations.en;
 
   return (
     <LanguageContext.Provider value={{ lang, setLang, t }}>

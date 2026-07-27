@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 
 /**
  * CustomCursor
@@ -86,7 +86,7 @@ export default function CustomCursor() {
   return (
     <>
       {/* Lagging outer ring with velocity stretch */}
-      <motion.div
+      <m.div
         className="pointer-events-none fixed left-0 top-0 z-[9999]"
         style={{
           x: ringX,
@@ -96,7 +96,7 @@ export default function CustomCursor() {
           rotate,
         }}
       >
-        <motion.div
+        <m.div
           className="rounded-full border border-gold/70"
           style={{
             width: 36,
@@ -104,10 +104,10 @@ export default function CustomCursor() {
             scaleX: stretch,
           }}
         />
-      </motion.div>
+      </m.div>
 
       {/* Instant gold dot */}
-      <motion.div
+      <m.div
         className="pointer-events-none fixed left-0 top-0 z-[9999] h-2 w-2 rounded-full bg-gold"
         style={{
           x: dotX,

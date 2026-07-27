@@ -1,0 +1,1250 @@
+[
+  {
+    "file": "public/testing-screenshots/hotel-master/desktop-full.png",
+    "orig_size": 1303273,
+    "webp_path": "public/testing-screenshots/hotel-master/desktop-full.webp",
+    "webp_size": 47834,
+    "savings": 96.32970221895182,
+    "dim": "1836x953"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/firefox.png",
+    "orig_size": 820033,
+    "webp_path": "public/testing-screenshots/hotel-master/firefox.webp",
+    "webp_size": 62468,
+    "savings": 92.38225778718662,
+    "dim": "1159x1004"
+  },
+  {
+    "file": "public/screenshots/telegram award_home.png",
+    "orig_size": 785500,
+    "webp_path": "public/screenshots/telegram award_home.webp",
+    "webp_size": 75034,
+    "savings": 90.44761298535964,
+    "dim": "1004x962"
+  },
+  {
+    "file": "public/screenshots/telegram-award/home.png",
+    "orig_size": 785500,
+    "webp_path": "public/screenshots/telegram-award/home.webp",
+    "webp_size": 75034,
+    "savings": 90.44761298535964,
+    "dim": "1004x962"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/firefox.png",
+    "orig_size": 731623,
+    "webp_path": "public/testing-screenshots/telegram-award/firefox.webp",
+    "webp_size": 69666,
+    "savings": 90.47788273468713,
+    "dim": "908x960"
+  },
+  {
+    "file": "public/screenshots/Hotel_Master.png",
+    "orig_size": 631720,
+    "webp_path": "public/screenshots/Hotel_Master.webp",
+    "webp_size": 49476,
+    "savings": 92.16804913569302,
+    "dim": "914x947"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/catagories-grid.png",
+    "orig_size": 548865,
+    "webp_path": "public/testing-screenshots/telegram-award/catagories-grid.webp",
+    "webp_size": 39414,
+    "savings": 92.81899920745539,
+    "dim": "910x956"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/vote-restricted.png",
+    "orig_size": 546570,
+    "webp_path": "public/testing-screenshots/telegram-award/vote-restricted.webp",
+    "webp_size": 58494,
+    "savings": 89.29798561940831,
+    "dim": "884x938"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/leaderboard.png",
+    "orig_size": 320430,
+    "webp_path": "public/testing-screenshots/telegram-award/leaderboard.webp",
+    "webp_size": 18548,
+    "savings": 94.2115282589021,
+    "dim": "803x708"
+  },
+  {
+    "file": "public/screenshots/Hotel_Master4.png",
+    "orig_size": 230516,
+    "webp_path": "public/screenshots/Hotel_Master4.webp",
+    "webp_size": 42204,
+    "savings": 81.69150948307275,
+    "dim": "922x872"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/leave.png",
+    "orig_size": 209811,
+    "webp_path": "public/screenshots/askualalink-hr/leave.webp",
+    "webp_size": 19214,
+    "savings": 90.84223420125733,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/leave.png",
+    "orig_size": 209811,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/leave.webp",
+    "webp_size": 19214,
+    "savings": 90.84223420125733,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/access-granted-admin.png",
+    "orig_size": 187146,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/access-granted-admin.webp",
+    "webp_size": 34542,
+    "savings": 81.54275271712994,
+    "dim": "1755x918"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/profile.png",
+    "orig_size": 183400,
+    "webp_path": "public/screenshots/askualalink-hr/profile.webp",
+    "webp_size": 18844,
+    "savings": 89.72519083969466,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/history.png",
+    "orig_size": 177936,
+    "webp_path": "public/screenshots/askualalink-hr/history.webp",
+    "webp_size": 15152,
+    "savings": 91.4845787249348,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin_employee.png",
+    "orig_size": 176432,
+    "webp_path": "public/screenshots/askualalink-hr/admin_employee.webp",
+    "webp_size": 31820,
+    "savings": 81.96472295275234,
+    "dim": "1766x907"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin-employees.png",
+    "orig_size": 176432,
+    "webp_path": "public/screenshots/askualalink-hr/admin-employees.webp",
+    "webp_size": 31820,
+    "savings": 81.96472295275234,
+    "dim": "1766x907"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/employees-list.png",
+    "orig_size": 176432,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/employees-list.webp",
+    "webp_size": 31820,
+    "savings": 81.96472295275234,
+    "dim": "1766x907"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/admin-employees.png",
+    "orig_size": 176432,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/admin-employees.webp",
+    "webp_size": 31820,
+    "savings": 81.96472295275234,
+    "dim": "1766x907"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/aqdmin-employee.png",
+    "orig_size": 175056,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/aqdmin-employee.webp",
+    "webp_size": 56812,
+    "savings": 67.54638515674985,
+    "dim": "1151x930"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/admin-appshell.png",
+    "orig_size": 163811,
+    "webp_path": "public/testing-screenshots/formula-management/admin-appshell.webp",
+    "webp_size": 28532,
+    "savings": 82.58236626355983,
+    "dim": "1854x961"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/employee_payslip.png",
+    "orig_size": 147123,
+    "webp_path": "public/screenshots/askualalink-hr/employee_payslip.webp",
+    "webp_size": 29420,
+    "savings": 80.00312663553625,
+    "dim": "1831x913"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/employee-payslips.png",
+    "orig_size": 147123,
+    "webp_path": "public/screenshots/askualalink-hr/employee-payslips.webp",
+    "webp_size": 29420,
+    "savings": 80.00312663553625,
+    "dim": "1831x913"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/employee-payslips.png",
+    "orig_size": 147123,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/employee-payslips.webp",
+    "webp_size": 29420,
+    "savings": 80.00312663553625,
+    "dim": "1831x913"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/officer-view.png",
+    "orig_size": 142437,
+    "webp_path": "public/testing-screenshots/formula-management/officer-view.webp",
+    "webp_size": 25700,
+    "savings": 81.9569353468551,
+    "dim": "1828x936"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/engineering-view.png",
+    "orig_size": 137816,
+    "webp_path": "public/testing-screenshots/formula-management/engineering-view.webp",
+    "webp_size": 25352,
+    "savings": 81.60445811807047,
+    "dim": "1836x956"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin_recruiment.png",
+    "orig_size": 137478,
+    "webp_path": "public/screenshots/askualalink-hr/admin_recruiment.webp",
+    "webp_size": 27358,
+    "savings": 80.10008874147137,
+    "dim": "1820x962"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin-recruitment.png",
+    "orig_size": 137478,
+    "webp_path": "public/screenshots/askualalink-hr/admin-recruitment.webp",
+    "webp_size": 27358,
+    "savings": 80.10008874147137,
+    "dim": "1820x962"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/admin-recruitment.png",
+    "orig_size": 137478,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/admin-recruitment.webp",
+    "webp_size": 27358,
+    "savings": 80.10008874147137,
+    "dim": "1820x962"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/login.png",
+    "orig_size": 137347,
+    "webp_path": "public/testing-screenshots/telegram-award/login.webp",
+    "webp_size": 11832,
+    "savings": 91.38532330520506,
+    "dim": "530x732"
+  },
+  {
+    "file": "public/screenshots/formula_management.png",
+    "orig_size": 136909,
+    "webp_path": "public/screenshots/formula_management.webp",
+    "webp_size": 46210,
+    "savings": 66.24765355089876,
+    "dim": "878x962"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/attendance-record.png",
+    "orig_size": 133537,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/attendance-record.webp",
+    "webp_size": 24656,
+    "savings": 81.5362034492313,
+    "dim": "1788x961"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin-attendance.png",
+    "orig_size": 124003,
+    "webp_path": "public/screenshots/askualalink-hr/admin-attendance.webp",
+    "webp_size": 23902,
+    "savings": 80.72465988726078,
+    "dim": "1795x940"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin_attendance.png",
+    "orig_size": 124003,
+    "webp_path": "public/screenshots/askualalink-hr/admin_attendance.webp",
+    "webp_size": 23902,
+    "savings": 80.72465988726078,
+    "dim": "1795x940"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/admin-attendance.png",
+    "orig_size": 124003,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/admin-attendance.webp",
+    "webp_size": 23902,
+    "savings": 80.72465988726078,
+    "dim": "1795x940"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/attendance.png",
+    "orig_size": 124003,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/attendance.webp",
+    "webp_size": 23902,
+    "savings": 80.72465988726078,
+    "dim": "1795x940"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/after-login-employee.png",
+    "orig_size": 107825,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/after-login-employee.webp",
+    "webp_size": 21676,
+    "savings": 79.89705541386506,
+    "dim": "1832x910"
+  },
+  {
+    "file": "public/screenshots/formula_Magement2.png",
+    "orig_size": 105843,
+    "webp_path": "public/screenshots/formula_Magement2.webp",
+    "webp_size": 18840,
+    "savings": 82.20005101896206,
+    "dim": "1850x927"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/formula-builder.png",
+    "orig_size": 105083,
+    "webp_path": "public/testing-screenshots/formula-management/formula-builder.webp",
+    "webp_size": 25088,
+    "savings": 76.12553885975848,
+    "dim": "1587x755"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/employee_dashboard.png",
+    "orig_size": 100293,
+    "webp_path": "public/screenshots/askualalink-hr/employee_dashboard.webp",
+    "webp_size": 20360,
+    "savings": 79.69948052207033,
+    "dim": "1835x833"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/employee-dashboard.png",
+    "orig_size": 100293,
+    "webp_path": "public/screenshots/askualalink-hr/employee-dashboard.webp",
+    "webp_size": 20360,
+    "savings": 79.69948052207033,
+    "dim": "1835x833"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/employee-dashboard.png",
+    "orig_size": 100293,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/employee-dashboard.webp",
+    "webp_size": 20360,
+    "savings": 79.69948052207033,
+    "dim": "1835x833"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/firefox.png",
+    "orig_size": 97150,
+    "webp_path": "public/testing-screenshots/todo-app/firefox.webp",
+    "webp_size": 26106,
+    "savings": 73.12815234173956,
+    "dim": "851x1004"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/mobile-award.png",
+    "orig_size": 96873,
+    "webp_path": "public/testing-screenshots/telegram-award/mobile-award.webp",
+    "webp_size": 12264,
+    "savings": 87.340125731628,
+    "dim": "199x426"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/mobile-hero.png",
+    "orig_size": 95282,
+    "webp_path": "public/testing-screenshots/hotel-master/mobile-hero.webp",
+    "webp_size": 11214,
+    "savings": 88.23072563548205,
+    "dim": "195x425"
+  },
+  {
+    "file": "public/screenshots/Todoapp.png",
+    "orig_size": 88309,
+    "webp_path": "public/screenshots/Todoapp.webp",
+    "webp_size": 21852,
+    "savings": 75.25507026463893,
+    "dim": "879x967"
+  },
+  {
+    "file": "public/screenshots/Hotel_Master3.png",
+    "orig_size": 86422,
+    "webp_path": "public/screenshots/Hotel_Master3.webp",
+    "webp_size": 35704,
+    "savings": 58.68644558098632,
+    "dim": "886x956"
+  },
+  {
+    "file": "public/screenshots/Hotel_Master2.png",
+    "orig_size": 85566,
+    "webp_path": "public/screenshots/Hotel_Master2.webp",
+    "webp_size": 33304,
+    "savings": 61.07799827034101,
+    "dim": "914x961"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/lighthouse-desktop.png",
+    "orig_size": 84697,
+    "webp_path": "public/testing-screenshots/formula-management/lighthouse-desktop.webp",
+    "webp_size": 23564,
+    "savings": 72.17847149249678,
+    "dim": "645x849"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/lighthouse-desktop.png",
+    "orig_size": 84300,
+    "webp_path": "public/testing-screenshots/telegram-award/lighthouse-desktop.webp",
+    "webp_size": 20644,
+    "savings": 75.51126927639383,
+    "dim": "594x838"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/mobile-service.png",
+    "orig_size": 82481,
+    "webp_path": "public/testing-screenshots/hotel-master/mobile-service.webp",
+    "webp_size": 36150,
+    "savings": 56.17172439713389,
+    "dim": "1281x953"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/carrer_portal.png",
+    "orig_size": 82074,
+    "webp_path": "public/screenshots/askualalink-hr/carrer_portal.webp",
+    "webp_size": 17924,
+    "savings": 78.16117162560616,
+    "dim": "1841x962"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/careers-jobs.png",
+    "orig_size": 82074,
+    "webp_path": "public/screenshots/askualalink-hr/careers-jobs.webp",
+    "webp_size": 17924,
+    "savings": 78.16117162560616,
+    "dim": "1841x962"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/careers-jobs.png",
+    "orig_size": 82074,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/careers-jobs.webp",
+    "webp_size": 17924,
+    "savings": 78.16117162560616,
+    "dim": "1841x962"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/after-login-admin.png",
+    "orig_size": 82013,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/after-login-admin.webp",
+    "webp_size": 16752,
+    "savings": 79.57396998036896,
+    "dim": "1837x954"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/desktop-fullsize.png",
+    "orig_size": 81663,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/desktop-fullsize.webp",
+    "webp_size": 16812,
+    "savings": 79.41295323463503,
+    "dim": "1821x946"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/chrome_admin.png",
+    "orig_size": 81314,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/chrome_admin.webp",
+    "webp_size": 17828,
+    "savings": 78.07511621614974,
+    "dim": "1784x948"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin_dashboard.png",
+    "orig_size": 78250,
+    "webp_path": "public/screenshots/askualalink-hr/admin_dashboard.webp",
+    "webp_size": 16816,
+    "savings": 78.50990415335464,
+    "dim": "1816x943"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin-dashboard.png",
+    "orig_size": 78250,
+    "webp_path": "public/screenshots/askualalink-hr/admin-dashboard.webp",
+    "webp_size": 16816,
+    "savings": 78.50990415335464,
+    "dim": "1816x943"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/admin-dashboard.png",
+    "orig_size": 78250,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/admin-dashboard.webp",
+    "webp_size": 16816,
+    "savings": 78.50990415335464,
+    "dim": "1816x943"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/desktop-admin.png",
+    "orig_size": 78250,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/desktop-admin.webp",
+    "webp_size": 16816,
+    "savings": 78.50990415335464,
+    "dim": "1816x943"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/employee-leaves.png",
+    "orig_size": 74749,
+    "webp_path": "public/screenshots/askualalink-hr/employee-leaves.webp",
+    "webp_size": 14910,
+    "savings": 80.053244859463,
+    "dim": "1836x955"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/employee_leave.png",
+    "orig_size": 74749,
+    "webp_path": "public/screenshots/askualalink-hr/employee_leave.webp",
+    "webp_size": 14910,
+    "savings": 80.053244859463,
+    "dim": "1836x955"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/employee-leaves.png",
+    "orig_size": 74749,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/employee-leaves.webp",
+    "webp_size": 14910,
+    "savings": 80.053244859463,
+    "dim": "1836x955"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/employee_app.png",
+    "orig_size": 74709,
+    "webp_path": "public/screenshots/askualalink-hr/employee_app.webp",
+    "webp_size": 15176,
+    "savings": 79.68651701936848,
+    "dim": "1832x953"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/table-todo.png",
+    "orig_size": 72794,
+    "webp_path": "public/testing-screenshots/todo-app/table-todo.webp",
+    "webp_size": 18212,
+    "savings": 74.98145451548204,
+    "dim": "589x850"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/filtered-tasks.png",
+    "orig_size": 69343,
+    "webp_path": "public/testing-screenshots/todo-app/filtered-tasks.webp",
+    "webp_size": 16794,
+    "savings": 75.78126126645805,
+    "dim": "632x796"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/desktop.png",
+    "orig_size": 67687,
+    "webp_path": "public/testing-screenshots/todo-app/desktop.webp",
+    "webp_size": 9266,
+    "savings": 86.31051752921536,
+    "dim": "1840x947"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/lighthouse-mobile.png",
+    "orig_size": 64868,
+    "webp_path": "public/testing-screenshots/formula-management/lighthouse-mobile.webp",
+    "webp_size": 21878,
+    "savings": 66.27304680273787,
+    "dim": "633x850"
+  },
+  {
+    "file": "public/screenshots/Hotel_Master5.png",
+    "orig_size": 62175,
+    "webp_path": "public/screenshots/Hotel_Master5.webp",
+    "webp_size": 23376,
+    "savings": 62.40289505428227,
+    "dim": "908x896"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/formula-errors.png",
+    "orig_size": 60923,
+    "webp_path": "public/testing-screenshots/formula-management/formula-errors.webp",
+    "webp_size": 21980,
+    "savings": 63.92167161827225,
+    "dim": "621x534"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/chat-response.png",
+    "orig_size": 59914,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/chat-response.webp",
+    "webp_size": 32176,
+    "savings": 46.296358113295724,
+    "dim": "854x681"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/lighthouse-desktop.png",
+    "orig_size": 59196,
+    "webp_path": "public/testing-screenshots/todo-app/lighthouse-desktop.webp",
+    "webp_size": 16802,
+    "savings": 71.61632542739375,
+    "dim": "555x855"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/lighthouse-mobile.png",
+    "orig_size": 56968,
+    "webp_path": "public/testing-screenshots/hotel-master/lighthouse-mobile.webp",
+    "webp_size": 15580,
+    "savings": 72.65131301783457,
+    "dim": "631x843"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/k6-load-result.png",
+    "orig_size": 56430,
+    "webp_path": "public/screenshots/askualalink-hr/k6-load-result.webp",
+    "webp_size": 36322,
+    "savings": 35.633528265107216,
+    "dim": "876x559"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/k6-load-result.png",
+    "orig_size": 56430,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/k6-load-result.webp",
+    "webp_size": 36322,
+    "savings": 35.633528265107216,
+    "dim": "876x559"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin-payroll.png",
+    "orig_size": 56315,
+    "webp_path": "public/screenshots/askualalink-hr/admin-payroll.webp",
+    "webp_size": 11300,
+    "savings": 79.93429814436651,
+    "dim": "1795x958"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin_payroll.png",
+    "orig_size": 56315,
+    "webp_path": "public/screenshots/askualalink-hr/admin_payroll.webp",
+    "webp_size": 11300,
+    "savings": 79.93429814436651,
+    "dim": "1795x958"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/payroll.png",
+    "orig_size": 56315,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/payroll.webp",
+    "webp_size": 11300,
+    "savings": 79.93429814436651,
+    "dim": "1795x958"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/mobile_3.jpg",
+    "orig_size": 55768,
+    "webp_path": "public/screenshots/askualalink-hr/mobile_3.webp",
+    "webp_size": 24596,
+    "savings": 55.89585425333525,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/mobile_3.jpg",
+    "orig_size": 55768,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/mobile_3.webp",
+    "webp_size": 24596,
+    "savings": 55.89585425333525,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/lighthouse-desktop.png",
+    "orig_size": 54766,
+    "webp_path": "public/testing-screenshots/hotel-master/lighthouse-desktop.webp",
+    "webp_size": 16146,
+    "savings": 70.51820472555966,
+    "dim": "627x844"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/lighthouse-mobile.png",
+    "orig_size": 54250,
+    "webp_path": "public/testing-screenshots/todo-app/lighthouse-mobile.webp",
+    "webp_size": 14816,
+    "savings": 72.68940092165899,
+    "dim": "532x849"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/leave-submitted.png",
+    "orig_size": 53786,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/leave-submitted.webp",
+    "webp_size": 15754,
+    "savings": 70.70985014687837,
+    "dim": "1423x826"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/api-auth-test.png",
+    "orig_size": 53359,
+    "webp_path": "public/testing-screenshots/telegram-award/api-auth-test.webp",
+    "webp_size": 31146,
+    "savings": 41.62934087970165,
+    "dim": "798x331"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/lighthouse-admin-mobile.png",
+    "orig_size": 52687,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/lighthouse-admin-mobile.webp",
+    "webp_size": 17426,
+    "savings": 66.92542752481636,
+    "dim": "549x875"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/mobile-todo.png",
+    "orig_size": 52365,
+    "webp_path": "public/testing-screenshots/todo-app/mobile-todo.webp",
+    "webp_size": 12678,
+    "savings": 75.78917215697508,
+    "dim": "327x713"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/lighthouse-admin.png",
+    "orig_size": 52303,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/lighthouse-admin.webp",
+    "webp_size": 15792,
+    "savings": 69.80670324837963,
+    "dim": "502x882"
+  },
+  {
+    "file": "public/screenshots/image.png",
+    "orig_size": 52274,
+    "webp_path": "public/screenshots/image.webp",
+    "webp_size": 14704,
+    "savings": 71.87129356850441,
+    "dim": "330x486"
+  },
+  {
+    "file": "public/screenshots/telegram-award/chatbot.png",
+    "orig_size": 52274,
+    "webp_path": "public/screenshots/telegram-award/chatbot.webp",
+    "webp_size": 14704,
+    "savings": 71.87129356850441,
+    "dim": "330x486"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/lighthouse-admin-desktop.png",
+    "orig_size": 51341,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/lighthouse-admin-desktop.webp",
+    "webp_size": 16590,
+    "savings": 67.68664420248925,
+    "dim": "534x886"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/vote-predictor.png",
+    "orig_size": 50418,
+    "webp_path": "public/testing-screenshots/telegram-award/vote-predictor.webp",
+    "webp_size": 19138,
+    "savings": 62.041334444047756,
+    "dim": "442x536"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/k6.png",
+    "orig_size": 49652,
+    "webp_path": "public/testing-screenshots/todo-app/k6.webp",
+    "webp_size": 39312,
+    "savings": 20.8249415934907,
+    "dim": "482x644"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/todo-list.png",
+    "orig_size": 49256,
+    "webp_path": "public/testing-screenshots/todo-app/todo-list.webp",
+    "webp_size": 17724,
+    "savings": 64.0165665096638,
+    "dim": "577x501"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/vote-sucess.png",
+    "orig_size": 49185,
+    "webp_path": "public/testing-screenshots/telegram-award/vote-sucess.webp",
+    "webp_size": 5936,
+    "savings": 87.93127986174648,
+    "dim": "430x368"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/formula-results.png",
+    "orig_size": 48823,
+    "webp_path": "public/testing-screenshots/formula-management/formula-results.webp",
+    "webp_size": 14670,
+    "savings": 69.95268623394712,
+    "dim": "1550x279"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/recuirment-pipeline.png",
+    "orig_size": 47562,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/recuirment-pipeline.webp",
+    "webp_size": 14832,
+    "savings": 68.81544089819604,
+    "dim": "1400x757"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/email-received.jpg",
+    "orig_size": 47296,
+    "webp_path": "public/testing-screenshots/hotel-master/email-received.webp",
+    "webp_size": 22298,
+    "savings": 52.85436400541273,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/k6.png",
+    "orig_size": 46367,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/k6.webp",
+    "webp_size": 30756,
+    "savings": 33.66834170854271,
+    "dim": "791x526"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/home_mobile.jpg",
+    "orig_size": 45590,
+    "webp_path": "public/screenshots/askualalink-hr/home_mobile.webp",
+    "webp_size": 19948,
+    "savings": 56.244790524237764,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/home_mobile.jpg",
+    "orig_size": 45590,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/home_mobile.webp",
+    "webp_size": 19948,
+    "savings": 56.244790524237764,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/image copy.png",
+    "orig_size": 45169,
+    "webp_path": "public/screenshots/askualalink-hr/image copy.webp",
+    "webp_size": 13708,
+    "savings": 69.65175230799885,
+    "dim": "925x1005"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/llighthouse-mobile.png",
+    "orig_size": 45050,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/llighthouse-mobile.webp",
+    "webp_size": 16088,
+    "savings": 64.28856825749168,
+    "dim": "550x841"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/employee_added.png",
+    "orig_size": 43754,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/employee_added.webp",
+    "webp_size": 16320,
+    "savings": 62.7005530922887,
+    "dim": "653x585"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/mobile_1.jpg",
+    "orig_size": 43632,
+    "webp_path": "public/screenshots/askualalink-hr/mobile_1.webp",
+    "webp_size": 18638,
+    "savings": 57.28364503116978,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/mobile-admin.png",
+    "orig_size": 43632,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/mobile-admin.webp",
+    "webp_size": 18638,
+    "savings": 57.28364503116978,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/mobile_1.jpg",
+    "orig_size": 43632,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/mobile_1.webp",
+    "webp_size": 18638,
+    "savings": 57.28364503116978,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/mobile_2.jpg",
+    "orig_size": 41285,
+    "webp_path": "public/screenshots/askualalink-hr/mobile_2.webp",
+    "webp_size": 16770,
+    "savings": 59.379920067821246,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/mobile_2.jpg",
+    "orig_size": 41285,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/mobile_2.webp",
+    "webp_size": 16770,
+    "savings": 59.379920067821246,
+    "dim": "574x1280"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/lighthouse-desktop.png",
+    "orig_size": 40420,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/lighthouse-desktop.webp",
+    "webp_size": 15252,
+    "savings": 62.2662048490846,
+    "dim": "547x848"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/image.png",
+    "orig_size": 39955,
+    "webp_path": "public/screenshots/askualalink-hr/image.webp",
+    "webp_size": 11914,
+    "savings": 70.18145413590288,
+    "dim": "819x998"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/mobile-employee-portal.png",
+    "orig_size": 39281,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/mobile-employee-portal.webp",
+    "webp_size": 12000,
+    "savings": 69.45087956009266,
+    "dim": "387x824"
+  },
+  {
+    "file": "public/profile.jpg",
+    "orig_size": 37200,
+    "webp_path": "public/profile.webp",
+    "webp_size": 13328,
+    "savings": 64.17204301075269,
+    "dim": "853x1280"
+  },
+  {
+    "file": "public/screenshots/hr-assistant.png",
+    "orig_size": 36648,
+    "webp_path": "public/screenshots/hr-assistant.webp",
+    "webp_size": 16596,
+    "savings": 54.715127701375245,
+    "dim": "833x957"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/iphone12.png",
+    "orig_size": 35183,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/iphone12.webp",
+    "webp_size": 12888,
+    "savings": 63.36867237017878,
+    "dim": "377x825"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/attedance-records.png",
+    "orig_size": 35168,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/attedance-records.webp",
+    "webp_size": 15544,
+    "savings": 55.80072793448589,
+    "dim": "801x750"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/k6_processing.png",
+    "orig_size": 34948,
+    "webp_path": "public/screenshots/askualalink-hr/k6_processing.webp",
+    "webp_size": 23824,
+    "savings": 31.83014764793407,
+    "dim": "482x732"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/k6_processing.png",
+    "orig_size": 34948,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/k6_processing.webp",
+    "webp_size": 23824,
+    "savings": 31.83014764793407,
+    "dim": "482x732"
+  },
+  {
+    "file": "public/screenshots/image copy.png",
+    "orig_size": 34635,
+    "webp_path": "public/screenshots/image copy.webp",
+    "webp_size": 7356,
+    "savings": 78.76136855781724,
+    "dim": "442x355"
+  },
+  {
+    "file": "public/screenshots/telegram-award/signin.png",
+    "orig_size": 34635,
+    "webp_path": "public/screenshots/telegram-award/signin.webp",
+    "webp_size": 7356,
+    "savings": 78.76136855781724,
+    "dim": "442x355"
+  },
+  {
+    "file": "public/testing-screenshots/telegram-award/verify.png",
+    "orig_size": 34196,
+    "webp_path": "public/testing-screenshots/telegram-award/verify.webp",
+    "webp_size": 7498,
+    "savings": 78.07345888408001,
+    "dim": "442x411"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/hotel-master.png",
+    "orig_size": 32248,
+    "webp_path": "public/testing-screenshots/hotel-master/hotel-master.webp",
+    "webp_size": 14546,
+    "savings": 54.893326717936,
+    "dim": "563x654"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/login.png",
+    "orig_size": 29891,
+    "webp_path": "public/screenshots/askualalink-hr/login.webp",
+    "webp_size": 10156,
+    "savings": 66.02321769094377,
+    "dim": "474x611"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/login.png",
+    "orig_size": 29891,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/login.webp",
+    "webp_size": 10156,
+    "savings": 66.02321769094377,
+    "dim": "474x611"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/login-error.png",
+    "orig_size": 28993,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/login-error.webp",
+    "webp_size": 10522,
+    "savings": 63.70848135756907,
+    "dim": "435x614"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/postman-login.png",
+    "orig_size": 28480,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/postman-login.webp",
+    "webp_size": 21856,
+    "savings": 23.258426966292134,
+    "dim": "498x276"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/add-task.png",
+    "orig_size": 28160,
+    "webp_path": "public/testing-screenshots/todo-app/add-task.webp",
+    "webp_size": 6908,
+    "savings": 75.46875,
+    "dim": "578x449"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin_login.png",
+    "orig_size": 27504,
+    "webp_path": "public/screenshots/askualalink-hr/admin_login.webp",
+    "webp_size": 8910,
+    "savings": 67.60471204188482,
+    "dim": "453x606"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/admin-login.png",
+    "orig_size": 27504,
+    "webp_path": "public/screenshots/askualalink-hr/admin-login.webp",
+    "webp_size": 8910,
+    "savings": 67.60471204188482,
+    "dim": "453x606"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/access-denied.png",
+    "orig_size": 27504,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/access-denied.webp",
+    "webp_size": 8910,
+    "savings": 67.60471204188482,
+    "dim": "453x606"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/admin-login.png",
+    "orig_size": 27504,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/admin-login.webp",
+    "webp_size": 8910,
+    "savings": 67.60471204188482,
+    "dim": "453x606"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/firefox-chat.png",
+    "orig_size": 26381,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/firefox-chat.webp",
+    "webp_size": 8882,
+    "savings": 66.33182972593912,
+    "dim": "1150x1006"
+  },
+  {
+    "file": "public/testing-screenshots/hotel-master/api-contact.png",
+    "orig_size": 24290,
+    "webp_path": "public/testing-screenshots/hotel-master/api-contact.webp",
+    "webp_size": 19910,
+    "savings": 18.032111980238785,
+    "dim": "899x106"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/mobile-formula.png",
+    "orig_size": 21963,
+    "webp_path": "public/testing-screenshots/formula-management/mobile-formula.webp",
+    "webp_size": 7068,
+    "savings": 67.81860401584483,
+    "dim": "183x414"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/desktop-chat.png",
+    "orig_size": 18283,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/desktop-chat.webp",
+    "webp_size": 3938,
+    "savings": 78.4608652846907,
+    "dim": "1848x956"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/corridor-red.png",
+    "orig_size": 16602,
+    "webp_path": "public/testing-screenshots/formula-management/corridor-red.webp",
+    "webp_size": 5660,
+    "savings": 65.90772196120949,
+    "dim": "610x227"
+  },
+  {
+    "file": "public/testing-screenshots/formula-management/corridor-green.png",
+    "orig_size": 15187,
+    "webp_path": "public/testing-screenshots/formula-management/corridor-green.webp",
+    "webp_size": 5638,
+    "savings": 62.87614407058668,
+    "dim": "621x216"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/access-denied-hr.png",
+    "orig_size": 14872,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/access-denied-hr.webp",
+    "webp_size": 5282,
+    "savings": 64.48359332974718,
+    "dim": "867x953"
+  },
+  {
+    "file": "public/testing-screenshots/todo-app/task-actions.png",
+    "orig_size": 14633,
+    "webp_path": "public/testing-screenshots/todo-app/task-actions.webp",
+    "webp_size": 5906,
+    "savings": 59.639171735119255,
+    "dim": "572x148"
+  },
+  {
+    "file": "public/screenshots/askualalink-hr/firefox-admin.png",
+    "orig_size": 13526,
+    "webp_path": "public/screenshots/askualalink-hr/firefox-admin.webp",
+    "webp_size": 4112,
+    "savings": 69.59929025580364,
+    "dim": "248x350"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/firefox-admin.png",
+    "orig_size": 13526,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/firefox-admin.webp",
+    "webp_size": 4112,
+    "savings": 69.59929025580364,
+    "dim": "248x350"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/mobile-admin-dashboard.png",
+    "orig_size": 13269,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/mobile-admin-dashboard.webp",
+    "webp_size": 4868,
+    "savings": 63.312985153364984,
+    "dim": "201x407"
+  },
+  {
+    "file": "public/testing-screenshots/askuala-link-hr/tablet-admin-dashboard.png",
+    "orig_size": 12333,
+    "webp_path": "public/testing-screenshots/askuala-link-hr/tablet-admin-dashboard.webp",
+    "webp_size": 4236,
+    "savings": 65.65312576015567,
+    "dim": "249x356"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/chat-empty.png",
+    "orig_size": 10781,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/chat-empty.webp",
+    "webp_size": 4396,
+    "savings": 59.22456172896763,
+    "dim": "917x666"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/chat-cleared.png",
+    "orig_size": 10133,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/chat-cleared.webp",
+    "webp_size": 3956,
+    "savings": 60.95924208033159,
+    "dim": "585x719"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/mobile-chat.png",
+    "orig_size": 10017,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/mobile-chat.webp",
+    "webp_size": 3554,
+    "savings": 64.52031546371168,
+    "dim": "382x846"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/api-health.png",
+    "orig_size": 7893,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/api-health.webp",
+    "webp_size": 10040,
+    "savings": -27.20131762321043,
+    "dim": "519x73"
+  },
+  {
+    "file": "public/screenshots/project-02.png",
+    "orig_size": 5790,
+    "webp_path": "public/screenshots/project-02.webp",
+    "webp_size": 2716,
+    "savings": 53.09153713298791,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/screenshots/project-07.png",
+    "orig_size": 5746,
+    "webp_path": "public/screenshots/project-07.webp",
+    "webp_size": 3036,
+    "savings": 47.16324399582318,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/screenshots/project-08.png",
+    "orig_size": 5719,
+    "webp_path": "public/screenshots/project-08.webp",
+    "webp_size": 2674,
+    "savings": 53.243574051407585,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/screenshots/project-03.png",
+    "orig_size": 5601,
+    "webp_path": "public/screenshots/project-03.webp",
+    "webp_size": 2884,
+    "savings": 48.50919478664524,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/screenshots/project-04.png",
+    "orig_size": 5557,
+    "webp_path": "public/screenshots/project-04.webp",
+    "webp_size": 2718,
+    "savings": 51.08871693359727,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/screenshots/project-06.png",
+    "orig_size": 5493,
+    "webp_path": "public/screenshots/project-06.webp",
+    "webp_size": 2884,
+    "savings": 47.49681412707082,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/screenshots/project-01.png",
+    "orig_size": 4849,
+    "webp_path": "public/screenshots/project-01.webp",
+    "webp_size": 2686,
+    "savings": 44.60713549185399,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/screenshots/project-05.png",
+    "orig_size": 4570,
+    "webp_path": "public/screenshots/project-05.webp",
+    "webp_size": 2312,
+    "savings": 49.40919037199125,
+    "dim": "400x300"
+  },
+  {
+    "file": "public/testing-screenshots/hr-assistant-ai/table-chat.png",
+    "orig_size": 4313,
+    "webp_path": "public/testing-screenshots/hr-assistant-ai/table-chat.webp",
+    "webp_size": 1492,
+    "savings": 65.40690934384419,
+    "dim": "322x478"
+  }
+]

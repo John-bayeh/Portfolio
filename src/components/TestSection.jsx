@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Play, Cpu, ShieldAlert, CheckCircle2, AlertTriangle, Wrench, HelpCircle, Terminal, FileCode } from "lucide-react";
+import { useState, memo } from "react";
+import { m, AnimatePresence } from "framer-motion";
+import { Play, Cpu, ShieldAlert, CheckCircle2, AlertTriangle, Wrench, HelpCircle, Terminal, FileCode, Image as ImageIcon } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 // Stagger variants
 const containerVariants = {
@@ -47,94 +48,102 @@ function highlightCode(code) {
   return escaped;
 }
 
+// Category Screenshot Grid Component
+const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshots, onSelectImage }) {
+  if (!screenshots || screenshots.length === 0) return null;
+
+  return (
+    <div className="mt-4 pt-3 border-t border-line/30">
+      <div className="flex items-center gap-2 mb-3">
+        <ImageIcon className="w-3.5 h-3.5 text-gold" />
+        <span className="text-[10px] font-mono font-bold text-gold uppercase tracking-wider">
+          Visual Testing Proof ({screenshots.length} Screenshot{screenshots.length > 1 ? "s" : ""})
+        </span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {screenshots.map((img, idx) => {
+          const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
+            `${img.url} ${img.title || ''} ${img.badge || ''}`
+          );
+          return (
+            <div
+              key={idx}
+              onClick={() => onSelectImage(img)}
+              className="group relative bg-[var(--th-card)] border border-line hover:border-gold/50 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-md hover:shadow-gold/10 flex flex-col h-full"
+            >
+              <div className={`overflow-hidden bg-[var(--th-bg)] flex items-center justify-center ${isVertical ? 'aspect-[9/16] p-2' : 'aspect-video'}`}>
+                <img
+                  src={img.url}
+                  alt={img.title || `Test Proof ${idx + 1}`}
+                  width={isVertical ? 300 : 400}
+                  height={isVertical ? 533 : 225}
+                  loading="lazy"
+                  className={`w-full h-full group-hover:scale-105 transition-transform duration-300 ${isVertical ? 'object-contain rounded-md' : 'object-cover'}`}
+                />
+              </div>
+              <div className="p-2.5 bg-[var(--th-card)] mt-auto border-t border-line/30">
+                <p className="text-[11px] font-bold group-hover:text-gold transition-colors truncate" style={{ color: 'var(--th-text)' }}>
+                  {img.title}
+                </p>
+                {img.badge && (
+                  <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
+                    {img.badge}
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+});
+
 export default function TestSection({ testData }) {
+  const { t } = useLanguage();
+  const lbl = t.labels || {};
   const { testCases = [], jestSnippet, k6Snippet, testingScreenshots = [] } = testData || {};
   const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [activeCodeTab, setActiveCodeTab] = useState("jest"); // "jest" | "k6"
   const [activeImageModal, setActiveImageModal] = useState(null);
 
-  // Get unique categories
-  const categories = ["ALL", ...new Set(testCases.map((tc) => tc.category))];
+  // Get unique categories from both test cases & screenshots
+  const tcCategories = testCases.map((tc) => tc.category);
+  const imgCategories = testingScreenshots.map((img) => img.category).filter(Boolean);
+  const categories = ["ALL", ...new Set([...tcCategories, ...imgCategories])];
 
-  // Filter test cases
-  const filteredCases = selectedCategory === "ALL"
-    ? testCases
-    : testCases.filter((tc) => tc.category === selectedCategory);
+  // Active categories list to render
+  const activeCategories = selectedCategory === "ALL"
+    ? categories.filter((c) => c !== "ALL")
+    : [selectedCategory];
 
   // Category Icon Resolver
   const getCategoryIcon = (category) => {
     switch (category) {
       case "Authentication":
-        return <Cpu className="w-3.5 h-3.5 text-blue-400" />;
+        return <Cpu className="w-4 h-4 text-blue-400" />;
       case "RBAC":
-        return <ShieldAlert className="w-3.5 h-3.5 text-purple-400" />;
+        return <ShieldAlert className="w-4 h-4 text-purple-400" />;
       case "Payroll":
-        return <Play className="w-3.5 h-3.5 text-emerald-400" fill="currentColor" />;
+        return <Play className="w-4 h-4 text-emerald-400" fill="currentColor" />;
       case "Leave Management":
-        return <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400" />;
+        return <CheckCircle2 className="w-4 h-4 text-indigo-400" />;
       case "Load Testing":
       case "Stress Testing":
-        return <Cpu className="w-3.5 h-3.5 text-orange-400" />;
+        return <Cpu className="w-4 h-4 text-orange-400" />;
       case "DoS Resilience":
-        return <ShieldAlert className="w-3.5 h-3.5 text-red-400" />;
+        return <ShieldAlert className="w-4 h-4 text-red-400" />;
       default:
-        return <HelpCircle className="w-3.5 h-3.5 text-muted" />;
+        return <HelpCircle className="w-4 h-4 text-gold" />;
     }
   };
 
   return (
     <div className="space-y-8 select-text text-left">
-      {/* 1. TESTING SCREENSHOTS PROOF GALLERY */}
-      {testingScreenshots.length > 0 && (
-        <div className="space-y-3 pb-6 border-b border-[#222222]/80">
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-bold font-mono text-gold uppercase tracking-wider flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-gold animate-ping" />
-              🖼️ Testing Evidence &amp; Visual Proof ({testingScreenshots.length} Screenshots)
-            </h3>
-            <span className="text-[10px] text-[#666666] font-mono">Click screenshot to enlarge</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 items-start">
-            {testingScreenshots.map((img, idx) => {
-              const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
-                `${img.url} ${img.title || ''} ${img.badge || ''}`
-              );
-              return (
-                <div
-                  key={idx}
-                  onClick={() => setActiveImageModal(img)}
-                  className="group relative bg-[#0e0e0e] border border-[#222222] hover:border-gold/50 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-md hover:shadow-gold/10 flex flex-col h-full"
-                >
-                  <div className={`overflow-hidden bg-[#050505] flex items-center justify-center ${isVertical ? 'aspect-[9/16] p-2' : 'aspect-video'}`}>
-                    <img
-                      src={img.url}
-                      alt={img.title || `Test Proof ${idx + 1}`}
-                      className={`w-full h-full group-hover:scale-105 transition-transform duration-300 ${isVertical ? 'object-contain rounded-md' : 'object-cover'}`}
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-2.5 bg-[#121212] mt-auto">
-                    <p className="text-[11px] font-bold text-white group-hover:text-gold transition-colors truncate">
-                      {img.title}
-                    </p>
-                    {img.badge && (
-                      <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
-                        {img.badge}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
       {/* LIGHTBOX IMAGE MODAL */}
       <AnimatePresence>
         {activeImageModal && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -152,118 +161,157 @@ export default function TestSection({ testData }) {
                 <p className="text-xs text-[#aaaaaa] mt-0.5">{activeImageModal.description || activeImageModal.badge}</p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       {/* Category Filter Tabs */}
-      <div className="flex flex-wrap gap-1.5 border-b border-[#222222]/80 pb-3">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 border ${
-              selectedCategory === cat
-                ? "bg-gold/10 border-gold/40 text-gold shadow-sm shadow-gold/5"
-                : "bg-[#111111] border-[#222222] text-[#888888] hover:border-gold/20 hover:text-[#aaaaaa]"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#222222]/80 pb-3">
+        <div className="flex flex-wrap gap-1.5">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 border ${
+                selectedCategory === cat
+                  ? "bg-gold/10 border-gold/40 text-gold shadow-sm shadow-gold/5"
+                  : "bg-[#111111] border-[#222222] text-[#888888] hover:border-gold/20 hover:text-[#aaaaaa]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+        <span className="text-[10px] font-mono text-[#666666]">
+          Click any screenshot to expand
+        </span>
       </div>
 
-      {/* Filtered Test Cases List */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 gap-3"
-      >
-        <AnimatePresence mode="wait">
-          {filteredCases.map((tc, idx) => (
-            <motion.div
-              key={tc.scenario + idx}
-              variants={itemVariants}
-              className="bg-[#0e0e0e] border border-[#222222]/80 rounded-xl p-4 hover:border-gold/25 transition-all duration-300 shadow-md group relative overflow-hidden"
+      {/* Render Category Sections (Test Cases + Screenshots placed in their matching category) */}
+      <div className="space-y-8">
+        {activeCategories.map((cat) => {
+          const categoryTestCases = testCases.filter((tc) => tc.category === cat);
+          const categoryScreenshots = testingScreenshots.filter(
+            (img) => img.category === cat || (!img.category && selectedCategory === "ALL" && false)
+          );
+
+          if (categoryTestCases.length === 0 && categoryScreenshots.length === 0) {
+            return null;
+          }
+
+          return (
+            <div
+              key={cat}
+              className="bg-[var(--th-card)]/40 border border-line/60 rounded-2xl p-5 space-y-4 shadow-sm"
             >
-              {/* Top Row: Category tag and status badge */}
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
-                <div className="flex items-center gap-2">
-                  <span className="p-1 rounded-md bg-[#161616] border border-[#222222]">
-                    {getCategoryIcon(tc.category)}
-                  </span>
-                  <span className="text-[10px] font-bold font-mono tracking-wider text-[#888] uppercase">
-                    {tc.category}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {/* Tool tag */}
-                  <span className="text-[8px] font-mono px-2 py-0.5 rounded border border-[#222222] bg-[#161616] text-[#666]">
-                    {tc.tool}
-                  </span>
-
-                  {/* Status Badge */}
-                  {tc.result === "pass" && (
-                    <span className="inline-flex items-center gap-1 bg-[#10b981]/10 border border-[#10b981]/25 text-[#10b981] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
-                      Pass
-                    </span>
-                  )}
-                  {tc.result === "fixed" && (
-                    <span className="inline-flex items-center gap-1 bg-gold/10 border border-gold/30 text-gold text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
-                      <Wrench className="w-2.5 h-2.5 text-gold shrink-0" />
-                      Fixed
-                    </span>
-                  )}
-                  {tc.result === "fail" && (
-                    <span className="inline-flex items-center gap-1 bg-[#ef4444]/10 border border-[#ef4444]/25 text-[#ef4444] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
-                      <AlertTriangle className="w-2.5 h-2.5 text-[#ef4444] shrink-0" />
-                      Fail
-                    </span>
-                  )}
-                </div>
+              {/* Category Header */}
+              <div className="flex items-center gap-2.5 pb-2 border-b border-line/40">
+                <span className="p-1.5 rounded-lg bg-[var(--th-bg)] border border-line">
+                  {getCategoryIcon(cat)}
+                </span>
+                <h4 className="text-xs font-bold font-mono tracking-wider text-gold uppercase">
+                  {cat} Section ({categoryTestCases.length} Test Case{categoryTestCases.length > 1 ? "s" : ""})
+                </h4>
               </div>
 
-              {/* Scenario details */}
-              <h5 className="text-xs font-semibold text-white group-hover:text-gold transition-colors duration-200 mb-1">
-                {tc.scenario}
-              </h5>
-              <p className="text-[11px] text-[#888888] leading-relaxed mb-2">
-                <span className="font-bold text-white/50">Expected:</span> {tc.expected}
-              </p>
+              {/* Category Test Cases Grid */}
+              {categoryTestCases.length > 0 && (
+                <m.div
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                  className="grid grid-cols-1 gap-3"
+                >
+                  {categoryTestCases.map((tc, idx) => (
+                    <m.div
+                      key={tc.scenario + idx}
+                      variants={itemVariants}
+                      className="bg-[var(--th-card)] border border-line/80 rounded-xl p-4 hover:border-gold/25 transition-all duration-300 shadow-md group relative overflow-hidden"
+                    >
+                      {/* Top Row: Category tag and status badge */}
+                      <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold font-mono tracking-wider text-muted uppercase">
+                            {tc.category}
+                          </span>
+                        </div>
 
-              {/* Fix notes / Performance notes */}
-              {tc.fixNote && (
-                <div className="mt-2.5 p-3 rounded-lg bg-gold/5 border border-gold/10 text-[10px] text-[#cda84b] leading-relaxed flex items-start gap-2">
-                  <Wrench className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-gold">Root Cause &amp; Resolution:</span>
-                    {tc.fixNote}
-                  </div>
-                </div>
+                        <div className="flex items-center gap-2">
+                          {/* Tool tag */}
+                          <span className="text-[8px] font-mono px-2 py-0.5 rounded border border-line bg-[var(--th-bg)] text-muted">
+                            {tc.tool}
+                          </span>
+
+                          {/* Status Badge */}
+                          {tc.result === "pass" && (
+                            <span className="inline-flex items-center gap-1 bg-[#10b981]/10 border border-[#10b981]/25 text-[#10b981] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
+                              Pass
+                            </span>
+                          )}
+                          {tc.result === "fixed" && (
+                            <span className="inline-flex items-center gap-1 bg-gold/10 border border-gold/30 text-gold text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
+                              <Wrench className="w-2.5 h-2.5 text-gold shrink-0" />
+                              Fixed
+                            </span>
+                          )}
+                          {tc.result === "fail" && (
+                            <span className="inline-flex items-center gap-1 bg-[#ef4444]/10 border border-[#ef4444]/25 text-[#ef4444] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
+                              <AlertTriangle className="w-2.5 h-2.5 text-[#ef4444] shrink-0" />
+                              Fail
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Scenario details */}
+                      <h5 className="text-xs font-semibold group-hover:text-gold transition-colors duration-200 mb-1" style={{ color: 'var(--th-text)' }}>
+                        {tc.scenario}
+                      </h5>
+                      <p className="text-[11px] text-muted leading-relaxed mb-2">
+                        <span className="font-bold opacity-75" style={{ color: 'var(--th-text)' }}>{lbl.expected || "Expected:"}</span> {tc.expected}
+                      </p>
+
+                      {/* Fix notes / Performance notes */}
+                      {tc.fixNote && (
+                        <div className="mt-2.5 p-3 rounded-lg bg-gold/5 border border-gold/10 text-[10px] text-[#cda84b] leading-relaxed flex items-start gap-2">
+                          <Wrench className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-gold">{lbl.rootCause || "Root Cause & Resolution:"}</span>
+                            {tc.fixNote}
+                          </div>
+                        </div>
+                      )}
+
+                      {tc.note && (
+                        <div className="mt-2.5 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10 text-[10px] text-blue-400/90 leading-relaxed flex items-start gap-2">
+                          <Terminal className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                          <div>
+                            <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-blue-400">{lbl.loadMetrics || "Load Test Metrics:"}</span>
+                            {tc.note}
+                          </div>
+                        </div>
+                      )}
+                    </m.div>
+                  ))}
+                </m.div>
               )}
 
-              {tc.note && (
-                <div className="mt-2.5 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10 text-[10px] text-blue-400/90 leading-relaxed flex items-start gap-2">
-                  <Terminal className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
-                  <div>
-                    <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-blue-400">Load Test Metrics:</span>
-                    {tc.note}
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
+              {/* Category Screenshots rendered right inside its category section */}
+              <CategoryScreenshotGrid
+                screenshots={categoryScreenshots}
+                onSelectImage={setActiveImageModal}
+              />
+            </div>
+          );
+        })}
+      </div>
 
       {/* Code Snippets Section (with editor-like tab switcher) */}
       <div className="space-y-3 pt-6 border-t border-[#222222]/80">
         <div className="flex items-center justify-between">
           <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono">
-            Embedded Test Scripts
+            {lbl.testScripts || "Embedded Test Scripts"}
           </h4>
           {/* Switcher */}
           <div className="flex bg-[#111] border border-[#222222] rounded-lg p-0.5">
@@ -293,14 +341,14 @@ export default function TestSection({ testData }) {
         </div>
 
         {/* Code Editor Window */}
-        <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-2xl bg-[#0a0a0a]">
+        <div className="rounded-xl border border-line/80 overflow-hidden shadow-2xl bg-[var(--th-card)]">
           {/* macOS window chrome */}
-          <div className="flex items-center justify-between bg-[#141414] border-b border-[#222222] px-4 py-2.5">
+          <div className="flex items-center justify-between bg-[var(--th-bg)] border-b border-line px-4 py-2.5">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
-              <span className="ml-3 text-[9px] font-mono text-[#555555]">
+              <span className="ml-3 text-[9px] font-mono text-muted">
                 {activeCodeTab === "jest" ? jestSnippet?.title : k6Snippet?.title}
               </span>
             </div>
@@ -310,7 +358,7 @@ export default function TestSection({ testData }) {
           </div>
 
           {/* Code content */}
-          <pre className="overflow-x-auto border-l-4 border-gold p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[350px]">
+          <pre className="overflow-x-auto border-l-4 border-gold p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[350px] bg-[var(--th-bg)]" style={{ color: 'var(--th-text)' }}>
             <code
               dangerouslySetInnerHTML={{
                 __html: highlightCode(

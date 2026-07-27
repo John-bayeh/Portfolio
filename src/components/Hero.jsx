@@ -1,46 +1,24 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Link } from "react-scroll";
 import { ArrowUpRight, MoveDown } from "lucide-react";
 import Marquee from "./Marquee";
 import { useLanguage } from "../context/LanguageContext";
 
-// Spring letter-by-letter animation config for the name.
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.05, delayChildren: 0.2 },
-  },
-};
-const letter = {
-  hidden: { opacity: 0, y: 40 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 400, damping: 18 },
-  },
-};
-
 function AnimatedName({ text }) {
   return (
-    <motion.span
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="inline-flex flex-wrap"
-      aria-label={text}
-    >
+    <span className="inline-flex flex-wrap" role="text" aria-label={text}>
       {text.split("").map((char, i) => (
-        <motion.span
+        <span
           key={i}
-          variants={letter}
-          className="inline-block"
+          className="hero-letter"
+          style={{ animationDelay: `${0.15 + i * 0.04}s` }}
           aria-hidden="true"
         >
           {char === " " ? "\u00a0" : char}
-        </motion.span>
+        </span>
       ))}
-    </motion.span>
+    </span>
   );
 }
 
@@ -51,8 +29,12 @@ function PhotoBlob() {
     <div className="relative mx-auto w-[320px] max-w-full">
       {!errored ? (
         <img
-          src="/profile.jpg"
+          src="/profile.webp"
           alt="Yohannes Bayeh"
+          width={320}
+          height={420}
+          loading="eager"
+          fetchPriority="high"
           onError={() => setErrored(true)}
           style={{
             width: '100%',
@@ -124,7 +106,7 @@ export default function Hero() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-12 pt-10 lg:flex-row lg:pt-16">
         {/* Left: copy (55%) */}
         <div className="w-full lg:w-[55%] flex flex-col items-start text-left">
-          <motion.p
+          <m.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -132,7 +114,7 @@ export default function Hero() {
             className="mb-6 text-xs font-medium uppercase tracking-[0.25em]"
           >
             {h.tagline}
-          </motion.p>
+          </m.p>
 
           <h1 className="font-display text-5xl font-semibold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
             <span className="block">{h.heading1}</span>
@@ -153,8 +135,8 @@ export default function Hero() {
 
           {/* CTA buttons */}
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Link to="projects" smooth duration={600} offset={-20}>
-              <motion.button
+            <Link to="projects" href="#projects" smooth duration={600} offset={-20}>
+              <m.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 style={{
@@ -164,10 +146,10 @@ export default function Hero() {
                 className="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200"
               >
                 {h.viewWork} <ArrowUpRight size={16} />
-              </motion.button>
+              </m.button>
             </Link>
-            <Link to="contact" smooth duration={600} offset={-20}>
-              <motion.button
+            <Link to="contact" href="#contact" smooth duration={600} offset={-20}>
+              <m.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 style={{
@@ -177,12 +159,12 @@ export default function Hero() {
                 className="inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-semibold transition-colors duration-200"
               >
                 {h.getInTouch}
-              </motion.button>
+              </m.button>
             </Link>
           </div>
 
           {/* Floating badge: tech stack */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
@@ -190,7 +172,7 @@ export default function Hero() {
             style={{ borderColor: 'var(--th-line)', background: 'var(--th-card)', color: 'var(--th-text-60)' }}
           >
             React · Next.js · Node.js
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Right: photo + stat card (40%) */}
@@ -200,7 +182,7 @@ export default function Hero() {
             <PhotoBlob />
 
             {/* Floating stat: projects shipped */}
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75 }}
@@ -223,7 +205,7 @@ export default function Hero() {
               >
                 {h.projectsShipped}
               </div>
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </div>

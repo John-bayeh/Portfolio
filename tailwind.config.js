@@ -5,8 +5,8 @@ export default {
     extend: {
       colors: {
         bg: "#080808",
-        gold: "#C9A84C",
-        muted: "#555555",
+        gold: "var(--color-gold)",
+        muted: "var(--th-muted)",
         card: "#111111",
         line: "#222222",
       },

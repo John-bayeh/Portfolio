@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AskualaLink HR — Product Requirements &amp; Architecture Document</title>
+  <meta name="description" content="Official Product Requirements & Architecture Document for AskualaLink HR Platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script>
+    if (localStorage.getItem('portfolio_theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #07090F;
+      --bar-bg: #0D1117;
+      --border: #1F2937;
+      --brand: #2563EB;
+      --text: #F9FAFB;
+      --muted: #888888;
+    }
+    html.light {
+      --bg: #F8F5F0;
+      --bar-bg: #FFFFFF;
+      --border: #E0DDD8;
+      --brand: #2563EB;
+      --text: #0A0A0A;
+      --muted: #555555;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg); font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Top Control Bar */
+    .top-bar {
+      height: 56px;
+      background: var(--bar-bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 10;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #2563EB;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #3B82F6; }
+
+    .btn-download {
+      background: #FFFFFF;
+      color: #000000;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.15s, background 0.15s;
+    }
+    .btn-download:hover {
+      background: #F0F0F0;
+      transform: translateY(-1px);
+    }
+
+    /* Embedded PDF Viewer Frame */
+    .pdf-container {
+      width: 100%;
+      height: calc(100vh - 56px);
+      position: relative;
+      background: var(--bg);
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .pdf-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text);
+      text-align: center;
+      padding: 2rem;
+    }
+    .pdf-fallback p { color: var(--muted); margin-bottom: 1.5rem; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation & Action Bar -->
+  <header class="top-bar">
+    <a href="/" class="back-link">← Back to Portfolio</a>
+    <a href="/docs/askualalink_hr_prd.pdf" target="_blank" class="btn-download" title="Download AskualaLink HR PRD PDF">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+      </svg>
+      Download PDF
+    </a>
+  </header>
+
+  <!-- Embedded PDF Viewer -->
+  <main class="pdf-container">
+    <iframe src="/docs/askualalink_hr_prd.pdf#toolbar=1&amp;navpanes=0&amp;scrollbar=1" type="application/pdf">
+      <div class="pdf-fallback">
+        <h2>AskualaLink HR Specification Document</h2>
+        <p>Your web browser does not support embedded PDF viewing.</p>
+        <a href="/docs/askualalink_hr_prd.pdf" target="_blank" class="btn-download">
+          Download PDF Document
+        </a>
+      </div>
+    </iframe>
+  </main>
+
+</body>
+</html>

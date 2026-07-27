@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Link } from "react-scroll";
 import { ArrowUpRight } from "lucide-react";
 import Marquee from "./Marquee";
@@ -17,8 +17,11 @@ function PhotoBlob() {
     <div className="relative mx-auto w-[320px] max-w-full">
       {!errored ? (
         <img
-          src="/profile.jpg"
+          src="/profile.webp"
           alt="Yohannes Bayeh"
+          width={320}
+          height={420}
+          loading="lazy"
           onError={() => setErrored(true)}
           style={{
             width: '100%',
@@ -57,19 +60,19 @@ export default function About() {
   return (
     <section id="about" className="px-6 py-24 sm:px-10">
       <div className="mx-auto max-w-6xl">
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-gold"
         >
           {a.sectionLabel}
-        </motion.p>
+        </m.p>
 
         {/* Two-column layout */}
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-2">
           {/* Left column: bio + CTA + timeline */}
-          <motion.div
+          <m.div
             variants={fadeUp}
             initial="hidden"
             whileInView="show"
@@ -84,15 +87,15 @@ export default function About() {
               {a.bio}
             </p>
 
-            <Link to="contact" smooth duration={600} offset={-20}>
-              <motion.button
+            <Link to="contact" href="#contact" smooth duration={600} offset={-20}>
+              <m.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className="mt-8 inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 text-sm font-semibold transition-colors hover:border-gold hover:text-gold"
                 style={{ color: 'var(--th-text)', borderColor: 'var(--th-line)' }}
               >
                 {a.cta} <ArrowUpRight size={16} />
-              </motion.button>
+              </m.button>
             </Link>
 
             {/* Process timeline */}
@@ -117,10 +120,10 @@ export default function About() {
                 ))}
               </ol>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* Right column: photo blob + floating stat cards */}
-          <motion.div
+          <m.div
             variants={fadeUp}
             initial="hidden"
             whileInView="show"
@@ -156,7 +159,7 @@ export default function About() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Skills infinite marquee */}

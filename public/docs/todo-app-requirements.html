@@ -3,513 +3,129 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Todo App — Dockerized Microservice Platform | Product Requirements</title>
-  <meta name="description" content="Full product requirements for the Todo App built as a Dockerized microservice platform: Nginx gateway, Auth Service, Tasks Service, PostgreSQL, Redis." />
+  <title>Todo App — Product Requirements &amp; Specification Document</title>
+  <meta name="description" content="Official Product Requirements & Specification Document for Todo App." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script>
+    if (localStorage.getItem('portfolio_theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+  </script>
   <style>
     :root {
-      --bg:        #07090F;
-      --bg-card:   #0D1117;
-      --bg-hover:  #111827;
-      --border:    #1F2937;
-      --border-hi: #374151;
-      --emerald:   #10B981;
-      --teal:      #14B8A6;
-      --text:      #F9FAFB;
-      --muted:     #6B7280;
-      --mono:      'JetBrains Mono', monospace;
+      --bg: #07090F;
+      --bar-bg: #0D1117;
+      --border: #1F2937;
+      --brand: #7C3AED;
+      --text: #F9FAFB;
+      --muted: #888888;
+    }
+    html.light {
+      --bg: #F8F5F0;
+      --bar-bg: #FFFFFF;
+      --border: #E0DDD8;
+      --brand: #7C3AED;
+      --text: #0A0A0A;
+      --muted: #555555;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 15px;
-      line-height: 1.7;
-      min-height: 100vh;
-    }
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(16,185,129,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(16,185,129,.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .back-bar {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(7,9,15,.85);
-      backdrop-filter: blur(16px);
+    html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg); font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Top Control Bar */
+    .top-bar {
+      height: 56px;
+      background: var(--bar-bg);
       border-bottom: 1px solid var(--border);
-      padding: 0 clamp(1rem,5vw,3rem);
-    }
-    .back-bar-inner {
-      max-width: 1100px; margin: 0 auto;
-      height: 52px; display: flex;
-      align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 10;
     }
     .back-link {
-      display: inline-flex; align-items: center; gap: 8px;
-      color: var(--muted); text-decoration: none;
-      font-size: 13px; font-weight: 500; transition: color .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #7C3AED;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: color 0.2s;
     }
-    .back-link:hover { color: var(--emerald); }
-    .doc-label { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
-    .page {
-      position: relative; z-index: 1;
-      max-width: 1100px; margin: 0 auto;
-      padding: clamp(2rem,6vw,4rem) clamp(1rem,5vw,3rem) 6rem;
+    .back-link:hover { color: #A78BFA; }
+
+    .btn-download {
+      background: #FFFFFF;
+      color: #000000;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.15s, background 0.15s;
     }
-    .hero { border-bottom: 1px solid var(--border); padding-bottom: 2.5rem; margin-bottom: 3rem; }
-    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
-    .pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 3px 12px; border-radius: 999px;
-      font-family: var(--mono); font-size: 11px; font-weight: 600;
-      letter-spacing: .06em; border: 1px solid;
+    .btn-download:hover {
+      background: #F0F0F0;
+      transform: translateY(-1px);
     }
-    .pill-em  { color: var(--emerald); border-color: rgba(16,185,129,.35); background: rgba(16,185,129,.06); }
-    .pill-bl  { color: #60A5FA;        border-color: rgba(96,165,250,.35);  background: rgba(96,165,250,.06); }
-    .pill-tl  { color: var(--teal);    border-color: rgba(20,184,166,.35);  background: rgba(20,184,166,.06); }
-    .pill-gr  { color: var(--muted);   border-color: var(--border);         background: rgba(255,255,255,.03); }
-    .hero h1 {
-      font-size: clamp(2rem,5vw,3.25rem); font-weight: 700;
-      line-height: 1.15; letter-spacing: -.02em; margin-bottom: .75rem;
+
+    /* Embedded PDF Viewer Frame */
+    .pdf-container {
+      width: 100%;
+      height: calc(100vh - 56px);
+      position: relative;
+      background: var(--bg);
     }
-    .hero h1 em { color: var(--emerald); font-style: normal; }
-    .hero-tagline { font-size: 1rem; color: var(--muted); max-width: 640px; margin-bottom: 1.5rem; }
-    .tech-stack { display: flex; flex-wrap: wrap; gap: 8px; }
-    .tb {
-      font-family: var(--mono); font-size: 11px; padding: 4px 10px;
-      border-radius: 6px; border: 1px solid var(--border);
-      color: var(--muted); background: var(--bg-card);
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
-    section { margin-bottom: 3rem; }
-    .sh {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 1.5rem; padding-bottom: .75rem;
-      border-bottom: 1px solid var(--border);
+    .pdf-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text);
+      text-align: center;
+      padding: 2rem;
     }
-    .sn { font-family: var(--mono); font-size: 11px; color: var(--emerald); min-width: 28px; }
-    .sh h2 { font-size: 1rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-    .card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 1.5rem;
-      transition: border-color .2s;
-    }
-    .card:hover { border-color: #374151; }
-    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1rem; }
-    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1rem; }
-    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1rem; }
-    .mc { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align: center; }
-    .mv { font-size: 2rem; font-weight: 700; color: var(--emerald); line-height: 1.1; }
-    .mu { font-size: .72rem; font-family: var(--mono); color: var(--muted); margin-top: 2px; }
-    .ml { font-size: .78rem; color: var(--muted); margin-top: 6px; }
-    .req-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .req-list li {
-      display: flex; align-items: flex-start; gap: 12px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 16px;
-      font-size: .9rem; line-height: 1.55;
-    }
-    .req-icon {
-      flex-shrink: 0; width: 20px; height: 20px;
-      background: rgba(16,185,129,.12); border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--emerald); font-size: 11px; margin-top: 2px;
-    }
-    .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 0; }
-    .fs {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 10px 16px;
-      font-size: .83rem; font-weight: 500; white-space: nowrap;
-    }
-    .fa { color: var(--emerald); font-size: 1.1rem; padding: 0 8px; }
-    .svc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 10px; }
-    .svc {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 16px;
-    }
-    .svc-name { font-family: var(--mono); font-size: .82rem; font-weight: 600; color: #60A5FA; margin-bottom: 4px; }
-    .svc-img  { font-family: var(--mono); font-size: .72rem; color: var(--muted); margin-bottom: 6px; }
-    .svc-desc { font-size: .78rem; color: var(--muted); }
-    .ep-list { display: flex; flex-direction: column; gap: 8px; }
-    .ep {
-      display: flex; align-items: flex-start; gap: 12px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 12px 16px; font-size: .84rem;
-    }
-    .method {
-      font-family: var(--mono); font-size: 10px; font-weight: 700;
-      padding: 3px 8px; border-radius: 5px;
-      min-width: 50px; text-align: center; flex-shrink: 0;
-    }
-    .m-get    { background: rgba(52,211,153,.12);  color: #34D399; border: 1px solid rgba(52,211,153,.25); }
-    .m-post   { background: rgba(96,165,250,.12);  color: #60A5FA; border: 1px solid rgba(96,165,250,.25); }
-    .m-patch  { background: rgba(251,191,36,.12);  color: #FBBF24; border: 1px solid rgba(251,191,36,.25); }
-    .m-delete { background: rgba(248,113,113,.12); color: #F87171; border: 1px solid rgba(248,113,113,.25); }
-    .ep-path { font-family: var(--mono); font-weight: 600; margin-bottom: 2px; }
-    .ep-desc { color: var(--muted); font-size: .78rem; }
-    .dc {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1.25rem;
-      transition: border-color .2s;
-    }
-    .dc:hover { border-color: rgba(16,185,129,.3); }
-    .dc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: .6rem; }
-    .dc-title { font-weight: 600; font-size: .88rem; }
-    .badge {
-      flex-shrink: 0; font-family: var(--mono); font-size: 10px;
-      font-weight: 600; padding: 2px 8px; border-radius: 4px; letter-spacing: .05em;
-    }
-    .b-arch { background: rgba(16,185,129,.12); color: var(--emerald); }
-    .b-sec  { background: rgba(251,191,36,.12);  color: #FBBF24; }
-    .b-rel  { background: rgba(96,165,250,.12);  color: #60A5FA; }
-    .b-prf  { background: rgba(167,139,250,.12); color: #A78BFA; }
-    .b-dvp  { background: rgba(20,184,166,.12);  color: var(--teal); }
-    .b-ux   { background: rgba(251,146,60,.12);  color: #FB923C; }
-    .dc-reason { font-size: .83rem; color: var(--muted); line-height: 1.55; }
-    .cb { background: #08090E; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-    .cb-hdr {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 16px; border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,.02);
-    }
-    .cb-title { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-    .cb-lang  { font-family: var(--mono); font-size: 10px; color: var(--emerald); }
-    .cb pre {
-      padding: 1.25rem 1.5rem; overflow-x: auto;
-      font-family: var(--mono); font-size: 12.5px;
-      line-height: 1.75; color: #C9D1D9;
-    }
-    .kw  { color: #7AA2F7; }
-    .str { color: #9ECE6A; }
-    .cm  { color: #565F89; font-style: italic; }
-    .nu  { color: #FF9E64; }
-    .tt { width: 100%; border-collapse: collapse; font-size: .83rem; }
-    .tt th {
-      text-align: left; padding: 10px 14px;
-      border-bottom: 1px solid var(--border);
-      font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
-      font-weight: 600; color: var(--muted); font-family: var(--mono);
-    }
-    .tt td {
-      padding: 10px 14px; border-bottom: 1px solid rgba(31,41,55,.6);
-      vertical-align: top; line-height: 1.5; color: #CBD5E1;
-    }
-    .tt tr:last-child td { border-bottom: none; }
-    .tt tr:hover td { background: rgba(255,255,255,.02); }
-    .cl { font-family: var(--mono); font-size: 10px; color: var(--emerald); padding: 2px 7px; background: rgba(16,185,129,.08); border-radius: 4px; white-space: nowrap; }
-    .sp { color: #34D399; font-family: var(--mono); font-size: 11px; font-weight: 700; }
-    .sf { color: #FBBF24; font-family: var(--mono); font-size: 11px; font-weight: 700; }
-    footer {
-      max-width: 1100px; margin: 0 auto;
-      padding: 2rem clamp(1rem,5vw,3rem) 4rem;
-      border-top: 1px solid var(--border);
-      display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 1rem;
-      position: relative; z-index: 1;
-    }
-    footer span { font-size: .78rem; color: var(--muted); }
-    footer a { color: var(--emerald); text-decoration: none; font-size: .78rem; }
+    .pdf-fallback p { color: var(--muted); margin-bottom: 1.5rem; font-size: 14px; }
   </style>
 </head>
 <body>
 
-<nav class="back-bar">
-  <div class="back-bar-inner">
-    <a href="/#projects" class="back-link" id="back-to-portfolio">
-      ← Back to Projects
+  <!-- Top Navigation & Action Bar -->
+  <header class="top-bar">
+    <a href="/" class="back-link">← Back to Portfolio</a>
+    <a href="/docs/todo_app_documentation.pdf" target="_blank" class="btn-download" title="Download Todo App Documentation PDF">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+      </svg>
+      Download PDF
     </a>
-    <span class="doc-label">PRD v1.0 · 2025</span>
-  </div>
-</nav>
-
-<main class="page">
-
-  <!-- Hero -->
-  <header class="hero" id="overview">
-    <div class="pills">
-      <span class="pill pill-em">Project 03</span>
-      <span class="pill pill-bl">🐳 Dockerized</span>
-      <span class="pill pill-tl">Microservices</span>
-      <span class="pill pill-gr">2025</span>
-    </div>
-    <h1>Todo App —<br><em>Microservice Platform</em></h1>
-    <p class="hero-tagline">
-      A deceptively simple task manager re-architected as a production-grade, Dockerized microservice platform.
-      Six services. One command. A showcase of containerization, API gateway routing, and service isolation
-      applied to a problem every engineer knows.
-    </p>
-    <div class="tech-stack">
-      <span class="tb">React (Vite)</span>
-      <span class="tb">Node.js + Express</span>
-      <span class="tb">Docker Compose</span>
-      <span class="tb">Nginx Gateway</span>
-      <span class="tb">PostgreSQL 16</span>
-      <span class="tb">Redis 7</span>
-      <span class="tb">JWT Auth</span>
-      <span class="tb">Jest + Supertest</span>
-      <span class="tb">k6 Load Testing</span>
-    </div>
   </header>
 
-  <!-- 01 Overview -->
-  <section>
-    <div class="sh"><span class="sn">01</span><h2>Project Overview</h2></div>
-    <div class="grid2" style="margin-bottom:1rem">
-      <div class="card">
-        <p style="font-size:.9rem;color:var(--muted);line-height:1.65">
-          Most todo apps are throw-away exercises. This one is different. The same feature set —
-          add, complete, filter, delete — is delivered through a <strong style="color:var(--text)">fully containerized,
-          multi-service architecture</strong> that mirrors how real production systems are built.
-          The goal: demonstrate that software engineering fundamentals scale <em>down</em> as well as up.
-        </p>
+  <!-- Embedded PDF Viewer -->
+  <main class="pdf-container">
+    <iframe src="/docs/todo_app_documentation.pdf#toolbar=1&amp;navpanes=0&amp;scrollbar=1" type="application/pdf">
+      <div class="pdf-fallback">
+        <h2>Todo App Documentation</h2>
+        <p>Your web browser does not support embedded PDF viewing.</p>
+        <a href="/docs/todo_app_documentation.pdf" target="_blank" class="btn-download">
+          Download PDF Document
+        </a>
       </div>
-      <div class="card">
-        <h3 style="font-size:.78rem;font-family:var(--mono);color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem">Why Microservices?</h3>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.84rem;color:var(--muted)">
-          <li>✦ <strong style="color:var(--text)">Service isolation</strong> — Auth and Tasks have zero runtime coupling</li>
-          <li>✦ <strong style="color:var(--text)">API gateway pattern</strong> via Nginx — single public entry point</li>
-          <li>✦ <strong style="color:var(--text)">Docker Compose orchestration</strong> with health checks &amp; named volumes</li>
-          <li>✦ <strong style="color:var(--text)">Independent deployability</strong> of each service</li>
-        </ul>
-      </div>
-    </div>
-    <div class="metric-grid">
-      <div class="mc"><div class="mv">6</div><div class="mu">docker services</div><div class="ml">Nginx · React · Auth · Tasks · PG · Redis</div></div>
-      <div class="mc"><div class="mv">1</div><div class="mu">command to start</div><div class="ml">docker compose up --build</div></div>
-      <div class="mc"><div class="mv">&lt;120<span style="font-size:1rem">MB</span></div><div class="mu">per service image</div><div class="ml">Multi-stage Alpine builds</div></div>
-      <div class="mc"><div class="mv">94%</div><div class="mu">Redis cache hit rate</div><div class="ml">@ 500 concurrent users</div></div>
-    </div>
-  </section>
-
-  <!-- 02 Architecture -->
-  <section>
-    <div class="sh"><span class="sn">02</span><h2>System Architecture</h2></div>
-    <div class="card" style="margin-bottom:1.25rem">
-      <h3 style="font-size:.78rem;font-family:var(--mono);color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem">Request Flow</h3>
-      <div class="flow">
-        <div class="fs">Browser (React SPA)</div>
-        <span class="fa">→</span>
-        <div class="fs" style="border-color:rgba(96,165,250,.4);color:#60A5FA">Nginx :80<br><small style="color:var(--muted);font-size:.7rem">API Gateway</small></div>
-        <span class="fa">→</span>
-        <div class="fs" style="border-color:rgba(16,185,129,.4);color:var(--emerald)">Auth Service :4000<br><small style="color:var(--muted);font-size:.7rem">/api/auth/*</small></div>
-        <span class="fa">/</span>
-        <div class="fs" style="border-color:rgba(16,185,129,.4);color:var(--emerald)">Tasks Service :4001<br><small style="color:var(--muted);font-size:.7rem">/api/tasks/*</small></div>
-        <span class="fa">→</span>
-        <div class="fs">PostgreSQL + Redis</div>
-      </div>
-    </div>
-    <div class="svc-grid" style="margin-bottom:1.25rem">
-      <div class="svc"><div class="svc-name">nginx</div><div class="svc-img">nginx:alpine · port 80</div><div class="svc-desc">API Gateway. Routes /api/auth and /api/tasks. Serves React static build.</div></div>
-      <div class="svc"><div class="svc-name">auth-api</div><div class="svc-img">./services/auth · internal :4000</div><div class="svc-desc">Registration, login, JWT issuance. Writes session validity flags to Redis.</div></div>
-      <div class="svc"><div class="svc-name">tasks-api</div><div class="svc-img">./services/tasks · internal :4001</div><div class="svc-desc">CRUD operations on tasks. Validates JWT via Redis — never touches auth_db.</div></div>
-      <div class="svc"><div class="svc-name">postgres</div><div class="svc-img">postgres:16-alpine</div><div class="svc-desc">Two isolated DBs: auth_db (users) and tasks_db (tasks). Named volume.</div></div>
-      <div class="svc"><div class="svc-name">redis</div><div class="svc-img">redis:7-alpine</div><div class="svc-desc">Shared session cache. JWT validity flags with TTL — eliminates DB round-trips.</div></div>
-    </div>
-    <div class="cb">
-      <div class="cb-hdr"><span class="cb-title">nginx/nginx.conf — Routing Rules</span><span class="cb-lang">nginx</span></div>
-      <pre><code><span class="cm"># Nginx API Gateway</span>
-upstream auth_service  { server auth-api:4000; }
-upstream tasks_service { server tasks-api:4001; }
-
-server {
-  listen 80;
-  location /api/auth/  { proxy_pass http://auth_service/;  proxy_set_header Host $host; }
-  location /api/tasks/ { proxy_pass http://tasks_service/; proxy_set_header Host $host; }
-  location / { root /usr/share/nginx/html; try_files $uri $uri/ /index.html; }
-  location /health { return 200 <span class="str">"ok\n"</span>; }
-}</code></pre>
-    </div>
-  </section>
-
-  <!-- 03 Requirements -->
-  <section>
-    <div class="sh"><span class="sn">03</span><h2>Functional Requirements</h2></div>
-    <ul class="req-list">
-      <li><div class="req-icon">✓</div><div><strong>User Registration &amp; Login:</strong> Auth Service issues a signed JWT on successful login. bcrypt password hashing. Duplicate email rejected with 409.</div></li>
-      <li><div class="req-icon">✓</div><div><strong>Authenticated Task CRUD:</strong> All task endpoints require a valid Bearer token. Tasks are user-scoped — each user sees only their own tasks.</div></li>
-      <li><div class="req-icon">✓</div><div><strong>Optimistic UI Toggle:</strong> Clicking a task checkbox updates the UI instantly. If the PATCH request fails, UI reverts automatically — no stuck state.</div></li>
-      <li><div class="req-icon">✓</div><div><strong>Filter: All / Active / Completed:</strong> Filter state preserved in URL query string — shareable and refresh-safe.</div></li>
-      <li><div class="req-icon">✓</div><div><strong>Docker Compose Orchestration:</strong> docker compose up --build starts all 6 services with correct dependency order, health checks, and named volumes.</div></li>
-      <li><div class="req-icon">✓</div><div><strong>Redis Session Validation:</strong> Tasks Service reads JWT validity from Redis. Cache miss triggers 401 — no PostgreSQL auth_db lookup on every request.</div></li>
-      <li><div class="req-icon">✓</div><div><strong>PostgreSQL Persistence:</strong> Tasks and users survive container restarts via named Docker volumes. Two isolated schemas prevent cross-service coupling.</div></li>
-      <li><div class="req-icon">✓</div><div><strong>Multi-Stage Dockerfiles:</strong> Builder stage installs devDependencies; runtime stage copies only production artifacts. Service images stay under 120 MB.</div></li>
-    </ul>
-  </section>
-
-  <!-- 04 API Contracts -->
-  <section>
-    <div class="sh"><span class="sn">04</span><h2>API Contracts</h2></div>
-    <h3 style="font-size:.78rem;font-family:var(--mono);color:#60A5FA;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem">Auth Service — /api/auth</h3>
-    <div class="ep-list" style="margin-bottom:1.25rem">
-      <div class="ep"><span class="method m-post">POST</span><div><div class="ep-path">/api/auth/register</div><div class="ep-desc">Body: {email, password} → 201 {token, user} · 409 if email exists</div></div></div>
-      <div class="ep"><span class="method m-post">POST</span><div><div class="ep-path">/api/auth/login</div><div class="ep-desc">Body: {email, password} → 200 {token} · 401 on wrong credentials</div></div></div>
-      <div class="ep"><span class="method m-post">POST</span><div><div class="ep-path">/api/auth/logout</div><div class="ep-desc">Auth required. Invalidates JWT validity flag in Redis. → 200</div></div></div>
-    </div>
-    <h3 style="font-size:.78rem;font-family:var(--mono);color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.75rem">Tasks Service — /api/tasks (Bearer token required)</h3>
-    <div class="ep-list">
-      <div class="ep"><span class="method m-get">GET</span><div><div class="ep-path">/api/tasks?filter=all|active|completed</div><div class="ep-desc">Returns filtered task list for the authenticated user.</div></div></div>
-      <div class="ep"><span class="method m-post">POST</span><div><div class="ep-path">/api/tasks</div><div class="ep-desc">Body: {title} → 201 {id, title, done: false} · 400 if title is empty</div></div></div>
-      <div class="ep"><span class="method m-patch">PATCH</span><div><div class="ep-path">/api/tasks/:id/toggle</div><div class="ep-desc">Flips task.done boolean. → 200 {id, done} · 404 if not found</div></div></div>
-      <div class="ep"><span class="method m-delete">DEL</span><div><div class="ep-path">/api/tasks/:id</div><div class="ep-desc">Removes task from tasks_db. → 204 No Content</div></div></div>
-    </div>
-  </section>
-
-  <!-- 05 Tech Decisions -->
-  <section>
-    <div class="sh"><span class="sn">05</span><h2>Technical Decisions</h2></div>
-    <div class="grid2">
-      <div class="dc"><div class="dc-top"><span class="dc-title">Microservices over Monolith</span><span class="badge b-arch">Architecture</span></div><p class="dc-reason">Auth and Tasks are independent concerns. Isolating them allows each service to be scaled, updated, and deployed independently — no coupling between feature domains.</p></div>
-      <div class="dc"><div class="dc-top"><span class="dc-title">Nginx as API Gateway</span><span class="badge b-sec">Security</span></div><p class="dc-reason">Single public port (80) hides internal service topology. Nginx handles routing, static file serving, and provides a natural place for future rate limiting and SSL.</p></div>
-      <div class="dc"><div class="dc-top"><span class="dc-title">PostgreSQL over SQLite</span><span class="badge b-rel">Reliability</span></div><p class="dc-reason">Production-grade from day one. Two isolated schemas (auth_db, tasks_db) prevent accidental cross-service data access. Named Docker volumes survive restarts.</p></div>
-      <div class="dc"><div class="dc-top"><span class="dc-title">Redis for Token Validation</span><span class="badge b-prf">Performance</span></div><p class="dc-reason">Tasks Service validates JWT by checking Redis first. 94% cache hit rate at 500 VUs — PostgreSQL auth_db query count stays flat regardless of traffic spikes.</p></div>
-      <div class="dc"><div class="dc-top"><span class="dc-title">Multi-Stage Docker Builds</span><span class="badge b-dvp">DevOps</span></div><p class="dc-reason">Builder stage installs all devDependencies. Runtime stage copies only production artifacts. Result: service images under 120 MB with a reduced attack surface.</p></div>
-      <div class="dc"><div class="dc-top"><span class="dc-title">Optimistic UI Toggle</span><span class="badge b-ux">UX</span></div><p class="dc-reason">Task state updates instantly on click. The PATCH request happens in the background. On failure, UI reverts automatically — zero perceptible latency for the most common interaction.</p></div>
-    </div>
-  </section>
-
-  <!-- 06 Docker Config -->
-  <section>
-    <div class="sh"><span class="sn">06</span><h2>Docker Compose Configuration</h2></div>
-    <div class="cb" style="margin-bottom:1.25rem">
-      <div class="cb-hdr"><span class="cb-title">docker-compose.yml — Full Stack Orchestration</span><span class="cb-lang">yaml</span></div>
-      <pre><code>version: <span class="str">'3.9'</span>
-
-services:
-  nginx:
-    image: nginx:alpine
-    ports: [<span class="str">'80:80'</span>]
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./frontend/dist:/usr/share/nginx/html:ro
-    depends_on: [auth-api, tasks-api]
-    healthcheck:
-      test: [<span class="str">"CMD"</span>, <span class="str">"wget"</span>, <span class="str">"-qO-"</span>, <span class="str">"http://localhost/health"</span>]
-      interval: 15s
-
-  auth-api:
-    build: ./services/auth
-    environment:
-      - DB_URL=postgres://postgres:secret@postgres:5432/auth_db
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=${JWT_SECRET}
-    depends_on: [postgres, redis]
-
-  tasks-api:
-    build: ./services/tasks
-    environment:
-      - DB_URL=postgres://postgres:secret@postgres:5432/tasks_db
-      - REDIS_URL=redis://redis:6379
-      - JWT_SECRET=${JWT_SECRET}
-    depends_on: [postgres, redis]
-
-  postgres:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_PASSWORD: secret
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-  redis:
-    image: redis:7-alpine
-    command: redis-server --appendonly yes
-    volumes:
-      - redisdata:/data
-
-volumes:
-  pgdata:
-  redisdata:</code></pre>
-    </div>
-    <div class="cb">
-      <div class="cb-hdr"><span class="cb-title">services/tasks/Dockerfile — Multi-Stage Build</span><span class="cb-lang">dockerfile</span></div>
-      <pre><code><span class="cm"># Stage 1: Builder</span>
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --omit=dev
-COPY . .
-
-<span class="cm"># Stage 2: Lean runtime image</span>
-FROM node:20-alpine AS runtime
-WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app .
-EXPOSE 4001
-HEALTHCHECK --interval=15s --timeout=5s \
-  CMD wget -qO- http://localhost:4001/health || exit 1
-CMD [<span class="str">"node"</span>, <span class="str">"src/index.js"</span>]</code></pre>
-    </div>
-  </section>
-
-  <!-- 07 Testing -->
-  <section>
-    <div class="sh"><span class="sn">07</span><h2>Testing Strategy</h2></div>
-    <div class="card" style="overflow-x:auto;margin-bottom:1.25rem">
-      <table class="tt">
-        <thead>
-          <tr><th>Service</th><th>Scenario</th><th>Expected</th><th>Tool</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><span class="cl">Auth</span></td><td>Register with valid payload</td><td>201 · JWT issued · user in auth_db</td><td style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">Supertest</td><td><span class="sp">PASS</span></td></tr>
-          <tr><td><span class="cl">Auth</span></td><td>Login with wrong password</td><td>401 Unauthorized · no token</td><td style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">Supertest</td><td><span class="sp">PASS</span></td></tr>
-          <tr><td><span class="cl">Auth</span></td><td>Expired JWT presented to Tasks</td><td>Redis cache miss → 401</td><td style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">Supertest</td><td><span class="sf">FIXED</span></td></tr>
-          <tr><td><span class="cl">Tasks</span></td><td>POST with empty title</td><td>400 · validation error</td><td style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">Supertest</td><td><span class="sp">PASS</span></td></tr>
-          <tr><td><span class="cl">Tasks</span></td><td>Toggle task done/undone</td><td>200 · UI state matches DB</td><td style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">Supertest</td><td><span class="sp">PASS</span></td></tr>
-          <tr><td><span class="cl">Load</span></td><td>100 VU task creation via gateway</td><td>p95 &lt; 200ms · 0% error rate</td><td style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">k6</td><td><span class="sp">PASS</span></td></tr>
-          <tr><td><span class="cl">Load</span></td><td>500 VU sustained fetch (2 min)</td><td>Redis cache hit &gt; 90%</td><td style="font-family:var(--mono);font-size:.75rem;color:var(--muted)">k6</td><td><span class="sp">PASS</span></td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 08 Ship -->
-  <section>
-    <div class="sh"><span class="sn">08</span><h2>Deployment — Ship</h2></div>
-    <div class="grid2">
-      <div class="card">
-        <h3 style="font-size:.78rem;font-family:var(--mono);color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem">Commands</h3>
-        <pre style="font-family:var(--mono);font-size:.82rem;line-height:1.9;color:#9ECE6A"><code># Start all 6 services
-$ docker compose up --build -d
-
-# Check service health
-$ docker compose ps
-
-# Stream logs
-$ docker compose logs -f tasks-api
-
-# Stop (preserve data)
-$ docker compose down
-
-# Full reset (wipe volumes)
-$ docker compose down -v</code></pre>
-      </div>
-      <div class="card">
-        <h3 style="font-size:.78rem;font-family:var(--mono);color:var(--emerald);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem">Runtime Metrics</h3>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:.84rem">
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">p50 latency (tasks GET)</span><span style="font-family:var(--mono);color:var(--emerald)">34 ms</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">p95 @ 100 VUs</span><span style="font-family:var(--mono);color:var(--emerald)">112 ms</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Redis cache hit @ 500 VUs</span><span style="font-family:var(--mono);color:var(--emerald)">94.2%</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Error rate under max load</span><span style="font-family:var(--mono);color:var(--emerald)">&lt; 0.1%</span></div>
-          <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--muted)">Lighthouse Performance</span><span style="font-family:var(--mono);color:var(--emerald)">99 / 100</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <span>Todo App — Dockerized Microservice Platform · PRD v1.0 · 2025</span>
-  <a href="https://github.com/John-bayeh/Todoappnew" target="_blank" rel="noopener">View on GitHub →</a>
-</footer>
+    </iframe>
+  </main>
 
 </body>
 </html>

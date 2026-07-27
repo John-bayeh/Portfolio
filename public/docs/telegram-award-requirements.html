@@ -1,452 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram Award | Product Requirements Document</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Telegram Award — Product Requirements &amp; Specification Document</title>
+  <meta name="description" content="Official Product Requirements & Specification Document for Telegram Award Platform." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script>
+    if (localStorage.getItem('portfolio_theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+  </script>
   <style>
     :root {
-      --bg: #080808;
-      --card-bg: #111111;
-      --border: #222222;
-      --text-main: #f8fafc;
-      --text-muted: #888888;
-      --gold: #D4AF37;
-      --gold-dark: #C9A84C;
+      --bg: #07090F;
+      --bar-bg: #0D1117;
+      --border: #1F2937;
+      --brand: #2AABEE;
+      --text: #F9FAFB;
+      --muted: #888888;
     }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    html.light {
+      --bg: #F8F5F0;
+      --bar-bg: #FFFFFF;
+      --border: #E0DDD8;
+      --brand: #2AABEE;
+      --text: #0A0A0A;
+      --muted: #555555;
     }
-    
-    body {
-      background-color: var(--bg);
-      color: var(--text-main);
-      font-family: 'Inter', sans-serif;
-      line-height: 1.6;
-      padding: 2rem 1rem;
-    }
-    
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
-    header {
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg); font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Top Control Bar */
+    .top-bar {
+      height: 56px;
+      background: var(--bar-bg);
       border-bottom: 1px solid var(--border);
-      padding-bottom: 2rem;
-      margin-bottom: 2.5rem;
-    }
-    
-    .logo-container {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 1rem;
+      justify-content: space-between;
+      padding: 0 clamp(1rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 10;
     }
-    
-    .badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: bold;
-      color: var(--gold);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      background-color: rgba(212, 175, 55, 0.05);
-      padding: 4px 8px;
-      border-radius: 4px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
     .back-link {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      color: var(--text-muted);
+      gap: 8px;
+      color: #2AABEE;
       text-decoration: none;
-      font-size: 0.8rem;
-      font-family: 'JetBrains Mono', monospace;
-      margin-bottom: 1.5rem;
-      transition: color 0.2s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .back-link:hover {
-      color: var(--gold);
-    }
-    
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 0.5rem;
-    }
-    
-    .subtitle {
-      font-size: 1rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-    }
-    
-    .meta-grid {
-      display: grid;
-      grid-template-cols: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-    }
-    
-    .meta-item {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border);
-      padding: 1rem;
-      border-radius: 12px;
-    }
-    
-    .meta-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-      display: block;
-    }
-    
-    .meta-val {
-      font-size: 0.9rem;
+      font-size: 13.5px;
       font-weight: 600;
+      transition: color 0.2s;
     }
-    
-    h2 {
-      font-size: 1.5rem;
+    .back-link:hover { color: #5BC8F5; }
+
+    .btn-download {
+      background: #FFFFFF;
+      color: #000000;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 12.5px;
       font-weight: 700;
-      letter-spacing: -0.3px;
-      margin-top: 3rem;
-      margin-bottom: 1.25rem;
-      color: var(--gold-dark);
-      border-bottom: 1px solid rgba(34, 34, 34, 0.5);
-      padding-bottom: 0.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.15s, background 0.15s;
     }
-    
-    h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-top: 1.75rem;
-      margin-bottom: 0.75rem;
+    .btn-download:hover {
+      background: #F0F0F0;
+      transform: translateY(-1px);
     }
-    
-    p {
-      color: #cccccc;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-    }
-    
-    ul, ol {
-      margin-bottom: 1.5rem;
-      padding-left: 1.25rem;
-    }
-    
-    li {
-      color: #cccccc;
-      font-size: 0.95rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    strong {
-      color: var(--text-main);
-    }
-    
-    code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      background-color: var(--card-bg);
-      border: 1px solid var(--border);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: #e06c75;
-    }
-    
-    pre {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--gold);
-      padding: 1.25rem;
-      border-radius: 8px;
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-    }
-    
-    pre code {
-      color: #abb2bf;
-      background: none;
-      border: none;
-      padding: 0;
-    }
-    
-    .callout {
-      background-color: rgba(212, 175, 55, 0.04);
-      border-left: 4px solid var(--gold);
-      padding: 1.25rem;
-      border-radius: 8px;
-      margin-bottom: 1.5rem;
-    }
-    
-    .callout-title {
-      font-weight: bold;
-      color: var(--gold);
-      margin-bottom: 4px;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .table-container {
-      overflow-x: auto;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-    
-    table {
+
+    /* Embedded PDF Viewer Frame */
+    .pdf-container {
       width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.9rem;
+      height: calc(100vh - 56px);
+      position: relative;
+      background: var(--bg);
     }
-    
-    th {
-      background-color: var(--card-bg);
-      color: var(--gold);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      color: #cccccc;
-    }
-    
-    tr:last-child td {
-      border-bottom: none;
-    }
-    
-    .floating-print {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background-color: var(--gold);
-      color: #080808;
+    iframe {
+      width: 100%;
+      height: 100%;
       border: none;
-      padding: 10px 20px;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.3);
-      transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
     }
-    
-    .floating-print:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    .pdf-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text);
+      text-align: center;
+      padding: 2rem;
     }
-    
-    @media print {
-      body {
-        background: white;
-        color: black;
-        padding: 0;
-      }
-      .floating-print, .back-link {
-        display: none;
-      }
-      h2 {
-        color: black;
-        border-bottom-color: black;
-      }
-      .meta-item, pre, .callout {
-        border-color: #ccc;
-        background: #f9f9f9;
-        color: black;
-      }
-    }
+    .pdf-fallback p { color: var(--muted); margin-bottom: 1.5rem; font-size: 14px; }
   </style>
 </head>
 <body>
 
-  <button class="floating-print" onclick="window.print()">Print Document</button>
+  <!-- Top Navigation & Action Bar -->
+  <header class="top-bar">
+    <a href="/" class="back-link">← Back to Portfolio</a>
+    <a href="/docs/telegram_award_documentation.pdf" target="_blank" class="btn-download" title="Download Telegram Award Documentation PDF">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+      </svg>
+      Download PDF
+    </a>
+  </header>
 
-  <div class="container">
-    <a href="/#projects" class="back-link">← Back to Projects</a>
-    <header>
-      <div class="logo-container">
-        <span class="badge">ENTERPRISE SPECIFICATION v2.0</span>
+  <!-- Embedded PDF Viewer -->
+  <main class="pdf-container">
+    <iframe src="/docs/telegram_award_documentation.pdf#toolbar=1&amp;navpanes=0&amp;scrollbar=1" type="application/pdf">
+      <div class="pdf-fallback">
+        <h2>Telegram Award Documentation</h2>
+        <p>Your web browser does not support embedded PDF viewing.</p>
+        <a href="/docs/telegram_award_documentation.pdf" target="_blank" class="btn-download">
+          Download PDF Document
+        </a>
       </div>
-      <h1>Telegram Award Voting Platform</h1>
-      <p class="subtitle">Enterprise Product Requirements Document (PRD) for High-Scale Global Campaigns</p>
-      
-      <div class="meta-grid">
-        <div class="meta-item">
-          <span class="meta-label">Target Capacity</span>
-          <span class="meta-val">10,000+ Req/sec (Spike)</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-label">Architecture</span>
-          <span class="meta-val">Vite &middot; Redis &middot; MongoDB</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-label">i18n &amp; Edge</span>
-          <span class="meta-val">Global Routing (&lt;50ms)</span>
-        </div>
-      </div>
-    </header>
+    </iframe>
+  </main>
 
-    <main>
-      <!-- SECTION 1: SYSTEM OVERVIEW -->
-      <h2>1. System Overview</h2>
-      <p>
-        The <strong>Telegram Award Voting Platform</strong> is an enterprise-grade, high-scale web system designed to handle fast-spike public voting campaigns within major Telegram communities. The platform allows channel owners to nominate members across custom categories, generating massive waves of traffic (often exceeding 20,000 simultaneous users) when broadcasted via Telegram channel posts.
-      </p>
-      <p>
-        To eliminate user friction, the platform requires <strong>Zero-Auth single-click voting</strong> (no Telegram login, email verification, or passwords). The requirements call for a system architecture capable of guaranteeing data integrity, resisting professional click-farms, and avoiding database write locks under heavy concurrent bursts, while delivering localized client experiences globally.
-      </p>
-
-      <!-- SECTION 2: ADVANCED ENTERPRISE REQUIREMENTS -->
-      <h2>2. High-Scale &amp; Security Engineering</h2>
-      
-      <h3>2.1 Redis write Buffering (Scale Architecture)</h3>
-      <p>
-        Under high concurrency, writing every vote immediately to MongoDB leads to transaction timeouts and database connection exhausts. The platform utilizes an **in-memory Redis buffer**:
-      </p>
-      <ul>
-        <li><strong>Atomic Queuing:</strong> When a user votes, the API increments the vote count inside Redis immediately via fast <code>HINCRBY</code> operations (processing in &lt;2ms).</li>
-        <li><strong>Batch Synchronization:</strong> A background daemon flushes aggregated vote logs from Redis to MongoDB in micro-batches every 10 seconds, offloading database load by 98%.</li>
-      </ul>
-
-      <h3>2.2 Advanced Anti-Sybil (Behavior &amp; Hardware Heuristics)</h3>
-      <p>
-        Without login walls, malicious actors will attempt to automate voting. The system prevents fraud through a layered security stack:
-      </p>
-      <ul>
-        <li><strong>Client Hardware Fingerprinting:</strong> Combines HTML5 Canvas rendering anomalies, WebGL GPU driver identifiers, and Audio Context frequencies to compile a hardware signature unique to the physical device.</li>
-        <li><strong>Behavior Analysis:</strong> Tracks cursor movement paths, typing intervals, and time-to-vote parameters. Headless scrapers (Puppeteer, Selenium) are flagged and blocked instantly.</li>
-        <li><strong>Proxy/VPN Detection:</strong> Cross-references IP addresses against a live database of commercial hosting ranges and public VPN lists, prompting a CAPTCHA fallback for flagged addresses.</li>
-      </ul>
-
-      <h3>2.3 Cryptographic Trust &amp; Verifiability (Public Ledger)</h3>
-      <p>
-        To ensure transparency and eliminate accusations of admin data manipulation, votes are signed and chained:
-      </p>
-      <div class="callout">
-        <div class="callout-title">Public Verification Audit</div>
-        <p>
-          Each vote is cryptographically linked to the previous vote hash using a Merkle Tree structure. The root hash of the tree is published at the end of each hour. Voters receive a receipt token that allows them to run a client-side verification script to verify that their specific vote is mathematically included in the final tallies.
-        </p>
-      </div>
-
-      <!-- SECTION 3: FUNCTIONAL & MULTI-LANGUAGE (i18n) REQUIREMENTS -->
-      <h2>3. Global Delivery &amp; Localization</h2>
-      <p>
-        Telegram users are spread across multiple continents. To provide a seamless experience:
-      </p>
-      <ul>
-        <li><strong>Dynamic Edge Routing:</strong> The static React client is cached globally on edge CDN nodes (Netlify Edge). Middleware detects user geography and serves localized assets under 50ms.</li>
-        <li><strong>Multi-language (i18n):</strong> The client fully translates templates dynamically into English, Russian, Amharic, Arabic, and Spanish, aligning with major Telegram demographics.</li>
-      </ul>
-
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Feature ID</th>
-              <th>Requirement Description</th>
-              <th>Advanced Logic Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>FR-01</strong></td>
-              <td>Redis Ingest Buffer</td>
-              <td>Ingests votes to Redis memory keys first, reducing write overhead on MongoDB.</td>
-            </tr>
-            <tr>
-              <td><strong>FR-02</strong></td>
-              <td>Device Fingerprinting</td>
-              <td>Combines WebGL + Audio Context to generate a unique 64-bit hardware key.</td>
-            </tr>
-            <tr>
-              <td><strong>FR-03</strong></td>
-              <td>Behavioral Validation</td>
-              <td>Analyzes mouse movement trajectories to detect automated browser scripts.</td>
-            </tr>
-            <tr>
-              <td><strong>FR-04</strong></td>
-              <td>Merkle Audit Trail</td>
-              <td>Maintains a verifiable cryptographic chain of votes for public auditing.</td>
-            </tr>
-            <tr>
-              <td><strong>FR-05</strong></td>
-              <td>Dynamic Localization</td>
-              <td>i18n middleware routes and renders regional assets based on client headers.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- SECTION 4: DATA MODEL CONFIG -->
-      <h2>4. Data Schema &amp; Storage Architecture</h2>
-      <p>
-        MongoDB houses persistent nominee records and voting summaries, while Redis manages live transaction logs.
-      </p>
-
-      <pre><code>// MongoDB Nominee Schema
-const NomineeSchema = new Schema({
-  name: { type: String, required: true },
-  telegramHandle: { type: String, required: true },
-  avatarUrl: String,
-  votes: { type: Number, default: 0 },
-  categoryId: { type: Schema.Types.ObjectId, ref: 'Category', index: true }
-});
-
-// MongoDB Audit Log Schema (Chained blocks for public auditing)
-const AuditLogSchema = new Schema({
-  voteIndex: { type: Number, unique: true, index: true },
-  nomineeId: { type: Schema.Types.ObjectId, required: true },
-  previousHash: { type: String, required: true },
-  currentHash: { type: String, required: true, unique: true },
-  timestamp: { type: Date, default: Date.now }
-});
-
-// Redis Key Structure for Live Buffer:
-// HSET voting:buffer:category_123 nominee_456 1205
-// SADD voting:voted_fingerprints:category_123 fingerprint_hash
-</code></pre>
-
-      <!-- SECTION 5: PERFORMANCE BENCHMARKS -->
-      <h2>5. Non-Functional Requirements</h2>
-      <h3>5.1 Scalability &amp; Availability</h3>
-      <ul>
-        <li>Must maintain 99.99% availability during peak marketing campaigns.</li>
-        <li><strong>Recovery Time Objective (RTO):</strong> &lt; 5 minutes; automatic database replication failover on MongoDB Atlas multi-region clusters.</li>
-      </ul>
-
-      <h3>5.2 Mobile Optimization (In-App Browser Compliance)</h3>
-      <ul>
-        <li>Must compile to a lightweight JS bundle (&lt;120KB gzipped) to load efficiently inside the Telegram in-app mobile webview.</li>
-        <li>A11y compliant with support for screen readers, high contrast, and touch targets &gt;48px.</li>
-      </ul>
-    </main>
-  </div>
 </body>
 </html>

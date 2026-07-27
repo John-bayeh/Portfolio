@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Mail, ArrowUpRight, CheckCircle2, X as XClose } from "lucide-react";
 import { GithubIcon, LinkedinIcon, XIcon, WhatsAppIcon } from "./BrandIcons";
 import { useLanguage } from "../context/LanguageContext";
@@ -148,7 +148,7 @@ export default function Contact() {
       {/* Top-center success toast — auto-dismisses */}
       <AnimatePresence>
         {status === "sent" && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -24 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -24 }}
@@ -166,13 +166,13 @@ export default function Contact() {
             >
               <XClose size={16} />
             </button>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 
       <div className="mx-auto max-w-6xl">
         {/* Available badge */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -184,10 +184,10 @@ export default function Contact() {
             <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
           </span>
           {c.available}
-        </motion.div>
+        </m.div>
 
         {/* Heading */}
-        <motion.h2
+        <m.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -197,11 +197,11 @@ export default function Contact() {
         >
           <span className="block">{c.heading1}</span>
           <span className="block text-gold">{c.heading2}</span>
-        </motion.h2>
+        </m.h2>
 
         <div className="mt-14 grid grid-cols-1 gap-14 lg:grid-cols-2">
           {/* Contact form */}
-          <motion.form
+          <m.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -213,7 +213,7 @@ export default function Contact() {
             <Field label={c.fieldEmail} name="email" type="email" />
             <Field label={c.fieldMessage} name="message" textarea />
 
-            <motion.button
+            <m.button
               type="submit"
               disabled={status === "sending"}
               whileHover={{ scale: 1.03 }}
@@ -221,7 +221,7 @@ export default function Contact() {
               className="inline-flex items-center gap-2 rounded-full bg-gold px-7 py-3 text-sm font-semibold text-bg disabled:opacity-60"
             >
               {buttonLabel} <ArrowUpRight size={16} />
-            </motion.button>
+            </m.button>
 
             {/* Error fallback */}
             {status === "error" && (
@@ -233,10 +233,10 @@ export default function Contact() {
                 .
               </p>
             )}
-          </motion.form>
+          </m.form>
 
           {/* Contact cards */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
@@ -269,7 +269,7 @@ export default function Contact() {
                 />
               </a>
             ))}
-          </motion.div>
+          </m.div>
         </div>
 
         {/* Footer */}

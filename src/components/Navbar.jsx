@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-scroll";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
 export default function Navbar({ isDark, onToggleTheme }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { lang, setLang, t } = useLanguage();
+  const { t } = useLanguage();
   const nav = t.nav;
 
   // Track scroll position to change background styling
@@ -30,21 +30,9 @@ export default function Navbar({ isDark, onToggleTheme }) {
     { id: "contact", label: nav.contact },
   ];
 
-  const getLangStyle = (isActive) => {
-    if (isActive) {
-      return {
-        color: "var(--nav-toggle-active, #C9A84C)",
-        fontWeight: "bold",
-      };
-    }
-    return {
-      color: "var(--nav-toggle-inactive, #888888)",
-    };
-  };
-
   return (
     <>
-      <motion.header
+      <m.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
@@ -62,6 +50,7 @@ export default function Navbar({ isDark, onToggleTheme }) {
           {/* Logo */}
           <Link
             to="home"
+            href="#home"
             spy={true}
             smooth={true}
             duration={600}
@@ -82,6 +71,7 @@ export default function Navbar({ isDark, onToggleTheme }) {
               <Link
                 key={id}
                 to={id}
+                href={`#${id}`}
                 spy={true}
                 smooth={true}
                 duration={600}
@@ -94,38 +84,8 @@ export default function Navbar({ isDark, onToggleTheme }) {
             ))}
           </nav>
 
-          {/* Controls (Language + Theme + Hamburger) */}
+          {/* Controls (Theme + Hamburger) */}
           <div className="flex items-center gap-3 sm:gap-6">
-            {/* Language Selector */}
-            <div className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold tracking-wider">
-              <button
-                type="button"
-                onClick={() => setLang("en")}
-                style={getLangStyle(lang === "en")}
-                className="transition-colors hover:text-[var(--nav-toggle-active)]"
-              >
-                EN
-              </button>
-              <span className="text-[var(--nav-toggle-inactive)]">/</span>
-              <button
-                type="button"
-                onClick={() => setLang("am")}
-                style={getLangStyle(lang === "am")}
-                className="transition-colors hover:text-[var(--nav-toggle-active)]"
-              >
-                AM
-              </button>
-              <span className="text-[var(--nav-toggle-inactive)]">/</span>
-              <button
-                type="button"
-                onClick={() => setLang("fr")}
-                style={getLangStyle(lang === "fr")}
-                className="transition-colors hover:text-[var(--nav-toggle-active)]"
-              >
-                FR
-              </button>
-            </div>
-
             {/* Theme Toggle */}
             <button
               type="button"
@@ -151,12 +111,12 @@ export default function Navbar({ isDark, onToggleTheme }) {
             </button>
           </div>
         </div>
-      </motion.header>
+      </m.header>
 
       {/* Mobile Drawer Navigation Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -172,6 +132,7 @@ export default function Navbar({ isDark, onToggleTheme }) {
                 <Link
                   key={id}
                   to={id}
+                  href={`#${id}`}
                   spy={true}
                   smooth={true}
                   duration={600}
@@ -184,7 +145,7 @@ export default function Navbar({ isDark, onToggleTheme }) {
                 </Link>
               ))}
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

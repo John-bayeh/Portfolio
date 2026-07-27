@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Github, ExternalLink, X, ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { m, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Github, ExternalLink, X, ChevronLeft, ChevronRight, FileText, Printer } from "lucide-react";
 import projects from "../data/projects";
 import extraProjectDetails from "../data/extraProjectDetails";
 import { ARCH_ICONS_MAP } from "../assets/icons/ArchIcons";
 import TestSection from "../components/TestSection";
+import { useLanguage } from "../context/LanguageContext";
 
 function ArchIcon({ iconKey, size = 22 }) {
   const Component = ARCH_ICONS_MAP[iconKey];
@@ -59,6 +60,9 @@ function CaseStudyImage({ src, alt }) {
     <img
       src={src}
       alt={alt}
+      width={400}
+      height={225}
+      loading="lazy"
       onError={() => setError(true)}
       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
     />
@@ -110,6 +114,8 @@ function LighthouseCircle({ label, score }) {
 
 export default function CaseStudyPage() {
   const { id } = useParams();
+  const { t: langT } = useLanguage();
+  const lbl = langT.labels || {};
   const [lightboxSrc, setLightboxSrc] = useState(null);
   const [activeSection, setActiveSection] = useState("scope");
 
@@ -171,29 +177,6 @@ export default function CaseStudyPage() {
     };
   }, [project]);
 
-  if (!project) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#080808] text-white">
-        <h2 className="font-display text-2xl font-bold mb-4">Project Not Found</h2>
-        <Link to="/" className="text-gold hover:underline flex items-center gap-2">
-          <ArrowLeft size={16} /> Back to Projects
-        </Link>
-      </div>
-    );
-  }
-
-  const extra = extraProjectDetails[project.slug] || {
-    userStories: [],
-    design: { colors: [], components: [] },
-    build: { architecture: "N/A" },
-    test: { cases: [] },
-    ship: { lighthouse: { performance: 90, accessibility: 90, bestPractices: 90, seo: 90 }, deploymentStack: { frontend: "N/A", backend: "N/A", database: "N/A", host: "N/A" }, deployConfig: "" }
-  };
-
-  // Next / Prev project navigation
-  const prevProject = projects[(projectIndex - 1 + projects.length) % projects.length];
-  const nextProject = projects[(projectIndex + 1) % projects.length];
-
   const getPortalLabel = (src) => {
     const filename = src.toLowerCase();
     if (filename.includes("admin")) return "ADMIN PORTAL";
@@ -218,15 +201,26 @@ export default function CaseStudyPage() {
     }
   };
 
+  if (!project) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--th-bg)]" style={{ color: 'var(--th-text)' }}>
+        <h2 className="font-display text-2xl font-bold mb-4">{lbl.projectNotFound || "Project Not Found"}</h2>
+        <Link to="/" className="text-gold hover:underline flex items-center gap-2">
+          <ArrowLeft size={16} /> {lbl.backToProjects || "Back to Projects"}
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#080808] text-white selection:bg-gold/30 selection:text-gold pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[var(--th-bg)] selection:bg-gold/30 selection:text-gold pt-20 pb-16 px-4 sm:px-6 lg:px-8" style={{ color: 'var(--th-text)' }}>
       {/* Back Button */}
       <div className="max-w-6xl mx-auto mb-8">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-[#888888] hover:text-gold uppercase transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-muted hover:text-gold uppercase transition-colors"
         >
-          <ArrowLeft size={14} /> Back to Projects
+          <ArrowLeft size={14} /> {lbl.backToProjects || "Back to Projects"}
         </Link>
       </div>
 
@@ -236,25 +230,32 @@ export default function CaseStudyPage() {
           <div>
             <div className="flex items-center gap-3 mb-3">
               <span className="font-mono text-xs font-semibold text-gold">{project.number}</span>
-              <span className="text-xs font-semibold text-[#888888]">{project.year}</span>
+              <span className="text-xs font-semibold text-muted">{project.year}</span>
             </div>
             <h1 className="font-display text-4xl sm:text-5xl font-extrabold tracking-tight mb-3">
               {project.name}
             </h1>
-            <p className="text-base sm:text-lg text-[#888888] max-w-2xl font-light">
+            <p className="text-base sm:text-lg text-muted max-w-2xl font-light">
               {project.tagline || project.description}
             </p>
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-2 bg-[var(--th-card)] border border-line hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer"
+            >
+              <Printer size={14} /> Print
+            </button>
             {project.requirementsDoc && (
               <a
                 href={project.requirementsDoc}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#111111] border border-[#222222] hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300"
+                className="inline-flex items-center gap-2 border border-gold/70 text-gold hover:bg-gold hover:text-[#080808] bg-gold/10 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 shadow-sm"
               >
-                <FileText size={14} /> Requirements Doc
+                <FileText size={14} /> {lbl.reqDoc || "Requirements Doc"}
               </a>
             )}
             {project.github && (
@@ -262,9 +263,9 @@ export default function CaseStudyPage() {
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[#111111] border border-[#222222] hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300"
+                className="inline-flex items-center gap-2 bg-[var(--th-card)] border border-line hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300"
               >
-                <Github size={14} /> Repository
+                <Github size={14} /> {lbl.repository || "Repository"}
               </a>
             )}
             {project.live && (
@@ -274,7 +275,7 @@ export default function CaseStudyPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-gold hover:bg-gold/90 text-[#080808] px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 shadow-lg shadow-gold/15"
               >
-                <ExternalLink size={14} /> Live Demo
+                <ExternalLink size={14} /> {lbl.liveDemo || "Live Demo"}
               </a>
             )}
           </div>
@@ -320,7 +321,7 @@ export default function CaseStudyPage() {
         </aside>
 
         {/* Sections Content */}
-        <main className="space-y-16">
+        <div className="space-y-16">
           {/* 01 SCOPE SECTION */}
           <section
             id="scope"
@@ -739,7 +740,7 @@ export default function CaseStudyPage() {
               )}
             </div>
           </section>
-        </main>
+        </div>
       </div>
 
       {/* Footer Navigation (Next/Prev Projects) */}
@@ -772,7 +773,7 @@ export default function CaseStudyPage() {
       {/* Lightbox Modal */}
       <AnimatePresence>
         {lightboxSrc && (
-          <motion.div
+          <m.div
             key="lightbox"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -781,7 +782,7 @@ export default function CaseStudyPage() {
             onClick={() => setLightboxSrc(null)}
             className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 cursor-zoom-out"
           >
-            <motion.div
+            <m.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
@@ -800,10 +801,10 @@ export default function CaseStudyPage() {
               >
                 <X size={16} />
               </button>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </div>
+    </main>
   );
 }

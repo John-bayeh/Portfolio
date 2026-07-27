@@ -3,323 +3,129 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hotel Master — Product Requirements</title>
-  <meta name="description" content="Product requirements for Hotel Master: A luxury hotel technology showcase and booking platform built with React 19, Tailwind CSS v4, Node.js, Express, and Brevo Email API." />
+  <title>Hotel Master — Product Requirements &amp; Architecture Document</title>
+  <meta name="description" content="Official Product Requirements & Architecture Document for Hotel Master Platform." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <script>
+    if (localStorage.getItem('portfolio_theme') === 'light') {
+      document.documentElement.classList.add('light');
+    }
+  </script>
   <style>
     :root {
-      --bg:        #07090F;
-      --bg-card:   #0D1117;
-      --bg-hover:  #111827;
-      --border:    #1F2937;
-      --border-hi: #374151;
-      --gold:      #C9A84C;
-      --emerald:   #10B981;
-      --text:      #F9FAFB;
-      --muted:     #6B7280;
-      --mono:      'JetBrains Mono', monospace;
+      --bg: #07090F;
+      --bar-bg: #0D1117;
+      --border: #1F2937;
+      --brand: #C9A84C;
+      --text: #F9FAFB;
+      --muted: #888888;
+    }
+    html.light {
+      --bg: #F8F5F0;
+      --bar-bg: #FFFFFF;
+      --border: #E0DDD8;
+      --brand: #C9A84C;
+      --text: #0A0A0A;
+      --muted: #555555;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 15px;
-      line-height: 1.7;
-      min-height: 100vh;
-    }
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(201,168,76,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
+    html, body { height: 100%; width: 100%; overflow: hidden; background-color: var(--bg); font-family: 'Inter', system-ui, sans-serif; }
 
-    /* ── Back bar ── */
-    .back-bar {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(7,9,15,.85);
-      backdrop-filter: blur(16px);
+    /* Top Control Bar */
+    .top-bar {
+      height: 56px;
+      background: var(--bar-bg);
       border-bottom: 1px solid var(--border);
-      padding: 0 clamp(1rem,5vw,3rem);
-    }
-    .back-bar-inner {
-      max-width: 1100px; margin: 0 auto;
-      height: 52px; display: flex;
-      align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1rem, 4vw, 2.5rem);
+      position: relative;
+      z-index: 10;
     }
     .back-link {
-      display: inline-flex; align-items: center; gap: 8px;
-      color: var(--muted); text-decoration: none;
-      font-size: 13px; font-weight: 500; transition: color .2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #C9A84C;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: color 0.2s;
     }
-    .back-link:hover { color: var(--gold); }
-    .doc-label { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: .08em; }
+    .back-link:hover { color: #E8C76A; }
 
-    /* ── Page ── */
-    .page {
-      position: relative; z-index: 1;
-      max-width: 1100px; margin: 0 auto;
-      padding: clamp(2rem,6vw,4rem) clamp(1rem,5vw,3rem) 6rem;
+    .btn-download {
+      background: #FFFFFF;
+      color: #000000;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.15s, background 0.15s;
     }
-
-    /* ── Hero ── */
-    .hero { border-bottom: 1px solid var(--border); padding-bottom: 2.5rem; margin-bottom: 3rem; }
-    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem; }
-    .pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 3px 12px; border-radius: 999px;
-      font-family: var(--mono); font-size: 11px; font-weight: 600;
-      letter-spacing: .06em; border: 1px solid;
-    }
-    .pill-gold { color: var(--gold);    border-color: rgba(201,168,76,.35);  background: rgba(201,168,76,.06); }
-    .pill-em   { color: var(--emerald); border-color: rgba(16,185,129,.35);  background: rgba(16,185,129,.06); }
-    .pill-bl   { color: #60A5FA;        border-color: rgba(96,165,250,.35);  background: rgba(96,165,250,.06); }
-    .pill-gr   { color: var(--muted);   border-color: var(--border);         background: rgba(255,255,255,.03); }
-
-    .hero-title {
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 700; letter-spacing: -.02em;
-      line-height: 1.15; margin-bottom: .75rem;
-    }
-    .hero-title span { color: var(--gold); }
-    .hero-sub { color: var(--muted); font-size: 1rem; max-width: 680px; margin-bottom: 1.5rem; }
-    .meta-row { display: flex; flex-wrap: wrap; gap: 1.5rem; }
-    .meta-item { font-family: var(--mono); font-size: 12px; }
-    .meta-item strong { display: block; color: var(--muted); font-weight: 500; margin-bottom: 2px; letter-spacing: .06em; }
-    .meta-item span { color: var(--text); }
-
-    /* ── Section ── */
-    .section { margin-bottom: 3rem; }
-    .section-header {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 1.25rem;
-      padding-bottom: .75rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .section-num { font-family: var(--mono); font-size: 11px; color: var(--gold); font-weight: 600; }
-    .section-title { font-size: 1rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-
-    /* ── Table ── */
-    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
-    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
-    thead { background: #0D1117; }
-    th {
-      padding: 10px 16px; text-align: left;
-      font-family: var(--mono); font-size: 10px; font-weight: 600;
-      letter-spacing: .08em; text-transform: uppercase; color: var(--muted);
-      border-bottom: 1px solid var(--border);
-    }
-    td { padding: 11px 16px; border-bottom: 1px solid rgba(31,41,55,.6); vertical-align: top; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,.015); }
-    .id-cell { font-family: var(--mono); font-size: 11px; color: var(--gold); font-weight: 600; white-space: nowrap; }
-    .priority-high   { color: #F87171; font-family: var(--mono); font-size: 11px; font-weight: 600; }
-    .priority-medium { color: #FCD34D; font-family: var(--mono); font-size: 11px; font-weight: 600; }
-    .priority-low    { color: var(--muted); font-family: var(--mono); font-size: 11px; font-weight: 600; }
-    .result-pass {
-      display: inline-flex; align-items: center;
-      background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.25);
-      color: var(--emerald); font-family: var(--mono); font-size: 10px;
-      font-weight: 700; padding: 2px 10px; border-radius: 4px;
+    .btn-download:hover {
+      background: #F0F0F0;
+      transform: translateY(-1px);
     }
 
-    /* ── Cards ── */
-    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-    .card {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1.1rem 1.25rem;
-      transition: border-color .2s;
+    /* Embedded PDF Viewer Frame */
+    .pdf-container {
+      width: 100%;
+      height: calc(100vh - 56px);
+      position: relative;
+      background: var(--bg);
     }
-    .card:hover { border-color: var(--border-hi); }
-    .card-label { font-family: var(--mono); font-size: 10px; color: var(--gold); font-weight: 600; letter-spacing: .08em; margin-bottom: .35rem; }
-    .card-value { font-size: 13.5px; font-weight: 500; }
-
-    /* ── User stories ── */
-    .stories { display: flex; flex-direction: column; gap: 10px; }
-    .story {
-      display: flex; align-items: flex-start; gap: 12px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 10px; padding: 1rem 1.25rem;
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
     }
-    .story-quote { color: var(--gold); font-size: 1.4rem; line-height: 1; flex-shrink: 0; margin-top: 2px; }
-    .story p { font-size: 13.5px; color: #CBD5E1; font-style: italic; }
-
-    /* ── Architecture ── */
-    .arch-box {
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 2rem;
-      font-family: var(--mono); font-size: 12px; line-height: 2;
-      color: #94A3B8; overflow-x: auto;
+    .pdf-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text);
+      text-align: center;
+      padding: 2rem;
     }
-    .arch-gold { color: var(--gold); font-weight: 600; }
-    .arch-em   { color: var(--emerald); }
-    .arch-bl   { color: #60A5FA; }
-
-    /* ── NFR target ── */
-    .nfr-target { font-family: var(--mono); font-size: 12px; color: var(--emerald); }
-
-    /* ── Lighthouse ── */
-    .lh-grid { display: flex; flex-wrap: wrap; gap: 12px; }
-    .lh-item {
-      flex: 1; min-width: 120px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 1.1rem; text-align: center;
-    }
-    .lh-score { font-size: 2rem; font-weight: 700; color: var(--emerald); font-family: var(--mono); }
-    .lh-label { font-size: 11px; color: var(--muted); font-family: var(--mono); letter-spacing: .06em; margin-top: 4px; }
+    .pdf-fallback p { color: var(--muted); margin-bottom: 1.5rem; font-size: 14px; }
   </style>
 </head>
 <body>
 
-<!-- Back bar -->
-<nav class="back-bar">
-  <div class="back-bar-inner">
-    <a class="back-link" href="/#projects">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M19 12H5M12 5l-7 7 7 7"/>
+  <!-- Top Navigation & Action Bar -->
+  <header class="top-bar">
+    <a href="/" class="back-link">← Back to Portfolio</a>
+    <a href="/docs/hotel_master_prd.pdf" target="_blank" class="btn-download" title="Download Hotel Master PRD PDF">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
       </svg>
-      Back to Projects
+      Download PDF
     </a>
-    <span class="doc-label">REQUIREMENTS DOC · v1.0</span>
-  </div>
-</nav>
-
-<div class="page">
-
-  <!-- Hero -->
-  <header class="hero">
-    <div class="pills">
-      <span class="pill pill-gold">React 19</span>
-      <span class="pill pill-em">Tailwind v4</span>
-      <span class="pill pill-bl">Node.js · Express</span>
-      <span class="pill pill-gr">2026</span>
-    </div>
-    <h1 class="hero-title">Hotel Master <span>Showcase</span><br>Requirements Document</h1>
-    <p class="hero-sub">
-      A digital web platform presenting digital services, amenities, and automated booking/consultation inquiries for modern hospitality and boutique hotels.
-    </p>
-    <div class="meta-row">
-      <div class="meta-item"><strong>VERSION</strong><span>1.0</span></div>
-      <div class="meta-item"><strong>YEAR</strong><span>2026</span></div>
-      <div class="meta-item"><strong>STACK</strong><span>React 19 · Tailwind CSS v4 · Node.js · Express · Brevo API</span></div>
-      <div class="meta-item"><strong>LIVE</strong><span><a href="https://hotel-master-qfcz78r5v-john-bayehs-projects.vercel.app" target="_blank" style="color:var(--gold);text-decoration:none;">Vercel App ↗</a></span></div>
-    </div>
   </header>
 
-  <!-- 01 Overview -->
-  <section class="section">
-    <div class="section-header">
-      <span class="section-num">01</span>
-      <h2 class="section-title">Overview</h2>
-    </div>
-    <p style="color:#94A3B8; max-width:780px;">
-      Hotel Master provides boutique hotels and hospitality clients with a high-end showcase website. Visitors can explore technology integrations, amenities, service offerings, and submit consultation/booking requests directly via an Express backend integrated with Brevo transactional email delivery.
-    </p>
-  </section>
-
-  <!-- 02 Stakeholders -->
-  <section class="section">
-    <div class="section-header">
-      <span class="section-num">02</span>
-      <h2 class="section-title">Stakeholders</h2>
-    </div>
-    <div class="cards">
-      <div class="card">
-        <div class="card-label">HOTEL VISITOR / GUEST</div>
-        <div class="card-value">Browses digital amenities, services, and submits booking or consultation inquiries.</div>
+  <!-- Embedded PDF Viewer -->
+  <main class="pdf-container">
+    <iframe src="/docs/hotel_master_prd.pdf#toolbar=1&amp;navpanes=0&amp;scrollbar=1" type="application/pdf">
+      <div class="pdf-fallback">
+        <h2>Hotel Master PRD Document</h2>
+        <p>Your web browser does not support embedded PDF viewing.</p>
+        <a href="/docs/hotel_master_prd.pdf" target="_blank" class="btn-download">
+          Download PDF Document
+        </a>
       </div>
-      <div class="card">
-        <div class="card-label">HOTEL MANAGEMENT</div>
-        <div class="card-value">Receives instant structured email notifications for booking and service inquiries.</div>
-      </div>
-    </div>
-  </section>
+    </iframe>
+  </main>
 
-  <!-- 03 Functional Requirements -->
-  <section class="section">
-    <div class="section-header">
-      <span class="section-num">03</span>
-      <h2 class="section-title">Functional Requirements</h2>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>ID</th><th>Requirement</th><th>Priority</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="id-cell">FR-01</td><td>Interactive Service &amp; Amenity Showcase with filterable categories</td><td class="priority-high">HIGH</td></tr>
-          <tr><td class="id-cell">FR-02</td><td>Consultation / Booking Request form with validation and submit status</td><td class="priority-high">HIGH</td></tr>
-          <tr><td class="id-cell">FR-03</td><td>Express backend API endpoint (<code style="font-family:var(--mono);font-size:12px;color:var(--gold);">POST /api/contact</code>) handling contact dispatches</td><td class="priority-high">HIGH</td></tr>
-          <tr><td class="id-cell">FR-04</td><td>Integration with Brevo API to send transactional notification emails to management</td><td class="priority-high">HIGH</td></tr>
-          <tr><td class="id-cell">FR-05</td><td>Dynamic service data API endpoint (<code style="font-family:var(--mono);font-size:12px;color:var(--gold);">GET /api/services</code>)</td><td class="priority-medium">MEDIUM</td></tr>
-          <tr><td class="id-cell">FR-06</td><td>CORS origin restrictions allowing only trusted frontend deployments</td><td class="priority-high">HIGH</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 04 Non-Functional Requirements -->
-  <section class="section">
-    <div class="section-header">
-      <span class="section-num">04</span>
-      <h2 class="section-title">Non-Functional Requirements</h2>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>ID</th><th>Requirement</th><th>Target</th></tr>
-        </thead>
-        <tbody>
-          <tr><td class="id-cell">NFR-01</td><td>Lighthouse Performance Score</td><td class="nfr-target">≥ 95</td></tr>
-          <tr><td class="id-cell">NFR-02</td><td>Lighthouse Accessibility Score</td><td class="nfr-target">≥ 98</td></tr>
-          <tr><td class="id-cell">NFR-03</td><td>API payload size limit</td><td class="nfr-target">≤ 10KB</td></tr>
-          <tr><td class="id-cell">NFR-04</td><td>Responsive UI layout across mobile, tablet, and ultra-wide screens</td><td class="nfr-target">Required</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 05 System Architecture -->
-  <section class="section">
-    <div class="section-header">
-      <span class="section-num">05</span>
-      <h2 class="section-title">System Architecture</h2>
-    </div>
-    <div class="arch-box">
-      <span class="arch-gold">Client Browser</span> (React 19 · Vite · Tailwind CSS v4)<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;│<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;POST /api/contact &nbsp;{ name, email, service, message }<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-      <span class="arch-gold">Node.js Express Server</span> (Render / Node.js)<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;│<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;├── <span class="arch-em">Brevo Transactional Email Service</span> (API Key Authentication)<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;└── <span class="arch-bl">CORS Middleware</span> (Restricted Origin Validation)
-    </div>
-  </section>
-
-  <!-- 06 Performance Metrics -->
-  <section class="section">
-    <div class="section-header">
-      <span class="section-num">06</span>
-      <h2 class="section-title">Performance Metrics (Lighthouse)</h2>
-    </div>
-    <div class="lh-grid">
-      <div class="lh-item"><div class="lh-score">96</div><div class="lh-label">PERFORMANCE</div></div>
-      <div class="lh-item"><div class="lh-score">98</div><div class="lh-label">ACCESSIBILITY</div></div>
-      <div class="lh-item"><div class="lh-score">95</div><div class="lh-label">BEST PRACTICES</div></div>
-      <div class="lh-item"><div class="lh-score">92</div><div class="lh-label">SEO</div></div>
-    </div>
-  </section>
-
-</div>
 </body>
 </html>

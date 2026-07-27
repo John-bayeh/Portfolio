@@ -1,4 +1,4 @@
-import { motion, useScroll, useSpring } from "framer-motion";
+import { m, useScroll, useSpring } from "framer-motion";
 
 /**
  * ScrollProgress
@@ -15,7 +15,7 @@ export default function ScrollProgress() {
   });
 
   return (
-    <motion.div
+    <m.div
       className="fixed left-0 top-0 z-[9998] h-screen w-[3px] origin-top bg-gold"
       style={{ scaleY }}
       aria-hidden="true"

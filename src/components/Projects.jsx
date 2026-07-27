@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef, memo } from "react";
+import { m, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, X, Monitor, Smartphone, Tablet, FileText } from "lucide-react";
-import { Link } from "react-router-dom";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import { useLanguage } from "../context/LanguageContext";
@@ -117,13 +116,14 @@ const tabItemVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.3 } }
 };
 
-function ProjectRow({ project, isExpanded, onToggleExpanded }) {
+const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpanded }) {
   const { number, name, description, tech, year, github, live, privateReason, screenshot, screenshots, requirementsDoc, slug, stages, codeSnippet } =
     project;
   const thumbnail = screenshots?.thumbnail || screenshot;
   const [imageError, setImageError] = useState(false);
   const [activeTab, setActiveTab] = useState("SCOPE");
   const [lightboxSrc, setLightboxSrc] = useState(null);
+  const rowRef = useRef(null);
 
   useEffect(() => {
     if (!lightboxSrc) return;
@@ -131,6 +131,20 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [lightboxSrc]);
+
+  const handleToggle = () => {
+    const nextState = !isExpanded;
+    onToggleExpanded();
+    if (nextState) {
+      setTimeout(() => {
+        rowRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 150);
+    }
+  };
+
+  const { t } = useLanguage();
+  const lbl = t.labels || {};
+  const tabLabels = t.tabs || {};
 
   const extra = extraProjectDetails[slug] || {
     userStories: [],
@@ -140,15 +154,22 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
     ship: { lighthouse: { performance: 90, accessibility: 90, bestPractices: 90, seo: 90 }, deploymentStack: { frontend: "N/A", backend: "N/A", database: "N/A", host: "N/A" }, deployConfig: "" }
   };
 
-  const tabs = ["SCOPE", "DESIGN", "BUILD", "TEST", "SHIP"];
+  const tabs = [
+    { id: "SCOPE", name: tabLabels.scope || "SCOPE" },
+    { id: "DESIGN", name: tabLabels.design || "DESIGN" },
+    { id: "BUILD", name: tabLabels.build || "BUILD" },
+    { id: "TEST", name: tabLabels.test || "TEST" },
+    { id: "SHIP", name: tabLabels.ship || "SHIP" },
+  ];
 
   return (
-    <motion.div
+    <m.div
+      ref={rowRef}
       variants={rowVariants}
-      onClick={onToggleExpanded}
+      onClick={handleToggle}
       className={`group relative flex flex-col gap-4 rounded-xl border border-line bg-card p-4 sm:p-5 transition-all duration-300 border-l-4 ${
         isExpanded 
-          ? "border-l-gold border-gold/40 shadow-xl bg-[#0b0b0b]" 
+          ? "border-l-gold border-gold/40 shadow-xl bg-[var(--th-card)]" 
           : "border-l-transparent hover:border-l-gold/60 hover:border-gold/20 hover:-translate-y-0.5 hover:shadow-md"
       } cursor-pointer select-none`}
     >
@@ -156,11 +177,14 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
         <div className="flex items-center gap-4 flex-1">
           {/* Left side: Thumbnail */}
-          <div className="relative w-[80px] h-[60px] shrink-0 overflow-hidden rounded-lg border border-line flex items-center justify-center bg-[#070707]">
+          <div className="relative w-[80px] h-[60px] shrink-0 overflow-hidden rounded-lg border border-line flex items-center justify-center bg-[var(--th-bg)]">
             {!imageError && thumbnail ? (
               <img
                 src={thumbnail}
                 alt={name}
+                width={80}
+                height={60}
+                loading="lazy"
                 onError={() => setImageError(true)}
                 className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-103"
               />
@@ -191,17 +215,30 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
           <span className="text-sm font-medium" style={{ color: 'var(--th-text-40)' }}>{year}</span>
           <div className="flex items-center gap-2">
             {/* GitHub icon button */}
-            <a
-              href={github}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-line transition-colors hover:border-gold hover:text-gold"
-              style={{ color: 'var(--th-text)' }}
-              aria-label="View Source Code"
-            >
-              <GithubIcon size={16} />
-            </a>
+            {github ? (
+              <a
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-line transition-colors hover:border-gold hover:text-gold"
+                style={{ color: 'var(--th-text)' }}
+                aria-label="View Source Code"
+              >
+                <GithubIcon size={16} />
+              </a>
+            ) : (
+              <div className="relative" onClick={(e) => e.stopPropagation()}>
+                <button
+                  type="button"
+                  disabled
+                  className="peer flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted cursor-not-allowed"
+                  aria-label="Source Code Not Available"
+                >
+                  <GithubIcon size={16} />
+                </button>
+              </div>
+            )}
             
             {/* Live arrow button */}
             {live ? (
@@ -226,7 +263,7 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                   <ArrowUpRight size={16} />
                 </button>
                 {privateReason && (
-                  <div className="absolute bottom-full right-0 mb-2 w-64 rounded-lg border border-line bg-surface p-3 text-xs opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
+                  <div className="absolute bottom-full right-0 mb-2 w-64 rounded-lg border border-line bg-[var(--th-card)] p-3 text-xs opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
                     <span className="font-bold block mb-1" style={{ color: '#ef4444' }}>🔒 Private Project</span>
                     <span className="font-bold" style={{ color: '#ef4444' }}>{privateReason}</span>
                   </div>
@@ -240,7 +277,7 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
       {/* Expandable panel container */}
       <AnimatePresence initial={false}>
         {isExpanded && (
-          <motion.div
+          <m.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -248,7 +285,7 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
             onClick={(e) => e.stopPropagation()}
             className="overflow-hidden w-full border-t border-line/40 pt-4 mt-2"
           >
-            <div className="bg-[#0D0D0D] rounded-xl p-5 border border-line/60 relative text-left select-text">
+            <div className="bg-[var(--th-card)] rounded-xl p-5 border border-line/60 relative text-left select-text" style={{ color: 'var(--th-text)' }}>
               {/* Close Button */}
               <button
                 type="button"
@@ -263,23 +300,23 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
               <div className="flex border-b border-line gap-5 mb-5 pb-2 overflow-x-auto no-scrollbar max-w-[calc(100%-24px)]">
                 {tabs.map((tab) => (
                   <button
-                    key={tab}
+                    key={tab.id}
                     type="button"
-                    onClick={() => setActiveTab(tab)}
+                    onClick={() => setActiveTab(tab.id)}
                     className={`text-[10px] sm:text-xs font-semibold tracking-wider pb-1 transition-all border-b-2 ${
-                      activeTab === tab
+                      activeTab === tab.id
                         ? "border-gold text-gold"
                         : "border-transparent text-[#555555] hover:text-[#888]"
                     }`}
                   >
-                    {tab}
+                    {tab.name}
                   </button>
                 ))}
               </div>
 
               {/* Tab Content Panels */}
               <AnimatePresence mode="wait">
-                <motion.div
+                <m.div
                   key={activeTab}
                   variants={tabContentVariants}
                   initial="hidden"
@@ -291,14 +328,14 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                   {activeTab === "SCOPE" && (
                     <div className="space-y-4">
                       {stages.scope?.summary && (
-                        <motion.p variants={tabItemVariants} className="text-xs text-muted mb-2">
+                        <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.scope.summary}
-                        </motion.p>
+                        </m.p>
                       )}
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
                         {stages.scope?.items && (
-                          <motion.div variants={tabItemVariants}>
+                          <m.div variants={tabItemVariants}>
                             <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Scope Requirements</h4>
                             <ul className="space-y-2">
                               {stages.scope.items.map((item, idx) => (
@@ -308,20 +345,20 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                 </li>
                               ))}
                             </ul>
-                          </motion.div>
+                          </m.div>
                         )}
                         
                         {extra.userStories && (
-                          <motion.div variants={tabItemVariants}>
+                          <m.div variants={tabItemVariants}>
                             <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">User Stories</h4>
                             <ul className="space-y-2">
                               {extra.userStories.map((story, idx) => (
-                                <li key={idx} className="bg-[#141414] border border-line/40 rounded-lg p-2.5 text-xs text-[#8e8e8e] italic">
+                                <li key={idx} className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5 text-xs text-muted italic" style={{ color: 'var(--th-text-60)' }}>
                                   "{story}"
                                 </li>
                               ))}
                             </ul>
-                          </motion.div>
+                          </m.div>
                         )}
                       </div>
                     </div>
@@ -331,41 +368,41 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                   {activeTab === "DESIGN" && (
                     <div className="space-y-4">
                       {stages.design?.summary && (
-                        <motion.p variants={tabItemVariants} className="text-xs text-muted mb-2">
+                        <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.design.summary}
-                        </motion.p>
+                        </m.p>
                       )}
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
                         <div className="space-y-4">
                           {extra.design?.colors && (
-                            <motion.div variants={tabItemVariants}>
-                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Color Palette</h4>
+                            <m.div variants={tabItemVariants}>
+                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.colorPalette || "Color Palette"}</h4>
                               <div className="flex flex-wrap gap-2">
                                 {extra.design.colors.map((color) => (
-                                  <div key={color.hex} className="flex items-center gap-2 bg-[#141414] border border-line/40 rounded-lg p-1.5 pr-2.5">
+                                  <div key={color.hex} className="flex items-center gap-2 bg-[var(--th-bg)] border border-line/40 rounded-lg p-1.5 pr-2.5">
                                     <div className="w-6 h-6 rounded border border-line shrink-0" style={{ backgroundColor: color.hex }} />
                                     <div>
-                                      <div className="text-[10px] font-semibold text-white">{color.name}</div>
+                                      <div className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{color.name}</div>
                                       <div className="text-[8px] font-mono text-muted">{color.hex}</div>
                                     </div>
                                   </div>
                                 ))}
                               </div>
-                            </motion.div>
+                            </m.div>
                           )}
 
                           {extra.design?.components && (
-                            <motion.div variants={tabItemVariants}>
-                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Modular UI Components</h4>
+                            <m.div variants={tabItemVariants}>
+                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.uiComponents || "Modular UI Components"}</h4>
                               <div className="flex flex-wrap gap-1.5">
                                 {extra.design.components.map((comp) => (
-                                  <span key={comp} className="bg-[#141414] border border-line/50 text-[#8e8e8e] text-[10px] px-2 py-0.5 rounded font-mono">
+                                  <span key={comp} className="bg-[var(--th-bg)] border border-line/50 text-muted text-[10px] px-2 py-0.5 rounded font-mono" style={{ color: 'var(--th-text-60)' }}>
                                     &lt;{comp} /&gt;
                                   </span>
                                 ))}
                               </div>
-                            </motion.div>
+                            </m.div>
                           )}
                         </div>
 
@@ -379,8 +416,8 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                               : null;
                           if (!items && !thumbnail) return null;
                           return (
-                            <motion.div variants={tabItemVariants} className="flex flex-col">
-                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Interface Preview</h4>
+                            <m.div variants={tabItemVariants} className="flex flex-col">
+                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.interfacePreview || "Interface Preview"}</h4>
                               {items ? (
                                 <div className="grid grid-cols-2 gap-3.5">
                                   {items.slice(0, 4).map((item, i) => {
@@ -392,13 +429,16 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                       <div
                                         key={i}
                                         onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
-                                        className={`border border-line rounded-lg overflow-hidden bg-[#070707] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
+                                        className={`border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
                                           isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
                                         }`}
                                       >
                                         <img
                                           src={src}
                                           alt={`${name} screenshot ${i + 1}`}
+                                          width={400}
+                                          height={225}
+                                          loading="lazy"
                                           className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
@@ -411,19 +451,19 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                               ) : (
                                 <div
                                   onClick={(e) => { e.stopPropagation(); setLightboxSrc(thumbnail); }}
-                                  className="border border-line rounded-lg overflow-hidden bg-[#070707] cursor-zoom-in aspect-video"
+                                  className="border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in aspect-video"
                                 >
-                                  <img src={thumbnail} alt={name} className="w-full h-full object-cover object-top" />
+                                  <img src={thumbnail} alt={name} width={400} height={225} loading="lazy" className="w-full h-full object-cover object-top" />
                                 </div>
                               )}
-                            </motion.div>
+                            </m.div>
                           );
                         })()}
 
                         {/* Lightbox */}
                         <AnimatePresence>
                           {lightboxSrc && (
-                            <motion.div
+                            <m.div
                               key="lightbox"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
@@ -433,7 +473,7 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                               style={{ cursor: 'default' }}
                               className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
                             >
-                              <motion.div
+                              <m.div
                                 initial={{ scale: 0.88, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.88, opacity: 0 }}
@@ -445,6 +485,7 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                 <img
                                   src={lightboxSrc}
                                   alt="Screenshot preview"
+                                  loading="lazy"
                                   style={{ cursor: 'default' }}
                                   className="w-full h-auto max-h-[90vh] object-contain"
                                 />
@@ -455,8 +496,8 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                 >
                                   <X size={16} />
                                 </button>
-                              </motion.div>
-                            </motion.div>
+                              </m.div>
+                            </m.div>
                           )}
                         </AnimatePresence>
                       </div>
@@ -467,16 +508,16 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                   {activeTab === "BUILD" && (
                     <div className="space-y-5">
                       {stages.build?.summary && (
-                        <motion.p variants={tabItemVariants} className="text-xs text-muted mb-2">
+                        <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.build.summary}
-                        </motion.p>
+                        </m.p>
                       )}
 
                       {/* PART 1 — Architecture Diagram */}
                       {extra.build?.architectureDiagram && (
-                        <motion.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-3">Architecture Diagram</h4>
-                          <div className="bg-[#0a0a0a] border border-line/40 rounded-xl p-4 flex flex-col items-center gap-0">
+                        <m.div variants={tabItemVariants}>
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-3">{lbl.archDiagram || "Architecture Diagram"}</h4>
+                          <div className="bg-[var(--th-bg)] border border-line/40 rounded-xl p-4 flex flex-col items-center gap-0">
                             {extra.build.architectureDiagram.map((node, idx, arr) => (
                               <div key={idx} className="flex flex-col items-center w-full max-w-xs">
                                 {/* Node box */}
@@ -484,15 +525,15 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                   <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border w-full justify-center ${
                                     node.primary
                                       ? "bg-gold/10 border-gold/40"
-                                      : "bg-[#141414] border-line/40"
+                                      : "bg-[var(--th-card)] border-line/40"
                                   }`}>
                                     {node.iconKey && <ArchIcon iconKey={node.iconKey} size={18} />}
                                     <div className="text-center">
-                                      <div className={`font-mono font-bold text-[10px] ${node.primary ? "text-gold" : "text-white"}`}>
+                                      <div className="font-mono font-bold text-[10px]" style={{ color: node.primary ? 'var(--color-role, #C9A84C)' : 'var(--th-text)' }}>
                                         {node.label}
                                       </div>
                                       {node.sub && (
-                                        <div className="text-[8px] text-[#555555] mt-0.5 font-mono">{node.sub}</div>
+                                        <div className="text-[8px] mt-0.5 font-mono" style={{ color: 'var(--th-text-60)' }}>{node.sub}</div>
                                       )}
                                     </div>
                                   </div>
@@ -501,9 +542,9 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                 {/* Arrow connector */}
                                 {!node.services && idx < arr.length - 1 && !arr[idx + 1]?.services && (
                                   <div className="flex flex-col items-center my-1">
-                                    <div className="w-px h-3 bg-[#333]" />
+                                    <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
                                     <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
-                                      <path d="M4 6L0 0H8L4 6Z" fill="#444" />
+                                      <path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" />
                                     </svg>
                                   </div>
                                 )}
@@ -512,21 +553,21 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                 {node.services && (
                                   <div className="flex flex-col items-center w-full">
                                     <div className="flex flex-col items-center my-1">
-                                      <div className="w-px h-3 bg-[#333]" />
+                                      <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
                                       <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
-                                        <path d="M4 6L0 0H8L4 6Z" fill="#444" />
+                                        <path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" />
                                       </svg>
                                     </div>
                                     <div className="flex flex-wrap justify-center gap-1.5 w-full">
                                       {node.services.map((svc, si) => (
                                         <div
                                           key={si}
-                                          className="flex items-center gap-1.5 bg-[#141414] border border-line/40 rounded-lg px-2.5 py-1.5 flex-1 min-w-[90px]"
+                                          className="flex items-center gap-1.5 bg-[var(--th-card)] border border-line/40 rounded-lg px-2.5 py-1.5 flex-1 min-w-[90px]"
                                         >
                                           {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={15} />}
                                           <div>
-                                            <div className="text-[9px] font-mono font-semibold text-white">{svc.label}</div>
-                                            <div className="text-[7px] text-[#555] font-mono">{svc.sub}</div>
+                                            <div className="text-[9px] font-mono font-semibold" style={{ color: 'var(--th-text)' }}>{svc.label}</div>
+                                            <div className="text-[7px] font-mono" style={{ color: 'var(--th-text-60)' }}>{svc.sub}</div>
                                           </div>
                                         </div>
                                       ))}
@@ -536,50 +577,50 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                               </div>
                             ))}
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
 
                       {/* PART 2 — Code Snippet */}
                       {(codeSnippet || stages.build?.snippet) && (
-                        <motion.div variants={tabItemVariants} className="space-y-2">
+                        <m.div variants={tabItemVariants} className="space-y-2">
                           <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">
-                            {codeSnippet ? codeSnippet.title : "Implementation Snippet"}
+                            {codeSnippet ? codeSnippet.title : (lbl.implSnippet || "Implementation Snippet")}
                           </h4>
                           <div className="rounded-lg border border-line/40 overflow-hidden">
                             {/* Editor chrome */}
-                            <div className="flex items-center gap-1.5 bg-[#141414] border-b border-line/30 px-3 py-2">
+                            <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border-b border-line/30 px-3 py-2">
                               <span className="w-2 h-2 rounded-full bg-[#FF5F56]" />
                               <span className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
                               <span className="w-2 h-2 rounded-full bg-[#27C93F]" />
-                              <span className="ml-2 text-[8px] font-mono text-[#555]">
+                              <span className="ml-2 text-[8px] font-mono text-muted">
                                 {codeSnippet ? (codeSnippet.language || "javascript") : "javascript"}
                               </span>
                             </div>
-                            <pre className="overflow-x-auto border-l-4 border-gold bg-[#0D0D0D] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[220px]">
+                            <pre className="overflow-x-auto border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[220px]" style={{ color: 'var(--th-text)' }}>
                               <code dangerouslySetInnerHTML={{ __html: highlightCode(codeSnippet ? codeSnippet.code : stages.build.snippet) }} />
                             </pre>
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
 
                       {/* PART 3 — Key Technical Decisions */}
                       {extra.build?.techDecisions && extra.build.techDecisions.length > 0 && (
-                        <motion.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Key Technical Decisions</h4>
+                        <m.div variants={tabItemVariants}>
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.techDecisions || "Key Technical Decisions"}</h4>
                           <div className="space-y-1.5">
                             {extra.build.techDecisions.map((decision, idx) => (
                               <div
                                 key={idx}
-                                className="flex items-start gap-2.5 bg-[#0d0d0d] border border-line/30 hover:border-gold/20 rounded-lg px-3 py-2 transition-colors duration-200 group"
+                                className="flex items-start gap-2.5 bg-[var(--th-bg)] border border-line/30 hover:border-gold/20 rounded-lg px-3 py-2 transition-colors duration-200 group"
                               >
                                 <div className="w-4 h-4 rounded bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
                                   <span className="text-gold text-[7px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
                                 </div>
                                 <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                                  <span className="text-[10px] font-semibold text-white group-hover:text-gold transition-colors">
+                                  <span className="text-[10px] font-semibold group-hover:text-gold transition-colors" style={{ color: 'var(--th-text)' }}>
                                     {decision.choice}
                                   </span>
-                                  <span className="text-[9px] text-[#666] leading-relaxed">{decision.reason}</span>
+                                  <span className="text-[9px] text-muted leading-relaxed">{decision.reason}</span>
                                 </div>
                                 {decision.badge && (
                                   <span className="ml-auto shrink-0 text-[7px] font-mono font-semibold px-1.5 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
@@ -589,7 +630,7 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                               </div>
                             ))}
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
                     </div>
                   )}
@@ -597,18 +638,18 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                   {activeTab === "TEST" && (
                     <div className="space-y-4">
                       {stages.test?.summary && (
-                        <motion.p variants={tabItemVariants} className="text-xs text-muted mb-2">
+                        <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.test.summary}
-                        </motion.p>
+                        </m.p>
                       )}
 
                       {extra.test?.testCases ? (
-                        <motion.div variants={tabItemVariants}>
+                        <m.div variants={tabItemVariants}>
                           <TestSection testData={extra.test} />
-                        </motion.div>
+                        </m.div>
                       ) : (
                         extra.test?.cases && (
-                          <motion.div variants={tabItemVariants} className="overflow-x-auto border border-line/40 rounded-lg">
+                          <m.div variants={tabItemVariants} className="overflow-x-auto border border-line/40 rounded-lg">
                             <table className="w-full border-collapse text-left text-[11px]">
                               <thead>
                                 <tr className="border-b border-line bg-[#141414] text-muted">
@@ -631,27 +672,27 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                                 ))}
                               </tbody>
                             </table>
-                          </motion.div>
+                          </m.div>
                         )
                       )}
 
-                      <motion.div variants={tabItemVariants} className="flex items-center gap-6 mt-2 bg-[#141414] border border-line/40 p-3 rounded-lg w-fit">
-                        <span className="text-[10px] font-semibold tracking-widest text-gold uppercase">Devices Tested</span>
+                      <m.div variants={tabItemVariants} className="flex items-center gap-6 mt-2 bg-[var(--th-bg)] border border-line/40 p-3 rounded-lg w-fit">
+                        <span className="text-[10px] font-semibold tracking-widest text-gold uppercase">{lbl.devicesTested || "Devices Tested"}</span>
                         <div className="flex items-center gap-4 text-xs text-[#a0a0a0]">
                           <div className="flex items-center gap-1.5">
                             <Monitor size={14} className="text-gold" />
-                            <span>Desktop ✅</span>
+                            <span>{lbl.desktop || "Desktop"} ✅</span>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <Tablet size={14} className="text-gold" />
-                            <span>Tablet ✅</span>
+                            <span>{lbl.tablet || "Tablet"} ✅</span>
                           </div>
                           <div className="flex items-center gap-1.5">
                             <Smartphone size={14} className="text-gold" />
-                            <span>Mobile ✅</span>
+                            <span>{lbl.mobile || "Mobile"} ✅</span>
                           </div>
                         </div>
-                      </motion.div>
+                      </m.div>
                     </div>
                   )}
 
@@ -659,63 +700,63 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                   {activeTab === "SHIP" && (
                     <div className="space-y-4">
                       {stages.ship?.summary && (
-                        <motion.p variants={tabItemVariants} className="text-xs text-muted mb-2">
+                        <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.ship.summary}
-                        </motion.p>
+                        </m.p>
                       )}
 
                       {extra.ship?.lighthouse && (
-                        <motion.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Lighthouse Audit Metrics</h4>
+                        <m.div variants={tabItemVariants}>
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.lighthouseMetrics || "Lighthouse Audit Metrics"}</h4>
                           <div className="flex flex-wrap gap-4">
                             <LighthouseCircle label="Performance" score={extra.ship.lighthouse.performance} />
                             <LighthouseCircle label="Accessibility" score={extra.ship.lighthouse.accessibility} />
                             <LighthouseCircle label="Best Practices" score={extra.ship.lighthouse.bestPractices} />
                             <LighthouseCircle label="SEO" score={extra.ship.lighthouse.seo} />
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
 
                       {extra.ship?.deploymentStack && (
-                        <motion.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">Deployment Environment</h4>
+                        <m.div variants={tabItemVariants}>
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.deployEnv || "Deployment Environment"}</h4>
                           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <div className="bg-[#141414] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">Frontend</div>
-                              <div className="text-xs font-semibold text-white">{extra.ship.deploymentStack.frontend}</div>
+                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
+                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.frontend || "Frontend"}</div>
+                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.frontend}</div>
                             </div>
-                            <div className="bg-[#141414] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">Backend</div>
-                              <div className="text-xs font-semibold text-white">{extra.ship.deploymentStack.backend}</div>
+                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
+                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.backend || "Backend"}</div>
+                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.backend}</div>
                             </div>
-                            <div className="bg-[#141414] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">Database</div>
-                              <div className="text-xs font-semibold text-white">{extra.ship.deploymentStack.database}</div>
+                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
+                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.database || "Database"}</div>
+                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.database}</div>
                             </div>
-                            <div className="bg-[#141414] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">Infrastructure Host</div>
-                              <div className="text-xs font-semibold text-white">{extra.ship.deploymentStack.host}</div>
+                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
+                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.infraHost || "Infrastructure Host"}</div>
+                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.host}</div>
                             </div>
                           </div>
-                        </motion.div>
+                        </m.div>
                       )}
 
                       {extra.ship?.deployConfig && (
-                        <motion.div variants={tabItemVariants} className="space-y-1">
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">Deployment Pipeline Configuration</h4>
-                          <pre className="overflow-x-auto rounded-lg border-l-4 border-gold bg-[#0D0D0D] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[160px] border border-line/40">
-                            <code className="text-[#a0a0a0]">{extra.ship.deployConfig}</code>
+                        <m.div variants={tabItemVariants} className="space-y-1">
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">{lbl.deployPipeline || "Deployment Pipeline Configuration"}</h4>
+                          <pre className="overflow-x-auto rounded-lg border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[160px] border border-line/40">
+                            <code className="text-muted" style={{ color: 'var(--th-text-60)' }}>{extra.ship.deployConfig}</code>
                           </pre>
-                        </motion.div>
+                        </m.div>
                       )}
 
-                      <motion.div variants={tabItemVariants} className="flex flex-wrap items-center justify-between gap-4 border-t border-line/30 pt-3">
+                      <m.div variants={tabItemVariants} className="flex flex-wrap items-center justify-between gap-4 border-t border-line/30 pt-3">
                         <div className="flex items-center gap-5 text-[11px] text-muted font-mono">
                           <div>
-                            <span className="font-semibold text-gold uppercase">Version:</span> v1.0.0
+                            <span className="font-semibold text-gold uppercase">{lbl.version || "Version:"}</span> v1.0.0
                           </div>
                           <div>
-                            <span className="font-semibold text-gold uppercase">Date:</span> Dec {year}
+                            <span className="font-semibold text-gold uppercase">{lbl.date || "Date:"}</span> Dec {year}
                           </div>
                         </div>
 
@@ -726,16 +767,16 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 bg-gold text-[#080808] px-4 py-2 rounded-full text-[11px] font-semibold hover:bg-gold/80 transition-colors"
                           >
-                            Live Demo <ArrowUpRight size={13} />
+                            {lbl.liveDemo || "Live Demo"} <ArrowUpRight size={13} />
                           </a>
                         )}
-                      </motion.div>
+                      </m.div>
                     </div>
                   )}
-                </motion.div>
+                </m.div>
               </AnimatePresence>
 
-              {/* Bottom Row Case Study & PRD Doc Buttons */}
+              {/* Bottom Row PRD Doc Button */}
               <div className="flex justify-end items-center gap-3 mt-5 pt-4 border-t border-line/30">
                 {requirementsDoc && (
                   <a
@@ -745,28 +786,19 @@ function ProjectRow({ project, isExpanded, onToggleExpanded }) {
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    className="inline-flex items-center gap-2 border border-line text-[#8e8e8e] hover:border-gold/40 hover:text-gold bg-[#111] hover:bg-[#151515] px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300"
+                    className="inline-flex items-center gap-2 border border-gold/70 text-gold hover:bg-gold hover:text-[#080808] bg-gold/10 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 shadow-sm"
                   >
-                    <FileText size={14} /> Requirements Doc
+                    <FileText size={14} /> {lbl.reqDoc || "Requirements Doc"}
                   </a>
                 )}
-                <Link
-                  to={`/projects/${slug}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                  className="inline-flex items-center gap-2 border border-gold text-gold hover:bg-gold/10 px-4 py-2 rounded-full text-xs font-semibold transition-colors"
-                >
-                  View Full Case Study →
-                </Link>
               </div>
             </div>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </m.div>
   );
-}
+});
 
 export default function Projects() {
   const { t } = useLanguage();
@@ -800,7 +832,7 @@ export default function Projects() {
         </div>
 
         {/* Vertical list container with Framer Motion stagger */}
-        <motion.div
+        <m.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -818,7 +850,7 @@ export default function Projects() {
               />
             );
           })}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

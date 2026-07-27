@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yohannes-bayeh.vercel.app/sitemap.xml

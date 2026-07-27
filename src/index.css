@@ -54,6 +54,24 @@ body {
   scrollbar-width: none;
 }
 
+@keyframes heroFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-letter {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: heroFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Custom cursor: hide native cursor on pointer-fine devices */
 @media (hover: hover) and (pointer: fine) {
   .custom-cursor-active,
@@ -118,4 +136,82 @@ body {
 /* Separator line */
 [style*="--th-bg"] [class*="via-white/"] {
   --tw-gradient-via: var(--th-line);
+}
+
+/* ─── Light Mode Override Rules for Hardcoded Hex Classes ──────────────────── */
+[style*="F8F5F0"] {
+  color-scheme: light;
+}
+
+[style*="F8F5F0"] .bg-\[\#0b0b0b\],
+[style*="F8F5F0"] .bg-\[\#0D0D0D\],
+[style*="F8F5F0"] .bg-\[\#0d0d0d\],
+[style*="F8F5F0"] .bg-\[\#141414\],
+[style*="F8F5F0"] .bg-\[\#0a0a0a\],
+[style*="F8F5F0"] .bg-\[\#080808\],
+[style*="F8F5F0"] .bg-\[\#111111\],
+[style*="F8F5F0"] .bg-\[\#111\],
+[style*="F8F5F0"] .bg-\[\#0e0e0e\],
+[style*="F8F5F0"] .bg-\[\#121212\],
+[style*="F8F5F0"] .bg-\[\#161616\],
+[style*="F8F5F0"] .bg-surface {
+  background-color: var(--th-card) !important;
+  color: var(--th-text) !important;
+}
+
+[style*="F8F5F0"] .bg-\[\#070707\],
+[style*="F8F5F0"] .bg-\[\#050505\] {
+  background-color: var(--th-bg) !important;
+}
+
+/* Code block backgrounds in light mode */
+[style*="F8F5F0"] pre.bg-\[\#0D0D0D\],
+[style*="F8F5F0"] pre.bg-\[\#0a0a0a\],
+[style*="F8F5F0"] pre.bg-\[\#0d0d0d\],
+[style*="F8F5F0"] pre[class*="bg-\[var\(--th-bg\)\]"] {
+  background-color: #EFECE6 !important;
+  color: #111111 !important;
+  border-color: #D8D4CC !important;
+}
+
+/* Borders in light mode */
+[style*="F8F5F0"] .border-\[\#222222\],
+[style*="F8F5F0"] .border-\[\#333333\],
+[style*="F8F5F0"] [class*="border-\[\#222222\]"],
+[style*="F8F5F0"] [class*="border-line"] {
+  border-color: var(--th-line) !important;
+}
+
+/* Muted text in light mode */
+[style*="F8F5F0"] .text-\[\#a0a0a0\],
+[style*="F8F5F0"] .text-\[\#8e8e8e\],
+[style*="F8F5F0"] .text-\[\#888888\],
+[style*="F8F5F0"] .text-\[\#555555\],
+[style*="F8F5F0"] .text-\[\#666\] {
+  color: var(--th-muted) !important;
+}
+
+[style*="F8F5F0"] .text-white {
+  color: var(--th-text) !important;
+}
+
+/* ─── Global Print Styles ─────────────────────────────────────────────────── */
+@media print {
+  nav, button, .no-print, [class*="CustomCursor"], [class*="ScrollProgress"] {
+    display: none !important;
+  }
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .min-h-screen {
+    min-height: auto !important;
+    padding-top: 0 !important;
+  }
+  [class*="border-"] {
+    border-color: #dddddd !important;
+  }
+  h1, h2, h3, h4, h5, h6, p, span, li, td, th {
+    color: #000000 !important;
+  }
 }
