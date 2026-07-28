@@ -468,7 +468,7 @@ export default function CaseStudyPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--th-bg)]" style={{ color: 'var(--th-text)' }}>
         <h2 className="font-display text-2xl font-bold mb-4">{lbl.projectNotFound || "Project Not Found"}</h2>
-        <Link to="/" className="text-gold hover:underline flex items-center gap-2">
+        <Link to="/#projects" className="text-gold hover:underline flex items-center gap-2">
           <ArrowLeft size={16} /> {lbl.backToProjects || "Back to Projects"}
         </Link>
       </div>
@@ -480,7 +480,7 @@ export default function CaseStudyPage() {
       {/* Back Button */}
       <div className="max-w-6xl mx-auto mb-8">
         <Link
-          to="/"
+          to="/#projects"
           className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-muted hover:text-gold uppercase transition-colors"
         >
           <ArrowLeft size={14} /> {lbl.backToProjects || "Back to Projects"}
