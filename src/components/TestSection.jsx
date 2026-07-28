@@ -97,15 +97,9 @@ const TestSection = memo(function TestSection({ testData }) {
             <img
               src={heroSrc}
               alt={heroScreenshot.title || "Test Verification Proof"}
-              className="w-full h-auto block transition-transform duration-300 group-hover:scale-[1.01] cursor-zoom-in"
+              className="w-full max-h-[280px] object-contain object-top transition-transform duration-300 group-hover:scale-[1.01] cursor-zoom-in"
               loading="lazy"
             />
-            {/* Hover hint */}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
-              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/70 text-white text-xs font-mono px-3 py-1.5 rounded-lg border border-white/20">
-                🔍 Click to enlarge
-              </span>
-            </div>
           </div>
           <p className="text-xs font-mono font-semibold text-gold">
             {heroScreenshot.title
