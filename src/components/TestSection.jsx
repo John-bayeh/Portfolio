@@ -165,26 +165,26 @@ export default function TestSection({ testData }) {
         )}
       </AnimatePresence>
 
-      {/* Category Filter Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#222222]/80 pb-3">
-        <div className="flex flex-wrap gap-1.5">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 border ${
-                selectedCategory === cat
-                  ? "bg-gold/10 border-gold/40 text-gold shadow-sm shadow-gold/5"
-                  : "bg-[#111111] border-[#222222] text-[#888888] hover:border-gold/20 hover:text-[#aaaaaa]"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+      {/* Category Filter Tabs — horizontally scrollable on mobile */}
+      <div className="border-b border-[#222222]/80 pb-3">
+        <div className="overflow-x-auto no-scrollbar">
+          <div className="flex gap-1.5 w-max">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 border ${
+                  selectedCategory === cat
+                    ? "bg-gold/10 border-gold/40 text-gold shadow-sm shadow-gold/5"
+                    : "bg-[#111111] border-[#222222] text-[#888888] hover:border-gold/20 hover:text-[#aaaaaa]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
-        <span className="text-[10px] font-mono text-[#666666]">
-          Click any screenshot to expand
-        </span>
+        <p className="text-[10px] font-mono text-[#666666] mt-2">Click any screenshot to expand</p>
       </div>
 
       {/* Render Category Sections (Test Cases + Screenshots placed in their matching category) */}
@@ -309,34 +309,36 @@ export default function TestSection({ testData }) {
 
       {/* Code Snippets Section (with editor-like tab switcher) */}
       <div className="space-y-3 pt-6 border-t border-[#222222]/80">
-        <div className="flex items-center justify-between">
-          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono">
+        <div className="flex items-start justify-between gap-2 flex-wrap sm:flex-nowrap">
+          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono shrink-0">
             {lbl.testScripts || "Embedded Test Scripts"}
           </h4>
-          {/* Switcher */}
-          <div className="flex bg-[#111] border border-[#222222] rounded-lg p-0.5">
-            <button
-              onClick={() => setActiveCodeTab("jest")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold font-mono transition-all ${
-                activeCodeTab === "jest"
-                  ? "bg-gold text-[#080808]"
-                  : "text-[#888] hover:text-white"
-              }`}
-            >
-              <FileCode className="w-3 h-3" />
-              Jest + Supertest
-            </button>
-            <button
-              onClick={() => setActiveCodeTab("k6")}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold font-mono transition-all ${
-                activeCodeTab === "k6"
-                  ? "bg-gold text-[#080808]"
-                  : "text-[#888] hover:text-white"
-              }`}
-            >
-              <Terminal className="w-3 h-3" />
-              k6 Load Test
-            </button>
+          {/* Switcher — scrollable on mobile */}
+          <div className="overflow-x-auto no-scrollbar">
+            <div className="flex bg-[#111] border border-[#222222] rounded-lg p-0.5 w-max">
+              <button
+                onClick={() => setActiveCodeTab("jest")}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold font-mono transition-all shrink-0 ${
+                  activeCodeTab === "jest"
+                    ? "bg-gold text-[#080808]"
+                    : "text-[#888] hover:text-white"
+                }`}
+              >
+                <FileCode className="w-3 h-3" />
+                Jest + Supertest
+              </button>
+              <button
+                onClick={() => setActiveCodeTab("k6")}
+                className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold font-mono transition-all shrink-0 ${
+                  activeCodeTab === "k6"
+                    ? "bg-gold text-[#080808]"
+                    : "text-[#888] hover:text-white"
+                }`}
+              >
+                <Terminal className="w-3 h-3" />
+                k6 Load Test
+              </button>
+            </div>
           </div>
         </div>
 

@@ -213,7 +213,7 @@ export default function CaseStudyPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--th-bg)] selection:bg-gold/30 selection:text-gold pt-20 pb-16 px-4 sm:px-6 lg:px-8" style={{ color: 'var(--th-text)' }}>
+    <main className="min-h-screen bg-[var(--th-bg)] selection:bg-gold/30 selection:text-gold pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-x-hidden" style={{ color: 'var(--th-text)' }}>
       {/* Back Button */}
       <div className="max-w-6xl mx-auto mb-8">
         <Link
@@ -240,11 +240,11 @@ export default function CaseStudyPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 max-w-full">
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-2 bg-[var(--th-card)] border border-line hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer"
+              className="inline-flex items-center gap-2 shrink-0 bg-[var(--th-card)] border border-line hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 cursor-pointer"
             >
               <Printer size={14} /> Print
             </button>
@@ -253,7 +253,7 @@ export default function CaseStudyPage() {
                 href={project.requirementsDoc}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-gold/70 text-gold hover:bg-gold hover:text-[#080808] bg-gold/10 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 shadow-sm"
+                className="inline-flex items-center gap-2 shrink-0 border border-gold/70 text-gold hover:bg-gold hover:text-[#080808] bg-gold/10 px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 shadow-sm"
               >
                 <FileText size={14} /> {lbl.reqDoc || "Requirements Doc"}
               </a>
@@ -263,7 +263,7 @@ export default function CaseStudyPage() {
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-[var(--th-card)] border border-line hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300"
+                className="inline-flex items-center gap-2 shrink-0 bg-[var(--th-card)] border border-line hover:border-gold/40 hover:text-gold px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300"
               >
                 <Github size={14} /> {lbl.repository || "Repository"}
               </a>
@@ -273,7 +273,7 @@ export default function CaseStudyPage() {
                 href={project.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gold hover:bg-gold/90 text-[#080808] px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 shadow-lg shadow-gold/15"
+                className="inline-flex items-center gap-2 shrink-0 bg-gold hover:bg-gold/90 text-[#080808] px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 shadow-lg shadow-gold/15"
               >
                 <ExternalLink size={14} /> {lbl.liveDemo || "Live Demo"}
               </a>
@@ -299,6 +299,29 @@ export default function CaseStudyPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/40 via-transparent to-transparent pointer-events-none" />
         </div>
       </header>
+
+      {/* Mobile Section Tab Bar (below header, lg hidden) */}
+      <div className="lg:hidden max-w-6xl mx-auto mb-6">
+        <div className="overflow-x-auto no-scrollbar -mx-4 px-4">
+          <div className="flex gap-1 w-max">
+            {sectionsList.map((sec) => (
+              <button
+                key={sec.id}
+                type="button"
+                onClick={() => handleSidebarClick(sec.id)}
+                className={`flex items-center gap-1.5 shrink-0 px-3 py-2 rounded-lg text-[10px] font-mono font-bold tracking-widest uppercase transition-all duration-200 border ${
+                  activeSection === sec.id
+                    ? "bg-gold/10 border-gold/40 text-gold"
+                    : "bg-[#111111] border-[#222222] text-[#888888] hover:border-gold/20 hover:text-[#aaaaaa]"
+                }`}
+              >
+                <span className="text-[8px] opacity-60">{sec.num}</span>
+                {sec.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {/* Main Layout Container */}
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[180px_1fr] gap-12 relative items-start">
@@ -668,8 +691,8 @@ export default function CaseStudyPage() {
             <div>
               <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-2.5 font-mono">Devices Tested</h3>
               <div className="flex flex-wrap gap-2 text-xs text-[#888888]">
-                {["MacBook Pro (Chrome/Safari)", "iPhone 15 (Mobile Viewport)", "iPad Air (Tablet)", "Windows PC (Firefox)"].map((dev, idx) => (
-                  <span key={idx} className="bg-[#151515] border border-[#222222] px-3 py-1.5 rounded-lg text-[10px]">
+                {["MacBook Pro (Chrome/Safari)", "iPhone 15 (Mobile)", "iPad Air (Tablet)", "Windows PC (Firefox)"].map((dev, idx) => (
+                  <span key={idx} className="bg-[#151515] border border-[#222222] px-3 py-1.5 rounded-lg text-[10px] whitespace-nowrap">
                     {dev}
                   </span>
                 ))}

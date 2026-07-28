@@ -285,7 +285,7 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
             onClick={(e) => e.stopPropagation()}
             className="overflow-hidden w-full border-t border-line/40 pt-4 mt-2"
           >
-            <div className="bg-[var(--th-card)] rounded-xl p-5 border border-line/60 relative text-left select-text" style={{ color: 'var(--th-text)' }}>
+            <div className="bg-[var(--th-card)] rounded-xl p-5 border border-line/60 relative text-left select-text overflow-x-hidden" style={{ color: 'var(--th-text)' }}>
               {/* Close Button */}
               <button
                 type="button"
