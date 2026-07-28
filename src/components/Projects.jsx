@@ -449,7 +449,7 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                     </div>
                   )}
 
-                  {/* DESIGN TAB — 3 Slides Swiper */}
+                  {/* DESIGN TAB — Clean 2x2 Grid + Colors */}
                   {activeTab === "DESIGN" && (
                     <div className="space-y-4">
                       {stages.design?.summary && (
@@ -458,110 +458,97 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                         </m.p>
                       )}
 
-                      <TabContentSwiper
-                        slides={[
-                          {
-                            label: "🖼️ SCREENSHOTS",
-                            content: (() => {
-                              const items = Array.isArray(screenshots) && screenshots.length > 0
-                                ? screenshots
-                                : screenshots?.design?.length > 0
-                                  ? screenshots.design.map(src => ({ src, type: src.includes('mobile') || src.includes('photo') ? 'mobile' : 'desktop' }))
-                                  : null;
-                              if (!items && !thumbnail) return null;
-                              return (
-                                <div>
-                                  <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.interfacePreview || "Interface Preview"}</h4>
-                                  {items ? (
-                                    <div className="grid grid-cols-2 gap-3.5">
-                                      {items.slice(0, 4).map((item, i) => {
-                                        const src = typeof item === 'string' ? item : item.src;
-                                        const isMobile = typeof item === 'string'
-                                          ? (src.includes('mobile') || src.includes('photo'))
-                                          : item.type === 'mobile';
-                                        return (
-                                          <div
-                                            key={i}
-                                            onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
-                                            className={`border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
-                                              isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
-                                            }`}
-                                          >
-                                            <img
-                                              src={src}
-                                              alt={`${name} screenshot ${i + 1}`}
-                                              width={400}
-                                              height={225}
-                                              loading="lazy"
-                                              className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
-                                            />
-                                            <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                                              <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
-                                            </div>
-                                          </div>
-                                        );
-                                      })}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
+                        {/* Left: Colors & Components */}
+                        <div className="space-y-4">
+                          {extra.design?.colors && (
+                            <m.div variants={tabItemVariants}>
+                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.colorPalette || "Color Palette"}</h4>
+                              <div className="flex flex-wrap gap-2">
+                                {extra.design.colors.map((color) => (
+                                  <div key={color.hex} className="flex items-center gap-2 bg-[var(--th-bg)] border border-line/40 rounded-lg p-1.5 pr-2.5">
+                                    <div className="w-6 h-6 rounded border border-line shrink-0" style={{ backgroundColor: color.hex }} />
+                                    <div>
+                                      <div className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{color.name}</div>
+                                      <div className="text-[8px] font-mono text-muted">{color.hex}</div>
                                     </div>
-                                  ) : (
-                                    <div
-                                      onClick={(e) => { e.stopPropagation(); setLightboxSrc(thumbnail); }}
-                                      className="border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in aspect-video max-w-sm"
-                                    >
-                                      <img src={thumbnail} alt={name} width={400} height={225} loading="lazy" className="w-full h-full object-cover object-top" />
-                                    </div>
-                                  )}
+                                  </div>
+                                ))}
+                              </div>
+                            </m.div>
+                          )}
+
+                          {extra.design?.components && (
+                            <m.div variants={tabItemVariants}>
+                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.uiComponents || "Modular UI Components"}</h4>
+                              <div className="flex flex-wrap gap-1.5">
+                                {extra.design.components.map((comp) => (
+                                  <span key={comp} className="bg-[var(--th-bg)] border border-line/50 text-muted text-[10px] px-2 py-0.5 rounded font-mono" style={{ color: 'var(--th-text-60)' }}>
+                                    &lt;{comp} /&gt;
+                                  </span>
+                                ))}
+                              </div>
+                            </m.div>
+                          )}
+                        </div>
+
+                        {/* Right: Max 4 Screenshots in a Clean 2x2 Grid */}
+                        {(() => {
+                          const items = Array.isArray(screenshots) && screenshots.length > 0
+                            ? screenshots
+                            : screenshots?.design?.length > 0
+                              ? screenshots.design.map(src => ({ src, type: src.includes('mobile') || src.includes('photo') ? 'mobile' : 'desktop' }))
+                              : null;
+                          if (!items && !thumbnail) return null;
+                          return (
+                            <m.div variants={tabItemVariants} className="flex flex-col">
+                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.interfacePreview || "Interface Preview"}</h4>
+                              {items ? (
+                                <div className="grid grid-cols-2 gap-3.5">
+                                  {items.slice(0, 4).map((item, i) => {
+                                    const src = typeof item === 'string' ? item : item.src;
+                                    const isMobile = typeof item === 'string'
+                                      ? (src.includes('mobile') || src.includes('photo'))
+                                      : item.type === 'mobile';
+                                    return (
+                                      <div
+                                        key={i}
+                                        onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
+                                        className={`border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
+                                          isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
+                                        }`}
+                                      >
+                                        <img
+                                          src={src}
+                                          alt={`${name} screenshot ${i + 1}`}
+                                          width={400}
+                                          height={225}
+                                          loading="lazy"
+                                          className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                          <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
                                 </div>
-                              );
-                            })(),
-                          },
-                          ...(extra.design?.colors
-                            ? [
-                                {
-                                  label: "🎨 COLOR PALETTE",
-                                  content: (
-                                    <div>
-                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.colorPalette || "Color Palette"}</h4>
-                                      <div className="flex flex-wrap gap-2">
-                                        {extra.design.colors.map((color) => (
-                                          <div key={color.hex} className="flex items-center gap-2 bg-[var(--th-bg)] border border-line/40 rounded-lg p-2 pr-3">
-                                            <div className="w-6 h-6 rounded border border-line shrink-0" style={{ backgroundColor: color.hex }} />
-                                            <div>
-                                              <div className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{color.name}</div>
-                                              <div className="text-[8px] font-mono text-muted">{color.hex}</div>
-                                            </div>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ),
-                                },
-                              ]
-                            : []),
-                          ...(extra.design?.components
-                            ? [
-                                {
-                                  label: "🧩 COMPONENTS",
-                                  content: (
-                                    <div>
-                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.uiComponents || "Modular UI Components"}</h4>
-                                      <div className="flex flex-wrap gap-1.5">
-                                        {extra.design.components.map((comp) => (
-                                          <span key={comp} className="bg-[var(--th-bg)] border border-line/50 text-muted text-[10px] px-2 py-1 rounded font-mono" style={{ color: 'var(--th-text-60)' }}>
-                                            &lt;{comp} /&gt;
-                                          </span>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ),
-                                },
-                              ]
-                            : []),
-                        ]}
-                      />
+                              ) : (
+                                <div
+                                  onClick={(e) => { e.stopPropagation(); setLightboxSrc(thumbnail); }}
+                                  className="border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in aspect-video max-w-sm"
+                                >
+                                  <img src={thumbnail} alt={name} width={400} height={225} loading="lazy" className="w-full h-full object-cover object-top" />
+                                </div>
+                              )}
+                            </m.div>
+                          );
+                        })()}
+                      </div>
                     </div>
                   )}
 
-                  {/* BUILD TAB — 3 Slides Swiper */}
+                  {/* BUILD TAB */}
                   {activeTab === "BUILD" && (
                     <div className="space-y-4">
                       {stages.build?.summary && (
@@ -697,7 +684,7 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                     </div>
                   )}
 
-                  {/* TEST TAB — 4 Slides Swiper */}
+                  {/* TEST TAB — Clean 3 Sections Only */}
                   {activeTab === "TEST" && (
                     <div className="space-y-4">
                       {stages.test?.summary && (
@@ -705,101 +692,13 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                           {stages.test.summary}
                         </m.p>
                       )}
-
-                      <TabContentSwiper
-                        slides={[
-                          {
-                            label: "📸 VISUAL PROOF",
-                            content: (
-                              <div>
-                                <TestSection testData={extra.test} />
-                              </div>
-                            ),
-                          },
-                          ...(extra.test?.cases || extra.test?.testCases
-                            ? [
-                                {
-                                  label: "✅ TEST RESULTS",
-                                  content: (
-                                    <div className="overflow-x-auto border border-line/40 rounded-lg">
-                                      <table className="w-full border-collapse text-left text-[11px]">
-                                        <thead>
-                                          <tr className="border-b border-line bg-[var(--th-bg)] text-muted">
-                                            <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Test Case</th>
-                                            <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
-                                            <th className="py-2 px-3 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-line/40" style={{ color: 'var(--th-text-60)' }}>
-                                          {(extra.test?.cases || extra.test?.testCases || []).map((tc, idx) => (
-                                            <tr key={idx} className="hover:bg-white/[0.01]">
-                                              <td className="py-2.5 px-3 font-medium" style={{ color: 'var(--th-text)' }}>{tc.test || tc.scenario}</td>
-                                              <td className="py-2.5 px-3">{tc.expected}</td>
-                                              <td className="py-2.5 px-3 text-right">
-                                                <span className="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded bg-green-950/40 text-green-400 border border-green-900/60">
-                                                  {tc.result || "PASS"} ✅
-                                                </span>
-                                              </td>
-                                            </tr>
-                                          ))}
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  ),
-                                },
-                              ]
-                            : []),
-                          ...(extra.test?.jestSnippet || extra.test?.k6Snippet
-                            ? [
-                                {
-                                  label: "💻 CODE EVIDENCE",
-                                  content: (
-                                    <div className="space-y-2">
-                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono">Automated Test Scripts</h4>
-                                      <div className="rounded-lg border border-line/40 overflow-hidden">
-                                        <div className="flex items-center justify-between bg-[var(--th-bg)] border-b border-line/30 px-3 py-2">
-                                          <span className="text-[8px] font-mono text-muted">jest.spec.js / k6-load.js</span>
-                                          <span className="text-[7px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">Jest / k6</span>
-                                        </div>
-                                        <pre className="overflow-x-auto border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed select-text max-h-[220px] code-scrollbar" style={{ color: 'var(--th-text)' }}>
-                                          <code dangerouslySetInnerHTML={{ __html: highlightCode(extra.test.jestSnippet?.code || extra.test.k6Snippet?.code || "") }} />
-                                        </pre>
-                                      </div>
-                                    </div>
-                                  ),
-                                },
-                              ]
-                            : []),
-                          {
-                            label: "📱 DEVICES & BROWSERS",
-                            content: (
-                              <div className="space-y-4">
-                                <div>
-                                  <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.devicesTested || "Devices & Browsers Tested"}</h4>
-                                  <div className="flex flex-wrap gap-2 text-xs text-[#a0a0a0]">
-                                    <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border border-line/40 px-2.5 py-1.5 rounded-lg text-xs">
-                                      <Monitor size={14} className="text-gold" />
-                                      <span>{lbl.desktop || "MacBook Pro"} ✅</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border border-line/40 px-2.5 py-1.5 rounded-lg text-xs">
-                                      <Tablet size={14} className="text-gold" />
-                                      <span>{lbl.tablet || "iPad Air"} ✅</span>
-                                    </div>
-                                    <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border border-line/40 px-2.5 py-1.5 rounded-lg text-xs">
-                                      <Smartphone size={14} className="text-gold" />
-                                      <span>{lbl.mobile || "iPhone 15"} ✅</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ),
-                          },
-                        ]}
-                      />
+                      <m.div variants={tabItemVariants}>
+                        <TestSection testData={extra.test} />
+                      </m.div>
                     </div>
                   )}
 
-                  {/* SHIP TAB */}
+                  {/* SHIP TAB — Includes Lighthouse Scores & 1-line Tested Devices */}
                   {activeTab === "SHIP" && (
                     <div className="space-y-4">
                       {stages.ship?.summary && (
@@ -808,6 +707,12 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                         </m.p>
                       )}
 
+                      {/* 1-Line Tested Devices & Browsers */}
+                      <m.div variants={tabItemVariants} className="p-3 bg-[var(--th-bg)] border border-line/40 rounded-lg text-xs font-mono text-[var(--th-text-60)]">
+                        <span className="text-gold font-bold">Tested on Desktop, Tablet, Mobile — Chrome, Firefox, Edge</span>
+                      </m.div>
+
+                      {/* Lighthouse Scores */}
                       {extra.ship?.lighthouse && (
                         <m.div variants={tabItemVariants}>
                           <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.lighthouseMetrics || "Lighthouse Audit Metrics"}</h4>

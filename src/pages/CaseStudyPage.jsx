@@ -652,7 +652,7 @@ export default function CaseStudyPage() {
             </div>
           </section>
 
-          {/* 02 DESIGN SECTION — 3 Slides Swiper */}
+          {/* 02 DESIGN SECTION — Clean Grid */}
           <section
             id="design"
             ref={designRef}
@@ -667,68 +667,54 @@ export default function CaseStudyPage() {
               {project.stages.design.summary}
             </p>
 
-            <TabContentSwiper
-              slides={[
-                {
-                  label: "🖼️ SCREENSHOTS",
-                  content: (
-                    <DesignScreenshotGallery
-                      project={project}
-                      setLightboxSrc={setLightboxSrc}
-                      getPortalLabel={getPortalLabel}
-                    />
-                  ),
-                },
-                ...(extra.design?.colors && extra.design.colors.length > 0
-                  ? [
-                      {
-                        label: "🎨 COLOR PALETTE",
-                        content: (
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Color Palette Swatches</h4>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                              {extra.design.colors.map((color, idx) => (
-                                <div key={idx} className="flex items-center gap-2.5 bg-[#141414] border border-[#222222] rounded-xl p-2.5">
-                                  <div className="w-8 h-8 rounded-lg border border-white/10 shrink-0" style={{ backgroundColor: color.hex }} />
-                                  <div className="flex flex-col gap-0.5">
-                                    <span className="text-xs font-bold text-white leading-none">{color.name}</span>
-                                    <span className="text-[9px] font-mono text-[#888888]">{color.hex}</span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ),
-                      },
-                    ]
-                  : []),
-                ...(extra.design?.components && extra.design.components.length > 0
-                  ? [
-                      {
-                        label: "🧩 COMPONENTS",
-                        content: (
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Modular System Components</h4>
-                            <div className="flex flex-wrap gap-2">
-                              {extra.design.components.map((comp, idx) => (
-                                <span
-                                  key={idx}
-                                  className="bg-[#141414] border border-[#222222] text-gold text-xs font-mono px-3 py-1.5 rounded-lg font-semibold"
-                                >
-                                  &lt;{comp} /&gt;
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        ),
-                      },
-                    ]
-                  : []),
-              ]}
-            />
+            {/* Screenshots Section (Clean 2x2 Grid) */}
+            <div className="mb-8">
+              <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">System Interfaces</h3>
+              <DesignScreenshotGallery
+                project={project}
+                setLightboxSrc={setLightboxSrc}
+                getPortalLabel={getPortalLabel}
+              />
+            </div>
+
+            {/* Colors and Components */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#222222]/40">
+              {extra.design?.colors && extra.design.colors.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Color Palette</h3>
+                  <div className="flex flex-wrap gap-2.5">
+                    {extra.design.colors.map((color, idx) => (
+                      <div key={idx} className="flex items-center gap-2 bg-[#151515] border border-[#222222] rounded-lg p-2 pr-3.5 flex-1 min-w-[120px]">
+                        <div className="w-6 h-6 rounded border border-white/5 shrink-0" style={{ backgroundColor: color.hex }} />
+                        <div className="flex flex-col gap-0.5">
+                          <span className="text-[10px] font-semibold text-white leading-none">{color.name}</span>
+                          <span className="text-[8px] font-mono text-[#555555]">{color.hex}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {extra.design?.components && extra.design.components.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Modular Components</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {extra.design.components.map((comp, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-[#151515] border border-[#222222]/60 text-[#888888] text-[9px] font-mono px-2.5 py-1 rounded"
+                      >
+                        &lt;{comp} /&gt;
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </section>
 
-          {/* 03 BUILD SECTION — 3 Slides Swiper */}
+          {/* 03 BUILD SECTION */}
           <section
             id="build"
             ref={buildRef}
@@ -865,7 +851,7 @@ export default function CaseStudyPage() {
             />
           </section>
 
-          {/* 04 TEST SECTION — 4 Slides Swiper */}
+          {/* 04 TEST SECTION — Clean 3 Sections */}
           <section
             id="test"
             ref={testRef}
@@ -880,124 +866,7 @@ export default function CaseStudyPage() {
               {project.stages.test.summary}
             </p>
 
-            <TabContentSwiper
-              slides={[
-                {
-                  label: "📸 VISUAL PROOF",
-                  content: (
-                    <div>
-                      <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Visual Testing Screenshots</h4>
-                      <TestSection testData={extra.test} />
-                    </div>
-                  ),
-                },
-                ...(extra.test?.cases || extra.test?.testCases
-                  ? [
-                      {
-                        label: "✅ TEST RESULTS",
-                        content: (
-                          <div>
-                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Verification &amp; Pass Matrix</h4>
-                            <div className="overflow-x-auto border border-[#222222] rounded-xl bg-[#0a0a0a]">
-                              <table className="w-full border-collapse text-left text-[11px] font-sans">
-                                <thead>
-                                  <tr className="border-b border-[#222222] bg-[#141414] text-[#888888]">
-                                    <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Test Description</th>
-                                    <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
-                                    <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
-                                  </tr>
-                                </thead>
-                                <tbody className="divide-y divide-[#222222]/40 text-[#aaaaaa]">
-                                  {(extra.test?.cases || extra.test?.testCases || []).map((tc, idx) => (
-                                    <tr key={idx} className="hover:bg-[#111111]/30 transition-colors">
-                                      <td className="py-2.5 px-4 font-medium text-white">{tc.test || tc.scenario}</td>
-                                      <td className="py-2.5 px-4">{tc.expected}</td>
-                                      <td className="py-2.5 px-4 text-right">
-                                        <span className="inline-flex items-center bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] text-[8px] font-mono px-2 py-0.5 rounded font-bold uppercase">
-                                          {tc.result || "PASS"}
-                                        </span>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        ),
-                      },
-                    ]
-                  : []),
-                ...(extra.test?.jestSnippet || extra.test?.k6Snippet
-                  ? [
-                      {
-                        label: "💻 CODE EVIDENCE",
-                        content: (
-                          <div className="space-y-3">
-                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">Automated Test Scripts</h4>
-                            <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-inner">
-                              <div className="flex items-center justify-between bg-[#141414] border-b border-[#222222] px-4 py-2.5">
-                                <div className="flex items-center gap-1.5">
-                                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-                                  <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
-                                  <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
-                                  <span className="ml-3 text-[9px] font-mono text-[#888888]">jest.spec.js / k6-load.js</span>
-                                </div>
-                                <span className="text-[8px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">
-                                  Jest / k6
-                                </span>
-                              </div>
-                              <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed select-text max-h-[300px] code-scrollbar">
-                                <code dangerouslySetInnerHTML={{ __html: highlightCode(extra.test.jestSnippet?.code || extra.test.k6Snippet?.code || "") }} />
-                              </pre>
-                            </div>
-                          </div>
-                        ),
-                      },
-                    ]
-                  : []),
-                {
-                  label: "📱 DEVICES & BROWSERS",
-                  content: (
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Target Viewports &amp; Hardware Tested</h4>
-                        <div className="flex flex-wrap gap-2 text-xs text-[#aaaaaa]">
-                          {["MacBook Pro 16\" (Chrome/Safari)", "iPhone 15 Pro (Mobile Viewport)", "iPad Air (Tablet Viewport)", "Windows PC (Firefox)"].map((dev, idx) => (
-                            <span key={idx} className="bg-[#141414] border border-[#222222] px-3 py-2 rounded-xl text-[11px] font-mono flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                              {dev}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Cross-Browser Engine Compatibility</h4>
-                        <div className="flex flex-wrap gap-2 text-xs text-[#aaaaaa]">
-                          {["Blink Engine (Google Chrome 124+)", "WebKit Engine (Apple Safari 17+)", "Gecko Engine (Mozilla Firefox 125+)"].map((engine, idx) => (
-                            <span key={idx} className="bg-[#141414] border border-[#222222] px-3 py-2 rounded-xl text-[11px] font-mono flex items-center gap-2 text-white">
-                              ✓ {engine}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      {extra.ship?.lighthouse && (
-                        <div>
-                          <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Lighthouse Audit Scores</h4>
-                          <div className="flex flex-wrap gap-3 bg-[#0a0a0a] border border-[#222222]/80 rounded-xl p-4">
-                            <LighthouseCircle label="Performance" score={extra.ship.lighthouse.performance} />
-                            <LighthouseCircle label="Accessibility" score={extra.ship.lighthouse.accessibility} />
-                            <LighthouseCircle label="Best Practices" score={extra.ship.lighthouse.bestPractices} />
-                            <LighthouseCircle label="SEO" score={extra.ship.lighthouse.seo} />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ),
-                },
-              ]}
-            />
+            <TestSection testData={extra.test} />
           </section>
 
           {/* 05 SHIP SECTION */}
@@ -1014,6 +883,11 @@ export default function CaseStudyPage() {
             <p className="text-sm text-[#aaaaaa] leading-relaxed mb-6">
               {project.stages.ship.summary}
             </p>
+
+            {/* 1-Line Tested Devices & Browsers */}
+            <div className="mb-6 p-3 bg-[#151515] border border-[#222222] rounded-xl text-xs font-mono text-gold">
+              Tested on Desktop, Tablet, Mobile — Chrome, Firefox, Edge
+            </div>
 
             {/* Lighthouse Scores */}
             {extra.ship?.lighthouse && (
