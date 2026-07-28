@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef, memo } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, X, Monitor, Smartphone, Tablet, FileText } from "lucide-react";
+import { ArrowUpRight, X, Monitor, Smartphone, Tablet, FileText, ChevronLeft, ChevronRight } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 import { GithubIcon } from "./BrandIcons";
 import projects from "../data/projects";
 import { useLanguage } from "../context/LanguageContext";
@@ -12,6 +16,87 @@ function ArchIcon({ iconKey, size = 18 }) {
   const Component = ARCH_ICONS_MAP[iconKey];
   if (!Component) return null;
   return <Component width={size} height={size} style={{ display: "block", flexShrink: 0 }} />;
+}
+
+function TabContentSwiper({ slides }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  if (!slides || slides.length === 0) return null;
+
+  return (
+    <div className="relative rounded-xl border border-line/60 bg-[var(--th-card)] p-4 sm:p-5 shadow-lg text-left select-text overflow-hidden">
+      {/* Header Bar */}
+      <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-line/40 gap-3">
+        {/* Slide Label */}
+        <span className="text-xs font-mono font-bold text-gold uppercase tracking-wider">
+          {slides[activeSlide]?.label}
+        </span>
+
+        {/* Counter & Nav Arrows */}
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-[9px] font-mono font-bold text-[var(--th-text-60)] bg-[var(--th-bg)] px-2 py-0.5 rounded-full border border-line/40">
+            {activeSlide + 1} / {slides.length}
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              disabled={activeSlide === 0}
+              onClick={() => setActiveSlide((c) => Math.max(0, c - 1))}
+              className="p-1 rounded border border-line/40 bg-[var(--th-bg)] text-[var(--th-text)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-gold hover:text-gold transition-colors"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={14} />
+            </button>
+            <button
+              type="button"
+              disabled={activeSlide === slides.length - 1}
+              onClick={() => setActiveSlide((c) => Math.min(slides.length - 1, c + 1))}
+              className="p-1 rounded border border-line/40 bg-[var(--th-bg)] text-[var(--th-text)] disabled:opacity-30 disabled:cursor-not-allowed hover:border-gold hover:text-gold transition-colors"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Swiper Content */}
+      <Swiper
+        modules={[Pagination]}
+        slidesPerView={1}
+        spaceBetween={14}
+        onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
+        className="w-full"
+      >
+        {slides.map((slide, idx) => (
+          <SwiperSlide key={idx} className="w-full">
+            <div className="w-full min-h-[180px]">
+              {slide.content}
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Bottom Dots Indicator */}
+      {slides.length > 1 && (
+        <div className="flex items-center justify-center gap-1.5 pt-2.5 mt-3 border-t border-line/30">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setActiveSlide(idx)}
+              className={`rounded-full transition-all duration-300 ${
+                idx === activeSlide
+                  ? "w-5 h-1.5 bg-gold shadow-sm shadow-gold/30"
+                  : "w-1.5 h-1.5 bg-[var(--th-line)] hover:bg-[var(--th-text-60)]"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 // Simple custom regex-based syntax highlighter for the code snippets
@@ -364,7 +449,7 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                     </div>
                   )}
 
-                  {/* DESIGN TAB */}
+                  {/* DESIGN TAB — 3 Slides Swiper */}
                   {activeTab === "DESIGN" && (
                     <div className="space-y-4">
                       {stages.design?.summary && (
@@ -373,268 +458,246 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                         </m.p>
                       )}
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
-                        <div className="space-y-4">
-                          {extra.design?.colors && (
-                            <m.div variants={tabItemVariants}>
-                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.colorPalette || "Color Palette"}</h4>
-                              <div className="flex flex-wrap gap-2">
-                                {extra.design.colors.map((color) => (
-                                  <div key={color.hex} className="flex items-center gap-2 bg-[var(--th-bg)] border border-line/40 rounded-lg p-1.5 pr-2.5">
-                                    <div className="w-6 h-6 rounded border border-line shrink-0" style={{ backgroundColor: color.hex }} />
-                                    <div>
-                                      <div className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{color.name}</div>
-                                      <div className="text-[8px] font-mono text-muted">{color.hex}</div>
+                      <TabContentSwiper
+                        slides={[
+                          {
+                            label: "🖼️ SCREENSHOTS",
+                            content: (() => {
+                              const items = Array.isArray(screenshots) && screenshots.length > 0
+                                ? screenshots
+                                : screenshots?.design?.length > 0
+                                  ? screenshots.design.map(src => ({ src, type: src.includes('mobile') || src.includes('photo') ? 'mobile' : 'desktop' }))
+                                  : null;
+                              if (!items && !thumbnail) return null;
+                              return (
+                                <div>
+                                  <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.interfacePreview || "Interface Preview"}</h4>
+                                  {items ? (
+                                    <div className="grid grid-cols-2 gap-3.5">
+                                      {items.slice(0, 4).map((item, i) => {
+                                        const src = typeof item === 'string' ? item : item.src;
+                                        const isMobile = typeof item === 'string'
+                                          ? (src.includes('mobile') || src.includes('photo'))
+                                          : item.type === 'mobile';
+                                        return (
+                                          <div
+                                            key={i}
+                                            onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
+                                            className={`border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
+                                              isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
+                                            }`}
+                                          >
+                                            <img
+                                              src={src}
+                                              alt={`${name} screenshot ${i + 1}`}
+                                              width={400}
+                                              height={225}
+                                              loading="lazy"
+                                              className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
+                                            />
+                                            <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                              <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
                                     </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </m.div>
-                          )}
-
-                          {extra.design?.components && (
-                            <m.div variants={tabItemVariants}>
-                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.uiComponents || "Modular UI Components"}</h4>
-                              <div className="flex flex-wrap gap-1.5">
-                                {extra.design.components.map((comp) => (
-                                  <span key={comp} className="bg-[var(--th-bg)] border border-line/50 text-muted text-[10px] px-2 py-0.5 rounded font-mono" style={{ color: 'var(--th-text-60)' }}>
-                                    &lt;{comp} /&gt;
-                                  </span>
-                                ))}
-                              </div>
-                            </m.div>
-                          )}
-                        </div>
-
-                        {/* Screenshot grid (2x2) — handles new array format {src,type,caption} and old .design[] */}
-                        {(() => {
-                          // Normalise: new format is top-level array of objects; old format is screenshots.design[]
-                          const items = Array.isArray(screenshots) && screenshots.length > 0
-                            ? screenshots
-                            : screenshots?.design?.length > 0
-                              ? screenshots.design.map(src => ({ src, type: src.includes('mobile') || src.includes('photo') ? 'mobile' : 'desktop' }))
-                              : null;
-                          if (!items && !thumbnail) return null;
-                          return (
-                            <m.div variants={tabItemVariants} className="flex flex-col">
-                              <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.interfacePreview || "Interface Preview"}</h4>
-                              {items ? (
-                                <div className="grid grid-cols-2 gap-3.5">
-                                  {items.slice(0, 4).map((item, i) => {
-                                    const src      = typeof item === 'string' ? item : item.src;
-                                    const isMobile = typeof item === 'string'
-                                      ? (src.includes('mobile') || src.includes('photo'))
-                                      : item.type === 'mobile';
-                                    return (
-                                      <div
-                                        key={i}
-                                        onClick={(e) => { e.stopPropagation(); setLightboxSrc(src); }}
-                                        className={`border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in group/thumb relative transition-all duration-300 hover:border-gold/30 ${
-                                          isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
-                                        }`}
-                                      >
-                                        <img
-                                          src={src}
-                                          alt={`${name} screenshot ${i + 1}`}
-                                          width={400}
-                                          height={225}
-                                          loading="lazy"
-                                          className="w-full h-full object-cover object-top transition-transform duration-300 group-hover/thumb:scale-105"
-                                        />
-                                        <div className="absolute inset-0 bg-black/0 group-hover/thumb:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                                          <span className="opacity-0 group-hover/thumb:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/60 px-2 py-0.5 rounded">View</span>
-                                        </div>
+                                  ) : (
+                                    <div
+                                      onClick={(e) => { e.stopPropagation(); setLightboxSrc(thumbnail); }}
+                                      className="border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in aspect-video max-w-sm"
+                                    >
+                                      <img src={thumbnail} alt={name} width={400} height={225} loading="lazy" className="w-full h-full object-cover object-top" />
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })(),
+                          },
+                          ...(extra.design?.colors
+                            ? [
+                                {
+                                  label: "🎨 COLOR PALETTE",
+                                  content: (
+                                    <div>
+                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.colorPalette || "Color Palette"}</h4>
+                                      <div className="flex flex-wrap gap-2">
+                                        {extra.design.colors.map((color) => (
+                                          <div key={color.hex} className="flex items-center gap-2 bg-[var(--th-bg)] border border-line/40 rounded-lg p-2 pr-3">
+                                            <div className="w-6 h-6 rounded border border-line shrink-0" style={{ backgroundColor: color.hex }} />
+                                            <div>
+                                              <div className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{color.name}</div>
+                                              <div className="text-[8px] font-mono text-muted">{color.hex}</div>
+                                            </div>
+                                          </div>
+                                        ))}
                                       </div>
-                                    );
-                                  })}
-                                </div>
-                              ) : (
-                                <div
-                                  onClick={(e) => { e.stopPropagation(); setLightboxSrc(thumbnail); }}
-                                  className="border border-line rounded-lg overflow-hidden bg-[var(--th-bg)] cursor-zoom-in aspect-video"
-                                >
-                                  <img src={thumbnail} alt={name} width={400} height={225} loading="lazy" className="w-full h-full object-cover object-top" />
-                                </div>
-                              )}
-                            </m.div>
-                          );
-                        })()}
-
-                        {/* Lightbox */}
-                        <AnimatePresence>
-                          {lightboxSrc && (
-                            <m.div
-                              key="lightbox"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                              onClick={(e) => { e.stopPropagation(); setLightboxSrc(null); }}
-                              style={{ cursor: 'default' }}
-                              className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
-                            >
-                              <m.div
-                                initial={{ scale: 0.88, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.88, opacity: 0 }}
-                                transition={{ duration: 0.25, ease: "easeOut" }}
-                                onClick={(e) => e.stopPropagation()}
-                                style={{ cursor: 'default' }}
-                                className="relative max-w-5xl w-full max-h-[90vh] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#080808]"
-                              >
-                                <img
-                                  src={lightboxSrc}
-                                  alt="Screenshot preview"
-                                  loading="lazy"
-                                  style={{ cursor: 'default' }}
-                                  className="w-full h-auto max-h-[90vh] object-contain"
-                                />
-                                <button
-                                  onClick={(e) => { e.stopPropagation(); setLightboxSrc(null); }}
-                                  style={{ cursor: 'pointer' }}
-                                  className="absolute top-3 right-3 bg-black/70 hover:bg-black/90 border border-white/10 rounded-full p-1.5 text-white transition-colors"
-                                >
-                                  <X size={16} />
-                                </button>
-                              </m.div>
-                            </m.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
+                                    </div>
+                                  ),
+                                },
+                              ]
+                            : []),
+                          ...(extra.design?.components
+                            ? [
+                                {
+                                  label: "🧩 COMPONENTS",
+                                  content: (
+                                    <div>
+                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.uiComponents || "Modular UI Components"}</h4>
+                                      <div className="flex flex-wrap gap-1.5">
+                                        {extra.design.components.map((comp) => (
+                                          <span key={comp} className="bg-[var(--th-bg)] border border-line/50 text-muted text-[10px] px-2 py-1 rounded font-mono" style={{ color: 'var(--th-text-60)' }}>
+                                            &lt;{comp} /&gt;
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ),
+                                },
+                              ]
+                            : []),
+                        ]}
+                      />
                     </div>
                   )}
 
-                  {/* BUILD TAB */}
+                  {/* BUILD TAB — 3 Slides Swiper */}
                   {activeTab === "BUILD" && (
-                    <div className="space-y-5">
+                    <div className="space-y-4">
                       {stages.build?.summary && (
                         <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.build.summary}
                         </m.p>
                       )}
 
-                      {/* PART 1 — Architecture Diagram */}
-                      {extra.build?.architectureDiagram && (
-                        <m.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-3">{lbl.archDiagram || "Architecture Diagram"}</h4>
-                          <div className="bg-[var(--th-bg)] border border-line/40 rounded-xl p-4 flex flex-col items-center gap-0">
-                            {extra.build.architectureDiagram.map((node, idx, arr) => (
-                              <div key={idx} className="flex flex-col items-center w-full max-w-xs">
-                                {/* Node box */}
-                                {!node.services && (
-                                  <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border w-full justify-center ${
-                                    node.primary
-                                      ? "bg-gold/10 border-gold/40"
-                                      : "bg-[var(--th-card)] border-line/40"
-                                  }`}>
-                                    {node.iconKey && <ArchIcon iconKey={node.iconKey} size={18} />}
-                                    <div className="text-center">
-                                      <div className="font-mono font-bold text-[10px]" style={{ color: node.primary ? 'var(--color-role, #C9A84C)' : 'var(--th-text)' }}>
-                                        {node.label}
-                                      </div>
-                                      {node.sub && (
-                                        <div className="text-[8px] mt-0.5 font-mono" style={{ color: 'var(--th-text-60)' }}>{node.sub}</div>
-                                      )}
-                                    </div>
-                                  </div>
-                                )}
-
-                                {/* Arrow connector */}
-                                {!node.services && idx < arr.length - 1 && !arr[idx + 1]?.services && (
-                                  <div className="flex flex-col items-center my-1">
-                                    <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
-                                    <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
-                                      <path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" />
-                                    </svg>
-                                  </div>
-                                )}
-
-                                {/* Services row (side-by-side) */}
-                                {node.services && (
-                                  <div className="flex flex-col items-center w-full">
-                                    <div className="flex flex-col items-center my-1">
-                                      <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
-                                      <svg width="7" height="5" viewBox="0 0 8 6" fill="none">
-                                        <path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" />
-                                      </svg>
-                                    </div>
-                                    <div className="flex flex-wrap justify-center gap-1.5 w-full">
-                                      {node.services.map((svc, si) => (
-                                        <div
-                                          key={si}
-                                          className="flex items-center gap-1.5 bg-[var(--th-card)] border border-line/40 rounded-lg px-2.5 py-1.5 flex-1 min-w-[90px]"
-                                        >
-                                          {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={15} />}
-                                          <div>
-                                            <div className="text-[9px] font-mono font-semibold" style={{ color: 'var(--th-text)' }}>{svc.label}</div>
-                                            <div className="text-[7px] font-mono" style={{ color: 'var(--th-text-60)' }}>{svc.sub}</div>
+                      <TabContentSwiper
+                        slides={[
+                          ...(extra.build?.architectureDiagram
+                            ? [
+                                {
+                                  label: "🏗️ ARCHITECTURE",
+                                  content: (
+                                    <div>
+                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-3">{lbl.archDiagram || "Architecture Diagram"}</h4>
+                                      <div className="bg-[var(--th-bg)] border border-line/40 rounded-xl p-4 flex flex-col items-center gap-0 overflow-x-auto">
+                                        {extra.build.architectureDiagram.map((node, idx, arr) => (
+                                          <div key={idx} className="flex flex-col items-center w-full max-w-xs">
+                                            {!node.services && (
+                                              <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border w-full justify-center ${
+                                                node.primary ? "bg-gold/10 border-gold/40" : "bg-[var(--th-card)] border-line/40"
+                                              }`}>
+                                                {node.iconKey && <ArchIcon iconKey={node.iconKey} size={18} />}
+                                                <div className="text-center">
+                                                  <div className="font-mono font-bold text-[10px]" style={{ color: node.primary ? 'var(--color-role, #C9A84C)' : 'var(--th-text)' }}>
+                                                    {node.label}
+                                                  </div>
+                                                  {node.sub && (
+                                                    <div className="text-[8px] mt-0.5 font-mono" style={{ color: 'var(--th-text-60)' }}>{node.sub}</div>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            )}
+                                            {!node.services && idx < arr.length - 1 && !arr[idx + 1]?.services && (
+                                              <div className="flex flex-col items-center my-1">
+                                                <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
+                                                <svg width="7" height="5" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" /></svg>
+                                              </div>
+                                            )}
+                                            {node.services && (
+                                              <div className="flex flex-col items-center w-full">
+                                                <div className="flex flex-col items-center my-1">
+                                                  <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
+                                                  <svg width="7" height="5" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" /></svg>
+                                                </div>
+                                                <div className="flex flex-wrap justify-center gap-1.5 w-full">
+                                                  {node.services.map((svc, si) => (
+                                                    <div key={si} className="flex items-center gap-1.5 bg-[var(--th-card)] border border-line/40 rounded-lg px-2.5 py-1.5 flex-1 min-w-[90px]">
+                                                      {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={15} />}
+                                                      <div>
+                                                        <div className="text-[9px] font-mono font-semibold" style={{ color: 'var(--th-text)' }}>{svc.label}</div>
+                                                        <div className="text-[7px] font-mono" style={{ color: 'var(--th-text-60)' }}>{svc.sub}</div>
+                                                      </div>
+                                                    </div>
+                                                  ))}
+                                                </div>
+                                              </div>
+                                            )}
                                           </div>
-                                        </div>
-                                      ))}
+                                        ))}
+                                      </div>
                                     </div>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </m.div>
-                      )}
-
-                      {/* PART 2 — Code Snippet */}
-                      {(codeSnippet || stages.build?.snippet) && (
-                        <m.div variants={tabItemVariants} className="space-y-2">
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">
-                            {codeSnippet ? codeSnippet.title : (lbl.implSnippet || "Implementation Snippet")}
-                          </h4>
-                          <div className="rounded-lg border border-line/40 overflow-hidden">
-                            {/* Editor chrome */}
-                            <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border-b border-line/30 px-3 py-2">
-                              <span className="w-2 h-2 rounded-full bg-[#FF5F56]" />
-                              <span className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
-                              <span className="w-2 h-2 rounded-full bg-[#27C93F]" />
-                              <span className="ml-2 text-[8px] font-mono text-muted">
-                                {codeSnippet ? (codeSnippet.language || "javascript") : "javascript"}
-                              </span>
-                            </div>
-                            <pre className="overflow-x-auto border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[220px]" style={{ color: 'var(--th-text)' }}>
-                              <code dangerouslySetInnerHTML={{ __html: highlightCode(codeSnippet ? codeSnippet.code : stages.build.snippet) }} />
-                            </pre>
-                          </div>
-                        </m.div>
-                      )}
-
-                      {/* PART 3 — Key Technical Decisions */}
-                      {extra.build?.techDecisions && extra.build.techDecisions.length > 0 && (
-                        <m.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.techDecisions || "Key Technical Decisions"}</h4>
-                          <div className="space-y-1.5">
-                            {extra.build.techDecisions.map((decision, idx) => (
-                              <div
-                                key={idx}
-                                className="flex items-start gap-2.5 bg-[var(--th-bg)] border border-line/30 hover:border-gold/20 rounded-lg px-3 py-2 transition-colors duration-200 group"
-                              >
-                                <div className="w-4 h-4 rounded bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
-                                  <span className="text-gold text-[7px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
-                                </div>
-                                <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                                  <span className="text-[10px] font-semibold group-hover:text-gold transition-colors" style={{ color: 'var(--th-text)' }}>
-                                    {decision.choice}
-                                  </span>
-                                  <span className="text-[9px] text-muted leading-relaxed">{decision.reason}</span>
-                                </div>
-                                {decision.badge && (
-                                  <span className="ml-auto shrink-0 text-[7px] font-mono font-semibold px-1.5 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
-                                    {decision.badge}
-                                  </span>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </m.div>
-                      )}
+                                  ),
+                                },
+                              ]
+                            : []),
+                          ...(codeSnippet || stages.build?.snippet
+                            ? [
+                                {
+                                  label: "💻 CODE SNIPPET",
+                                  content: (
+                                    <div className="space-y-2">
+                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono">
+                                        {codeSnippet ? codeSnippet.title : (lbl.implSnippet || "Implementation Snippet")}
+                                      </h4>
+                                      <div className="rounded-lg border border-line/40 overflow-hidden">
+                                        <div className="flex items-center justify-between bg-[var(--th-bg)] border-b border-line/30 px-3 py-2">
+                                          <div className="flex items-center gap-1.5">
+                                            <span className="w-2 h-2 rounded-full bg-[#FF5F56]" />
+                                            <span className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
+                                            <span className="w-2 h-2 rounded-full bg-[#27C93F]" />
+                                            <span className="ml-2 text-[8px] font-mono text-muted">
+                                              {codeSnippet ? (codeSnippet.language || "javascript") : "javascript"}
+                                            </span>
+                                          </div>
+                                          <span className="text-[7px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">
+                                            {codeSnippet ? (codeSnippet.language || "js") : "js"}
+                                          </span>
+                                        </div>
+                                        <pre className="overflow-x-auto border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed select-text max-h-[220px] code-scrollbar" style={{ color: 'var(--th-text)' }}>
+                                          <code dangerouslySetInnerHTML={{ __html: highlightCode(codeSnippet ? codeSnippet.code : stages.build.snippet) }} />
+                                        </pre>
+                                      </div>
+                                    </div>
+                                  ),
+                                },
+                              ]
+                            : []),
+                          ...(extra.build?.techDecisions && extra.build.techDecisions.length > 0
+                            ? [
+                                {
+                                  label: "⚡ TECH DECISIONS",
+                                  content: (
+                                    <div className="space-y-2">
+                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono mb-2">{lbl.techDecisions || "Key Technical Decisions"}</h4>
+                                      <div className="space-y-1.5">
+                                        {extra.build.techDecisions.map((decision, idx) => (
+                                          <div key={idx} className="flex items-start gap-2.5 bg-[var(--th-bg)] border border-line/30 hover:border-gold/20 rounded-lg px-3 py-2">
+                                            <div className="w-4 h-4 rounded bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+                                              <span className="text-gold text-[7px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
+                                            </div>
+                                            <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                                              <span className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{decision.choice}</span>
+                                              <span className="text-[9px] text-muted leading-relaxed">{decision.reason}</span>
+                                            </div>
+                                            {decision.badge && (
+                                              <span className="ml-auto shrink-0 text-[7px] font-mono font-semibold px-1.5 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
+                                                {decision.badge}
+                                              </span>
+                                            )}
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ),
+                                },
+                              ]
+                            : []),
+                        ]}
+                      />
                     </div>
                   )}
-                              {/* TEST TAB */}
+
+                  {/* TEST TAB — 4 Slides Swiper */}
                   {activeTab === "TEST" && (
                     <div className="space-y-4">
                       {stages.test?.summary && (
@@ -643,56 +706,96 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                         </m.p>
                       )}
 
-                      {extra.test?.testCases ? (
-                        <m.div variants={tabItemVariants}>
-                          <TestSection testData={extra.test} />
-                        </m.div>
-                      ) : (
-                        extra.test?.cases && (
-                          <m.div variants={tabItemVariants} className="overflow-x-auto border border-line/40 rounded-lg">
-                            <table className="w-full border-collapse text-left text-[11px]">
-                              <thead>
-                                <tr className="border-b border-line bg-[#141414] text-muted">
-                                  <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Test Case</th>
-                                  <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
-                                  <th className="py-2 px-3 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-line/40 text-[#a0a0a0]">
-                                {extra.test.cases.map((tc, idx) => (
-                                  <tr key={idx} className="hover:bg-white/[0.01]">
-                                    <td className="py-2.5 px-3 font-medium text-white">{tc.test}</td>
-                                    <td className="py-2.5 px-3">{tc.expected}</td>
-                                    <td className="py-2.5 px-3 text-right">
-                                      <span className="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded bg-green-950/40 text-green-400 border border-green-900/60">
-                                        PASS ✅
-                                      </span>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </m.div>
-                        )
-                      )}
-
-                      <m.div variants={tabItemVariants} className="flex items-center gap-6 mt-2 bg-[var(--th-bg)] border border-line/40 p-3 rounded-lg w-fit">
-                        <span className="text-[10px] font-semibold tracking-widest text-gold uppercase">{lbl.devicesTested || "Devices Tested"}</span>
-                        <div className="flex items-center gap-4 text-xs text-[#a0a0a0]">
-                          <div className="flex items-center gap-1.5">
-                            <Monitor size={14} className="text-gold" />
-                            <span>{lbl.desktop || "Desktop"} ✅</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <Tablet size={14} className="text-gold" />
-                            <span>{lbl.tablet || "Tablet"} ✅</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <Smartphone size={14} className="text-gold" />
-                            <span>{lbl.mobile || "Mobile"} ✅</span>
-                          </div>
-                        </div>
-                      </m.div>
+                      <TabContentSwiper
+                        slides={[
+                          {
+                            label: "📸 VISUAL PROOF",
+                            content: (
+                              <div>
+                                <TestSection testData={extra.test} />
+                              </div>
+                            ),
+                          },
+                          ...(extra.test?.cases || extra.test?.testCases
+                            ? [
+                                {
+                                  label: "✅ TEST RESULTS",
+                                  content: (
+                                    <div className="overflow-x-auto border border-line/40 rounded-lg">
+                                      <table className="w-full border-collapse text-left text-[11px]">
+                                        <thead>
+                                          <tr className="border-b border-line bg-[var(--th-bg)] text-muted">
+                                            <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Test Case</th>
+                                            <th className="py-2 px-3 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
+                                            <th className="py-2 px-3 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-line/40" style={{ color: 'var(--th-text-60)' }}>
+                                          {(extra.test?.cases || extra.test?.testCases || []).map((tc, idx) => (
+                                            <tr key={idx} className="hover:bg-white/[0.01]">
+                                              <td className="py-2.5 px-3 font-medium" style={{ color: 'var(--th-text)' }}>{tc.test || tc.scenario}</td>
+                                              <td className="py-2.5 px-3">{tc.expected}</td>
+                                              <td className="py-2.5 px-3 text-right">
+                                                <span className="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded bg-green-950/40 text-green-400 border border-green-900/60">
+                                                  {tc.result || "PASS"} ✅
+                                                </span>
+                                              </td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  ),
+                                },
+                              ]
+                            : []),
+                          ...(extra.test?.jestSnippet || extra.test?.k6Snippet
+                            ? [
+                                {
+                                  label: "💻 CODE EVIDENCE",
+                                  content: (
+                                    <div className="space-y-2">
+                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono">Automated Test Scripts</h4>
+                                      <div className="rounded-lg border border-line/40 overflow-hidden">
+                                        <div className="flex items-center justify-between bg-[var(--th-bg)] border-b border-line/30 px-3 py-2">
+                                          <span className="text-[8px] font-mono text-muted">jest.spec.js / k6-load.js</span>
+                                          <span className="text-[7px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">Jest / k6</span>
+                                        </div>
+                                        <pre className="overflow-x-auto border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed select-text max-h-[220px] code-scrollbar" style={{ color: 'var(--th-text)' }}>
+                                          <code dangerouslySetInnerHTML={{ __html: highlightCode(extra.test.jestSnippet?.code || extra.test.k6Snippet?.code || "") }} />
+                                        </pre>
+                                      </div>
+                                    </div>
+                                  ),
+                                },
+                              ]
+                            : []),
+                          {
+                            label: "📱 DEVICES & BROWSERS",
+                            content: (
+                              <div className="space-y-4">
+                                <div>
+                                  <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.devicesTested || "Devices & Browsers Tested"}</h4>
+                                  <div className="flex flex-wrap gap-2 text-xs text-[#a0a0a0]">
+                                    <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border border-line/40 px-2.5 py-1.5 rounded-lg text-xs">
+                                      <Monitor size={14} className="text-gold" />
+                                      <span>{lbl.desktop || "MacBook Pro"} ✅</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border border-line/40 px-2.5 py-1.5 rounded-lg text-xs">
+                                      <Tablet size={14} className="text-gold" />
+                                      <span>{lbl.tablet || "iPad Air"} ✅</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5 bg-[var(--th-bg)] border border-line/40 px-2.5 py-1.5 rounded-lg text-xs">
+                                      <Smartphone size={14} className="text-gold" />
+                                      <span>{lbl.mobile || "iPhone 15"} ✅</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ),
+                          },
+                        ]}
+                      />
                     </div>
                   )}
 

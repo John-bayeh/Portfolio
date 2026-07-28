@@ -267,35 +267,110 @@ function LighthouseCircle({ label, score }) {
   else if (score >= 50) strokeColor = "#EAB308";
 
   return (
-    <div className="flex flex-col items-center gap-2 bg-[#111111] border border-[#222222]/60 rounded-xl p-3.5 min-w-[85px] flex-1">
+    <div className="flex flex-col items-center gap-1.5 min-w-[75px]">
       <div className="relative flex items-center justify-center w-14 h-14">
         <svg className="w-full h-full transform -rotate-90">
-          <circle
-            cx="28"
-            cy="28"
-            r={radius}
-            className="stroke-[#222] fill-none"
-            strokeWidth="3.5"
-          />
+          <circle cx="28" cy="28" r={radius} className="stroke-[#222222] fill-none" strokeWidth="4" />
           <circle
             cx="28"
             cy="28"
             r={radius}
             fill="none"
             stroke={strokeColor}
-            strokeWidth="3.5"
+            strokeWidth="4"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
           />
         </svg>
-        <span className="absolute text-xs font-bold" style={{ color: strokeColor }}>
+        <span className="absolute text-xs font-bold font-mono" style={{ color: strokeColor }}>
           {score}
         </span>
       </div>
-      <span className="text-[9px] tracking-wider text-[#888888] font-semibold uppercase text-center">
+      <span className="text-[9px] tracking-wider text-[#888888] font-mono uppercase text-center">
         {label}
       </span>
+    </div>
+  );
+}
+
+function TabContentSwiper({ slides }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  if (!slides || slides.length === 0) return null;
+
+  return (
+    <div className="relative rounded-2xl border border-[#222222]/80 bg-[#0d0d0d] p-4 sm:p-6 shadow-xl text-left select-text overflow-hidden">
+      {/* Header Bar */}
+      <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#222222]/80 gap-3">
+        {/* Slide Label */}
+        <span className="text-xs font-mono font-bold text-gold uppercase tracking-wider">
+          {slides[activeSlide]?.label}
+        </span>
+
+        {/* Counter & Nav Arrows */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          <span className="text-[9px] font-mono font-bold text-[#888888] bg-[#141414] px-2.5 py-0.5 rounded-full border border-[#222222]">
+            {activeSlide + 1} / {slides.length}
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              disabled={activeSlide === 0}
+              onClick={() => setActiveSlide((c) => Math.max(0, c - 1))}
+              className="p-1 rounded-md border border-[#222222] bg-[#141414] text-white disabled:opacity-30 disabled:cursor-not-allowed hover:border-gold hover:text-gold transition-colors"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft size={14} />
+            </button>
+            <button
+              type="button"
+              disabled={activeSlide === slides.length - 1}
+              onClick={() => setActiveSlide((c) => Math.min(slides.length - 1, c + 1))}
+              className="p-1 rounded-md border border-[#222222] bg-[#141414] text-white disabled:opacity-30 disabled:cursor-not-allowed hover:border-gold hover:text-gold transition-colors"
+              aria-label="Next slide"
+            >
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Swiper Content */}
+      <Swiper
+        modules={[Pagination]}
+        slidesPerView={1}
+        spaceBetween={16}
+        onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
+        className="w-full"
+      >
+        {slides.map((slide, idx) => (
+          <SwiperSlide key={idx} className="w-full">
+            <div className="w-full min-h-[200px]">
+              {slide.content}
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {/* Bottom Dots Indicator */}
+      {slides.length > 1 && (
+        <div className="flex items-center justify-center gap-2 pt-3 mt-4 border-t border-[#222222]/60">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setActiveSlide(idx)}
+              className={`rounded-full transition-all duration-300 ${
+                idx === activeSlide
+                  ? "w-5 h-1.5 bg-gold shadow-sm shadow-gold/30"
+                  : "w-1.5 h-1.5 bg-[#333333] hover:bg-[#666666]"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -577,7 +652,7 @@ export default function CaseStudyPage() {
             </div>
           </section>
 
-          {/* 02 DESIGN SECTION */}
+          {/* 02 DESIGN SECTION — 3 Slides Swiper */}
           <section
             id="design"
             ref={designRef}
@@ -592,56 +667,68 @@ export default function CaseStudyPage() {
               {project.stages.design.summary}
             </p>
 
-            {/* Screenshots Section */}
-            <div className="mb-8">
-              <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">System Interfaces</h3>
-              <DesignScreenshotGallery
-                project={project}
-                setLightboxSrc={setLightboxSrc}
-                getPortalLabel={getPortalLabel}
-              />
-            </div>
-
-
-
-            {/* Colors and Components */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#222222]/40">
-              {extra.design?.colors && extra.design.colors.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Color Palette</h3>
-                  <div className="flex flex-wrap gap-2.5">
-                    {extra.design.colors.map((color, idx) => (
-                      <div key={idx} className="flex items-center gap-2 bg-[#151515] border border-[#222222] rounded-lg p-2 pr-3.5 flex-1 min-w-[120px]">
-                        <div className="w-6 h-6 rounded border border-white/5 shrink-0" style={{ backgroundColor: color.hex }} />
-                        <div className="flex flex-col gap-0.5">
-                          <span className="text-[10px] font-semibold text-white leading-none">{color.name}</span>
-                          <span className="text-[8px] font-mono text-[#555555]">{color.hex}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {extra.design?.components && extra.design.components.length > 0 && (
-                <div>
-                  <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Modular Components</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {extra.design.components.map((comp, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-[#151515] border border-[#222222]/60 text-[#888888] text-[9px] font-mono px-2.5 py-1 rounded"
-                      >
-                        &lt;{comp} /&gt;
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+            <TabContentSwiper
+              slides={[
+                {
+                  label: "🖼️ SCREENSHOTS",
+                  content: (
+                    <DesignScreenshotGallery
+                      project={project}
+                      setLightboxSrc={setLightboxSrc}
+                      getPortalLabel={getPortalLabel}
+                    />
+                  ),
+                },
+                ...(extra.design?.colors && extra.design.colors.length > 0
+                  ? [
+                      {
+                        label: "🎨 COLOR PALETTE",
+                        content: (
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Color Palette Swatches</h4>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                              {extra.design.colors.map((color, idx) => (
+                                <div key={idx} className="flex items-center gap-2.5 bg-[#141414] border border-[#222222] rounded-xl p-2.5">
+                                  <div className="w-8 h-8 rounded-lg border border-white/10 shrink-0" style={{ backgroundColor: color.hex }} />
+                                  <div className="flex flex-col gap-0.5">
+                                    <span className="text-xs font-bold text-white leading-none">{color.name}</span>
+                                    <span className="text-[9px] font-mono text-[#888888]">{color.hex}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ),
+                      },
+                    ]
+                  : []),
+                ...(extra.design?.components && extra.design.components.length > 0
+                  ? [
+                      {
+                        label: "🧩 COMPONENTS",
+                        content: (
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Modular System Components</h4>
+                            <div className="flex flex-wrap gap-2">
+                              {extra.design.components.map((comp, idx) => (
+                                <span
+                                  key={idx}
+                                  className="bg-[#141414] border border-[#222222] text-gold text-xs font-mono px-3 py-1.5 rounded-lg font-semibold"
+                                >
+                                  &lt;{comp} /&gt;
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ),
+                      },
+                    ]
+                  : []),
+              ]}
+            />
           </section>
 
-          {/* 03 BUILD SECTION */}
+          {/* 03 BUILD SECTION — 3 Slides Swiper */}
           <section
             id="build"
             ref={buildRef}
@@ -652,147 +739,133 @@ export default function CaseStudyPage() {
               <h2 className="font-display text-lg font-bold tracking-wider uppercase">Architecture &amp; Build</h2>
             </div>
 
-            <p className="text-sm text-[#aaaaaa] leading-relaxed mb-8">
+            <p className="text-sm text-[#aaaaaa] leading-relaxed mb-6">
               {project.stages.build.summary}
             </p>
 
-            {/* PART 1 — Architecture Diagram */}
-            {extra.build?.architectureDiagram && (
-              <div className="mb-8">
-                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">Architecture Diagram</h3>
-                <div className="bg-[#0a0a0a] border border-[#222222]/80 rounded-xl p-6 flex flex-col items-center gap-0 overflow-x-auto">
-                  {extra.build.architectureDiagram.map((node, idx, arr) => (
-                    <div key={idx} className="flex flex-col items-center w-full max-w-sm">
-                      {/* Node box */}
-                      <div className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border w-full justify-center ${
-                        node.primary
-                          ? "bg-gold/10 border-gold/40 text-gold"
-                          : node.services
-                          ? "bg-[#141414] border-[#222222]/60 text-[#aaaaaa]"
-                          : "bg-[#141414] border-[#222222]/60 text-[#888888]"
-                      }`}>
-                        {node.iconKey && <ArchIcon iconKey={node.iconKey} size={22} />}
-                        <div className="text-center">
-                          <div className={`font-mono font-bold text-xs ${node.primary ? "text-gold" : "text-white"}`}>
-                            {node.label}
-                          </div>
-                          {node.sub && (
-                            <div className="text-[9px] text-[#555555] mt-0.5 font-mono">{node.sub}</div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Connector arrow (not on last node) */}
-                      {idx < arr.length - 1 && !arr[idx + 1]?.services && (
-                        <div className="flex flex-col items-center my-1">
-                          <div className="w-px h-4 bg-[#333333]" />
-                          <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
-                            <path d="M4 6L0 0H8L4 6Z" fill="#444444" />
-                          </svg>
-                        </div>
-                      )}
-
-                      {/* Side-by-side services row */}
-                      {node.services && (
-                        <div className="flex flex-col items-center w-full">
-                          <div className="flex flex-col items-center my-1">
-                            <div className="w-px h-4 bg-[#333333]" />
-                            <svg width="8" height="6" viewBox="0 0 8 6" fill="none">
-                              <path d="M4 6L0 0H8L4 6Z" fill="#444444" />
-                            </svg>
-                          </div>
-                          <div className="flex flex-wrap justify-center gap-2 w-full">
-                            {node.services.map((svc, si) => (
-                              <div
-                                key={si}
-                                className="flex items-center gap-1.5 bg-[#141414] border border-[#222222]/60 rounded-lg px-3 py-2 min-w-[120px] flex-1"
-                              >
-                                {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={18} />}
-                                <div>
-                                  <div className="text-[10px] font-mono font-semibold text-white">{svc.label}</div>
-                                  <div className="text-[8px] text-[#555555] font-mono">{svc.sub}</div>
+            <TabContentSwiper
+              slides={[
+                ...(extra.build?.architectureDiagram
+                  ? [
+                      {
+                        label: "🏗️ ARCHITECTURE",
+                        content: (
+                          <div>
+                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-4">Architecture Diagram</h4>
+                            <div className="bg-[#0a0a0a] border border-[#222222]/80 rounded-xl p-6 flex flex-col items-center gap-0 overflow-x-auto">
+                              {extra.build.architectureDiagram.map((node, idx, arr) => (
+                                <div key={idx} className="flex flex-col items-center w-full max-w-sm">
+                                  <div className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl border w-full justify-center ${
+                                    node.primary ? "bg-gold/10 border-gold/40 text-gold" : "bg-[#141414] border-[#222222]/60 text-white"
+                                  }`}>
+                                    {node.iconKey && <ArchIcon iconKey={node.iconKey} size={22} />}
+                                    <div className="text-center">
+                                      <div className={`font-mono font-bold text-xs ${node.primary ? "text-gold" : "text-white"}`}>
+                                        {node.label}
+                                      </div>
+                                      {node.sub && <div className="text-[9px] text-[#555555] mt-0.5 font-mono">{node.sub}</div>}
+                                    </div>
+                                  </div>
+                                  {idx < arr.length - 1 && !arr[idx + 1]?.services && (
+                                    <div className="flex flex-col items-center my-1">
+                                      <div className="w-px h-4 bg-[#333333]" />
+                                      <svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="#444444" /></svg>
+                                    </div>
+                                  )}
+                                  {node.services && (
+                                    <div className="flex flex-col items-center w-full">
+                                      <div className="flex flex-col items-center my-1">
+                                        <div className="w-px h-4 bg-[#333333]" />
+                                        <svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="#444444" /></svg>
+                                      </div>
+                                      <div className="flex flex-wrap justify-center gap-2 w-full">
+                                        {node.services.map((svc, si) => (
+                                          <div key={si} className="flex items-center gap-1.5 bg-[#141414] border border-[#222222]/60 rounded-lg px-3 py-2 min-w-[120px] flex-1">
+                                            {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={18} />}
+                                            <div>
+                                              <div className="text-[10px] font-mono font-semibold text-white">{svc.label}</div>
+                                              <div className="text-[8px] text-[#555555] font-mono">{svc.sub}</div>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
-                              </div>
-                            ))}
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* PART 2 — Code Snippet */}
-            {project.codeSnippet ? (
-              <div className="mb-8 space-y-3">
-                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">
-                  {project.codeSnippet.title}
-                </h3>
-                <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-inner">
-                  {/* Code editor top bar */}
-                  <div className="flex items-center gap-1.5 bg-[#141414] border-b border-[#222222] px-4 py-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
-                    <span className="ml-3 text-[9px] font-mono text-[#555555]">
-                      {project.codeSnippet.language || "javascript"} — {project.codeSnippet.title}
-                    </span>
-                  </div>
-                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed select-text max-h-[300px] code-scrollbar">
-                    <code dangerouslySetInnerHTML={{ __html: highlightCode(project.codeSnippet.code) }} />
-                  </pre>
-                </div>
-              </div>
-            ) : project.stages.build.snippet ? (
-              <div className="mb-8 space-y-3">
-                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">Implementation Snippet</h3>
-                <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-inner">
-                  <div className="flex items-center gap-1.5 bg-[#141414] border-b border-[#222222] px-4 py-2.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
-                    <span className="ml-3 text-[9px] font-mono text-[#555555]">javascript — implementation.js</span>
-                  </div>
-                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed select-text max-h-[300px] code-scrollbar">
-                    <code dangerouslySetInnerHTML={{ __html: highlightCode(project.stages.build.snippet) }} />
-                  </pre>
-                </div>
-              </div>
-            ) : null}
-
-            {/* PART 3 — Key Technical Decisions */}
-            {extra.build?.techDecisions && extra.build.techDecisions.length > 0 && (
-              <div>
-                <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">Key Technical Decisions</h3>
-                <div className="space-y-2">
-                  {extra.build.techDecisions.map((decision, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-start gap-3 bg-[#0d0d0d] border border-[#1e1e1e] hover:border-gold/20 rounded-xl px-4 py-3 transition-colors duration-200 group"
-                    >
-                      <div className="w-5 h-5 rounded-md bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="text-gold text-[9px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
-                      </div>
-                      <div className="flex flex-col gap-0.5 min-w-0">
-                        <span className="text-[11px] font-semibold text-white group-hover:text-gold transition-colors">
-                          {decision.choice}
-                        </span>
-                        <span className="text-[10px] text-[#666666] leading-relaxed">{decision.reason}</span>
-                      </div>
-                      {decision.badge && (
-                        <span className="ml-auto shrink-0 text-[8px] font-mono font-semibold px-2 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
-                          {decision.badge}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                        ),
+                      },
+                    ]
+                  : []),
+                ...(project.codeSnippet || project.stages.build?.snippet
+                  ? [
+                      {
+                        label: "💻 CODE SNIPPET",
+                        content: (
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">
+                              {project.codeSnippet ? project.codeSnippet.title : "Implementation Snippet"}
+                            </h4>
+                            <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-inner">
+                              <div className="flex items-center justify-between bg-[#141414] border-b border-[#222222] px-4 py-2.5">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                                  <span className="ml-3 text-[9px] font-mono text-[#888888]">
+                                    {project.codeSnippet?.language || "javascript"}
+                                  </span>
+                                </div>
+                                <span className="text-[8px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">
+                                  {project.codeSnippet?.language || "js"}
+                                </span>
+                              </div>
+                              <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed select-text max-h-[300px] code-scrollbar">
+                                <code dangerouslySetInnerHTML={{ __html: highlightCode(project.codeSnippet ? project.codeSnippet.code : project.stages.build.snippet) }} />
+                              </pre>
+                            </div>
+                          </div>
+                        ),
+                      },
+                    ]
+                  : []),
+                ...(extra.build?.techDecisions && extra.build.techDecisions.length > 0
+                  ? [
+                      {
+                        label: "⚡ TECH DECISIONS",
+                        content: (
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Key Technical Decisions</h4>
+                            <div className="space-y-2">
+                              {extra.build.techDecisions.map((decision, idx) => (
+                                <div key={idx} className="flex items-start gap-3 bg-[#141414] border border-[#222222] rounded-xl px-4 py-3">
+                                  <div className="w-5 h-5 rounded-md bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+                                    <span className="text-gold text-[9px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
+                                  </div>
+                                  <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                                    <span className="text-xs font-bold text-white">{decision.choice}</span>
+                                    <span className="text-[10px] text-[#aaaaaa] leading-relaxed">{decision.reason}</span>
+                                  </div>
+                                  {decision.badge && (
+                                    <span className="shrink-0 text-[8px] font-mono font-semibold px-2 py-0.5 rounded border border-gold/20 text-gold bg-gold/5 uppercase tracking-wider">
+                                      {decision.badge}
+                                    </span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ),
+                      },
+                    ]
+                  : []),
+              ]}
+            />
           </section>
 
-          {/* 04 TEST SECTION */}
+          {/* 04 TEST SECTION — 4 Slides Swiper */}
           <section
             id="test"
             ref={testRef}
@@ -807,54 +880,124 @@ export default function CaseStudyPage() {
               {project.stages.test.summary}
             </p>
 
-            {/* Test Cases Table */}
-            {extra.test?.testCases ? (
-              <div className="mb-6">
-                <TestSection testData={extra.test} />
-              </div>
-            ) : (
-              extra.test?.cases && extra.test.cases.length > 0 && (
-                <div className="mb-6">
-                  <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-3 font-mono">Verification Matrix</h3>
-                  <div className="overflow-x-auto border border-[#222222] rounded-xl bg-[#0a0a0a]">
-                    <table className="w-full border-collapse text-left text-[11px] font-sans">
-                      <thead>
-                        <tr className="border-b border-[#222222] bg-[#141414] text-[#888888]">
-                          <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Test Description</th>
-                          <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
-                          <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-[#222222]/40 text-[#aaaaaa]">
-                        {extra.test.cases.map((tc, idx) => (
-                          <tr key={idx} className="hover:bg-[#111111]/30 transition-colors">
-                            <td className="py-2.5 px-4 font-medium text-white">{tc.test}</td>
-                            <td className="py-2.5 px-4">{tc.expected}</td>
-                            <td className="py-2.5 px-4 text-right">
-                              <span className="inline-flex items-center bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] text-[8px] font-mono px-2 py-0.5 rounded font-bold uppercase">
-                                {tc.result || "pass"}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )
-            )}
+            <TabContentSwiper
+              slides={[
+                {
+                  label: "📸 VISUAL PROOF",
+                  content: (
+                    <div>
+                      <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Visual Testing Screenshots</h4>
+                      <TestSection testData={extra.test} />
+                    </div>
+                  ),
+                },
+                ...(extra.test?.cases || extra.test?.testCases
+                  ? [
+                      {
+                        label: "✅ TEST RESULTS",
+                        content: (
+                          <div>
+                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Verification &amp; Pass Matrix</h4>
+                            <div className="overflow-x-auto border border-[#222222] rounded-xl bg-[#0a0a0a]">
+                              <table className="w-full border-collapse text-left text-[11px] font-sans">
+                                <thead>
+                                  <tr className="border-b border-[#222222] bg-[#141414] text-[#888888]">
+                                    <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Test Description</th>
+                                    <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-[9px]">Expected Behavior</th>
+                                    <th className="py-2.5 px-4 font-semibold uppercase tracking-wider text-right text-[9px]">Result</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-[#222222]/40 text-[#aaaaaa]">
+                                  {(extra.test?.cases || extra.test?.testCases || []).map((tc, idx) => (
+                                    <tr key={idx} className="hover:bg-[#111111]/30 transition-colors">
+                                      <td className="py-2.5 px-4 font-medium text-white">{tc.test || tc.scenario}</td>
+                                      <td className="py-2.5 px-4">{tc.expected}</td>
+                                      <td className="py-2.5 px-4 text-right">
+                                        <span className="inline-flex items-center bg-[#22C55E]/10 border border-[#22C55E]/20 text-[#22C55E] text-[8px] font-mono px-2 py-0.5 rounded font-bold uppercase">
+                                          {tc.result || "PASS"}
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        ),
+                      },
+                    ]
+                  : []),
+                ...(extra.test?.jestSnippet || extra.test?.k6Snippet
+                  ? [
+                      {
+                        label: "💻 CODE EVIDENCE",
+                        content: (
+                          <div className="space-y-3">
+                            <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono">Automated Test Scripts</h4>
+                            <div className="rounded-xl border border-[#222222]/80 overflow-hidden shadow-inner">
+                              <div className="flex items-center justify-between bg-[#141414] border-b border-[#222222] px-4 py-2.5">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
+                                  <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+                                  <span className="ml-3 text-[9px] font-mono text-[#888888]">jest.spec.js / k6-load.js</span>
+                                </div>
+                                <span className="text-[8px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">
+                                  Jest / k6
+                                </span>
+                              </div>
+                              <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed select-text max-h-[300px] code-scrollbar">
+                                <code dangerouslySetInnerHTML={{ __html: highlightCode(extra.test.jestSnippet?.code || extra.test.k6Snippet?.code || "") }} />
+                              </pre>
+                            </div>
+                          </div>
+                        ),
+                      },
+                    ]
+                  : []),
+                {
+                  label: "📱 DEVICES & BROWSERS",
+                  content: (
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Target Viewports &amp; Hardware Tested</h4>
+                        <div className="flex flex-wrap gap-2 text-xs text-[#aaaaaa]">
+                          {["MacBook Pro 16\" (Chrome/Safari)", "iPhone 15 Pro (Mobile Viewport)", "iPad Air (Tablet Viewport)", "Windows PC (Firefox)"].map((dev, idx) => (
+                            <span key={idx} className="bg-[#141414] border border-[#222222] px-3 py-2 rounded-xl text-[11px] font-mono flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                              {dev}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
 
-            {/* Devices Tested */}
-            <div>
-              <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-2.5 font-mono">Devices Tested</h3>
-              <div className="flex flex-wrap gap-2 text-xs text-[#888888]">
-                {["MacBook (Chrome/Safari)", "iPhone 15 (Mobile)", "iPad Air (Tablet)", "Windows (Firefox)"].map((dev, idx) => (
-                  <span key={idx} className="bg-[#151515] border border-[#222222] px-3 py-1.5 rounded-lg text-[11px] whitespace-nowrap">
-                    {dev}
-                  </span>
-                ))}
-              </div>
-            </div>
+                      <div>
+                        <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Cross-Browser Engine Compatibility</h4>
+                        <div className="flex flex-wrap gap-2 text-xs text-[#aaaaaa]">
+                          {["Blink Engine (Google Chrome 124+)", "WebKit Engine (Apple Safari 17+)", "Gecko Engine (Mozilla Firefox 125+)"].map((engine, idx) => (
+                            <span key={idx} className="bg-[#141414] border border-[#222222] px-3 py-2 rounded-xl text-[11px] font-mono flex items-center gap-2 text-white">
+                              ✓ {engine}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {extra.ship?.lighthouse && (
+                        <div>
+                          <h4 className="text-xs font-semibold tracking-wider text-gold uppercase font-mono mb-3">Lighthouse Audit Scores</h4>
+                          <div className="flex flex-wrap gap-3 bg-[#0a0a0a] border border-[#222222]/80 rounded-xl p-4">
+                            <LighthouseCircle label="Performance" score={extra.ship.lighthouse.performance} />
+                            <LighthouseCircle label="Accessibility" score={extra.ship.lighthouse.accessibility} />
+                            <LighthouseCircle label="Best Practices" score={extra.ship.lighthouse.bestPractices} />
+                            <LighthouseCircle label="SEO" score={extra.ship.lighthouse.seo} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ),
+                },
+              ]}
+            />
           </section>
 
           {/* 05 SHIP SECTION */}
