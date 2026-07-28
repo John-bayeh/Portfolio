@@ -186,10 +186,10 @@ const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshot
         })}
       </div>
 
-      {/* Fullscreen All Screenshots Modal */}
+      {/* Fullscreen All Screenshots Modal — Horizontal alignment */}
       {showAllModal && (
         <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col p-4 sm:p-6">
-          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
             <span className="text-xs font-mono font-bold text-gold uppercase tracking-wider">
               All Screenshots ({screenshots.length})
             </span>
@@ -201,11 +201,15 @@ const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshot
               <X size={18} />
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto pt-4 space-y-6">
+          {/* Horizontal scroll track */}
+          <div className="flex-1 overflow-x-auto flex items-center gap-4 py-4 snap-x no-scrollbar">
             {screenshots.map((img, idx) => (
-              <div key={idx} className="bg-[#111] border border-white/10 rounded-xl overflow-hidden p-2">
-                <img src={img.url} alt={img.title} className="w-full h-auto max-h-[70vh] object-contain mx-auto rounded-lg" />
-                <p className="text-xs font-bold text-white text-center mt-2">{img.title}</p>
+              <div key={idx} className="shrink-0 w-[85vw] max-w-2xl bg-[#111] border border-white/10 rounded-xl overflow-hidden p-3 snap-center">
+                <img src={img.url} alt={img.title} className="w-full h-auto max-h-[65vh] object-contain mx-auto rounded-lg" />
+                <p className="text-xs font-bold text-white text-center mt-2.5">{img.title}</p>
+                {img.badge && (
+                  <p className="text-[9px] font-mono text-gold text-center mt-1">{img.badge}</p>
+                )}
               </div>
             ))}
           </div>
@@ -281,26 +285,24 @@ export default function TestSection({ testData }) {
         )}
       </AnimatePresence>
 
-      {/* Category Filter Tabs — horizontally scrollable on mobile */}
-      <div className="border-b border-[#222222]/80 pb-3">
-        <div className="overflow-x-auto no-scrollbar">
-          <div className="flex gap-1.5 w-max">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`shrink-0 px-3 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 border ${
-                  selectedCategory === cat
-                    ? "bg-gold/10 border-gold/40 text-gold shadow-sm shadow-gold/5"
-                    : "bg-[#111111] border-[#222222] text-[#888888] hover:border-gold/20 hover:text-[#aaaaaa]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+      {/* Category Filter Tabs — all categories fully visible across all devices and themes */}
+      <div className="border-b border-[var(--th-line)] pb-3">
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 border ${
+                selectedCategory === cat
+                  ? "bg-gold/10 border-gold/50 text-gold shadow-sm"
+                  : "bg-[var(--th-card)] border-[var(--th-line)] text-[var(--th-text-60)] hover:border-gold/30 hover:text-[var(--th-text)]"
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
-        <p className="text-[10px] font-mono text-[#666666] mt-2">Click any screenshot to expand</p>
+        <p className="text-[10px] font-mono text-[var(--th-text-60)] mt-2.5">Click any screenshot to expand</p>
       </div>
 
       {/* Render Category Sections (Test Cases + Screenshots placed in their matching category) */}
@@ -424,20 +426,20 @@ export default function TestSection({ testData }) {
       </div>
 
       {/* Code Snippets Section (with editor-like tab switcher) */}
-      <div className="space-y-3 pt-6 border-t border-[#222222]/80">
+      <div className="space-y-3 pt-6 border-t border-[var(--th-line)]">
         <div className="flex items-start justify-between gap-2 flex-wrap sm:flex-nowrap">
           <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono shrink-0">
             {lbl.testScripts || "Embedded Test Scripts"}
           </h4>
           {/* Switcher — scrollable on mobile */}
           <div className="overflow-x-auto no-scrollbar">
-            <div className="flex bg-[#111] border border-[#222222] rounded-lg p-0.5 w-max">
+            <div className="flex bg-[var(--th-bg)] border border-[var(--th-line)] rounded-lg p-0.5 w-max">
               <button
                 onClick={() => setActiveCodeTab("jest")}
                 className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold font-mono transition-all shrink-0 ${
                   activeCodeTab === "jest"
                     ? "bg-gold text-[#080808]"
-                    : "text-[#888] hover:text-white"
+                    : "text-[var(--th-text-60)] hover:text-[var(--th-text)]"
                 }`}
               >
                 <FileCode className="w-3 h-3" />
@@ -448,7 +450,7 @@ export default function TestSection({ testData }) {
                 className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-[9px] font-bold font-mono transition-all shrink-0 ${
                   activeCodeTab === "k6"
                     ? "bg-gold text-[#080808]"
-                    : "text-[#888] hover:text-white"
+                    : "text-[var(--th-text-60)] hover:text-[var(--th-text)]"
                 }`}
               >
                 <Terminal className="w-3 h-3" />

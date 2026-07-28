@@ -214,10 +214,10 @@ function DesignScreenshotGallery({ project, setLightboxSrc, getPortalLabel }) {
         })}
       </div>
 
-      {/* Fullscreen All Screenshots Modal */}
+      {/* Fullscreen All Screenshots Modal — Horizontal Alignment */}
       {showAllModal && (
         <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col p-4 sm:p-6">
-          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10 shrink-0">
             <span className="text-xs font-mono font-bold text-gold uppercase tracking-wider">
               {project.name} — All Screenshots ({rawScreenshots.length})
             </span>
@@ -229,7 +229,8 @@ function DesignScreenshotGallery({ project, setLightboxSrc, getPortalLabel }) {
               <X size={18} />
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto pt-4 space-y-6">
+          {/* Horizontal scroll track */}
+          <div className="flex-1 overflow-x-auto flex items-center gap-4 py-4 snap-x no-scrollbar">
             {rawScreenshots.map((item, idx) => {
               const src = typeof item === "string" ? item : item.src;
               const caption =
@@ -238,14 +239,14 @@ function DesignScreenshotGallery({ project, setLightboxSrc, getPortalLabel }) {
               return (
                 <div
                   key={idx}
-                  className="bg-[#111] border border-white/10 rounded-xl overflow-hidden p-2"
+                  className="shrink-0 w-[85vw] max-w-2xl bg-[#111] border border-white/10 rounded-xl overflow-hidden p-3 snap-center"
                 >
                   <img
                     src={src}
                     alt={caption}
-                    className="w-full h-auto max-h-[70vh] object-contain mx-auto rounded-lg"
+                    className="w-full h-auto max-h-[65vh] object-contain mx-auto rounded-lg"
                   />
-                  <p className="text-xs font-bold text-white text-center mt-2">{caption}</p>
+                  <p className="text-xs font-bold text-white text-center mt-2.5">{caption}</p>
                 </div>
               );
             })}
