@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useState } from "react";
 
 // Regex-based simple code highlighter
 function highlightCode(code) {
@@ -23,6 +23,8 @@ function highlightCode(code) {
 
 const TestSection = memo(function TestSection({ testData }) {
   if (!testData) return null;
+
+  const [lightboxSrc, setLightboxSrc] = useState(null);
 
   const { testCases = [], cases = [], jestSnippet, k6Snippet, codeSnippet, testingScreenshots = [] } = testData;
 
@@ -56,18 +58,54 @@ const TestSection = memo(function TestSection({ testData }) {
     ? codeSnippetText.split("\n").slice(0, 15).join("\n")
     : "";
 
+  const heroSrc = heroScreenshot
+    ? heroScreenshot.url || heroScreenshot.src || heroScreenshot
+    : null;
+
   return (
     <div className="space-y-6 select-text text-left">
+      {/* LIGHTBOX OVERLAY */}
+      {lightboxSrc && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setLightboxSrc(null)}
+        >
+          <button
+            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white text-lg transition-colors"
+            onClick={() => setLightboxSrc(null)}
+            aria-label="Close lightbox"
+          >
+            ✕
+          </button>
+          <img
+            src={lightboxSrc}
+            alt="Full screenshot"
+            className="max-w-full max-h-[90vh] rounded-xl shadow-2xl border border-white/10 object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
       {/* SECTION 1 — HERO SCREENSHOT (top) */}
       {heroScreenshot && (
         <div className="space-y-2">
-          <div className="w-full rounded-xl overflow-hidden border border-line/60 bg-[#080808]">
+          <div
+            className="w-full rounded-xl overflow-hidden border border-line/60 bg-[#080808] cursor-zoom-in group relative"
+            onClick={() => setLightboxSrc(heroSrc)}
+            title="Click to view full size"
+          >
             <img
-              src={heroScreenshot.url || heroScreenshot.src || heroScreenshot}
+              src={heroSrc}
               alt={heroScreenshot.title || "Test Verification Proof"}
-              className="w-full h-auto block"
+              className="w-full h-auto block transition-transform duration-300 group-hover:scale-[1.01]"
               loading="lazy"
             />
+            {/* Hover hint */}
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200 flex items-center justify-center">
+              <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/70 text-white text-xs font-mono px-3 py-1.5 rounded-lg border border-white/20">
+                🔍 Click to enlarge
+              </span>
+            </div>
           </div>
           <p className="text-xs font-mono font-semibold text-gold">
             {heroScreenshot.title
