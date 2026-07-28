@@ -480,7 +480,7 @@ jobs:
     },
     test: {
       testingScreenshots: [
-        { url: "/testing-screenshots/telegram-award/login.webp",              title: "OTP Login Modal",                         badge: "Auth Flow",                           category: "Authentication" },
+        { url: "/testing-screenshots/telegram-award/hero.webp",              title: "Best Sport — Voting Categories",            badge: "UI Overview",                         category: "Authentication" },
         { url: "/testing-screenshots/telegram-award/verify.webp",             title: "OTP Verification Step",                   badge: "Email OTP",                           category: "Authentication" },
         { url: "/testing-screenshots/telegram-award/catagories-grid.webp",    title: "Award Categories Grid",                  badge: "UI Overview",                         category: "Authentication" },
         { url: "/testing-screenshots/telegram-award/vote-restricted.webp",    title: "Double-Vote Prevention Alert",            badge: "⭐ UNIQUE TEST (One Vote Per User)", category: "DoS Resilience" },
@@ -688,7 +688,7 @@ export default function () {
     },
     test: {
       testingScreenshots: [
-        { url: "/testing-screenshots/todo-app/add-task.webp",           title: "New Task Creation Form",                   badge: "Task Creation",                  category: "UI Component" },
+        { url: "/testing-screenshots/todo-app/hero.webp",               title: "Todo App — Main Interface",                badge: "UI Overview",                    category: "UI Component" },
         { url: "/testing-screenshots/todo-app/todo-list.webp",          title: "Interactive Task List View",               badge: "List View",                      category: "UI Component" },
         { url: "/testing-screenshots/todo-app/desktop.webp",            title: "Full Desktop View",                        badge: "Desktop UI",                     category: "UI Component" },
         { url: "/testing-screenshots/todo-app/mobile-todo.webp",        title: "Mobile Responsive View (390px)",           badge: "Mobile UI",                      category: "UI Component" },
@@ -812,7 +812,7 @@ export default function () {
     },
     test: {
       testingScreenshots: [
-        { url: "/testing-screenshots/hr-assistant-ai/chat-response.webp",     title: "AI Chat Response Streaming",            badge: "AI Response",                 category: "Chat Interface" },
+        { url: "/testing-screenshots/hr-assistant-ai/hero.webp",              title: "HR Assistant — Main Interface",         badge: "UI Overview",                 category: "Chat Interface" },
         { url: "/testing-screenshots/hr-assistant-ai/chat-empty.webp",        title: "Empty Chat Interface",                  badge: "Chat UI",                     category: "Chat Interface" },
         { url: "/testing-screenshots/hr-assistant-ai/chat-cleared.webp",      title: "Cleared Conversation History",          badge: "Clear History",               category: "Chat Interface" },
         { url: "/testing-screenshots/hr-assistant-ai/desktop-chat.webp",    title: "Full Desktop Chat View",               badge: "Desktop UI",                  category: "Chat Interface" },
@@ -1421,7 +1421,7 @@ jobs:
     },
     test: {
       testingScreenshots: [
-        { url: "/testing-screenshots/hotel-master/email-received.webp", title: "Gmail Brevo Transactional Email Received", badge: "⭐ UNIQUE TEST (Email Proof)", category: "Notification" },
+        { url: "/testing-screenshots/hotel-master/hero.webp", title: "Hotel Master — Main Interface", badge: "UI Overview", category: "Notification" },
         { url: "/testing-screenshots/hotel-master/api-contact.webp", title: "Postman / Terminal API Contact Endpoint Test", badge: "API Verification", category: "Booking" },
         { url: "/testing-screenshots/hotel-master/desktop-full.webp", title: "Desktop Full Homepage View", badge: "Desktop View", category: "Filtering" },
         { url: "/testing-screenshots/hotel-master/mobile-hero.webp", title: "Mobile Hero Section (iPhone 12 Pro)", badge: "Mobile UI", category: "Responsive" },
