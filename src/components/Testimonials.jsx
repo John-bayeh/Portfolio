@@ -1,5 +1,5 @@
 import { m } from "framer-motion";
-import { Quote, Star } from "lucide-react";
+import { Quote } from "lucide-react";
 import testimonials from "../data/testimonials";
 
 const fadeUp = {
@@ -35,9 +35,6 @@ export default function Testimonials() {
           <h2 className="font-display text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
             WHAT PEOPLE <span className="text-gold">SAY</span>.
           </h2>
-          <p className="mt-3 max-w-xl text-sm" style={{ color: "var(--th-text-60)" }}>
-            Endorsements and feedback from colleagues, founders, and research leads.
-          </p>
         </m.div>
 
         {/* 3 Testimonial Cards Grid */}
@@ -60,15 +57,10 @@ export default function Testimonials() {
               }}
             >
               <div>
-                {/* Top row: Quote Icon + Rating Stars */}
+                {/* Top row: Quote Icon */}
                 <div className="flex items-center justify-between mb-5">
                   <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-colors duration-300">
                     <Quote size={18} />
-                  </div>
-                  <div className="flex items-center gap-1 text-gold">
-                    {[...Array(item.rating)].map((_, i) => (
-                      <Star key={i} size={14} className="fill-gold stroke-gold" />
-                    ))}
                   </div>
                 </div>
 
