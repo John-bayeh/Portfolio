@@ -97,7 +97,7 @@ const TestSection = memo(function TestSection({ testData }) {
             <img
               src={heroSrc}
               alt={heroScreenshot.title || "Test Verification Proof"}
-              className="w-full h-auto block transition-transform duration-300 group-hover:scale-[1.01]"
+              className="w-full h-auto block transition-transform duration-300 group-hover:scale-[1.01] cursor-zoom-in"
               loading="lazy"
             />
             {/* Hover hint */}
