@@ -53,7 +53,7 @@ const certificates = [
     link: "/screenshots/certificate1.webp",
   },
   {
-    name: "Software Engineering & AI Integration",
+    name: "Claude Code in Action",
     issuer: "Professional Certification",
     date: "2026",
     link: "/screenshots/certificate2.webp",
@@ -105,9 +105,49 @@ function PhotoBlob() {
 export default function About() {
   const { t } = useLanguage();
   const a = t.about;
+  const [activeCert, setActiveCert] = useState(null);
 
   return (
     <section id="about" className="px-6 py-24 sm:px-10">
+      {/* Certificate Lightbox Overlay */}
+      {activeCert && (
+        <div
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          onClick={() => setActiveCert(null)}
+        >
+          <button
+            className="fixed top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white text-lg transition-colors z-[10000]"
+            onClick={() => setActiveCert(null)}
+            aria-label="Close Certificate Preview"
+          >
+            ✕
+          </button>
+          <div
+            className="relative max-w-3xl w-full flex flex-col items-center gap-4 my-auto p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={activeCert.link}
+              alt={activeCert.name}
+              className="max-w-full max-h-[80vh] rounded-xl shadow-2xl border border-white/20 object-contain"
+            />
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <span className="text-xs font-mono font-semibold text-gold bg-black/80 px-3 py-1.5 rounded-md border border-gold/30">
+                {activeCert.name}
+              </span>
+              <a
+                href={activeCert.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono font-semibold text-white bg-gold/20 hover:bg-gold/30 px-3 py-1.5 rounded-md border border-gold/40 flex items-center gap-1.5 transition-colors"
+              >
+                Open Full Size <ExternalLink size={13} />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto max-w-6xl">
         <m.p
           initial={{ opacity: 0, y: 16 }}
@@ -217,14 +257,12 @@ export default function About() {
                 className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               >
                 {certificates.map((cert, idx) => (
-                  <m.a
+                  <m.div
                     key={idx}
                     variants={fadeUp}
-                    href={cert.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={() => setActiveCert(cert)}
                     whileHover={{ y: -4 }}
-                    className="group relative rounded-xl border p-4 transition-all duration-300 flex flex-col justify-between"
+                    className="group relative rounded-xl border p-4 transition-all duration-300 flex flex-col justify-between cursor-pointer hover:border-gold/60 select-none"
                     style={{
                       backgroundColor: 'var(--th-card)',
                       borderColor: 'var(--th-line)',
@@ -250,10 +288,10 @@ export default function About() {
                     </div>
 
                     <div className="mt-4 pt-3 border-t border-line/40 flex items-center justify-between text-xs font-semibold text-gold group-hover:underline">
-                      <span>View Certificate</span>
+                      <span>View Certificate →</span>
                       <ExternalLink size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </div>
-                  </m.a>
+                  </m.div>
                 ))}
               </m.div>
             </div>
