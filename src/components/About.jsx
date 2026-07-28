@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { m } from "framer-motion";
 import { Link } from "react-scroll";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Award, ExternalLink } from "lucide-react";
 import Marquee from "./Marquee";
 import skills from "../data/skills";
 import { useLanguage } from "../context/LanguageContext";
@@ -10,6 +10,55 @@ const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0 },
 };
+
+const containerStagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const experiences = [
+  {
+    period: "2024 — Present",
+    role: "Lead Frontend Developer",
+    company: "AskualaLink",
+    desc: "Built and led the frontend architecture of AskualaLink HR — a full-scale enterprise HR management platform serving attendance tracking, payroll automation, AI-powered recruitment, and multi-role portals.",
+    stack: ["Next.js", "Tailwind CSS", "Node.js"],
+  },
+  {
+    period: "2023 — Present",
+    role: "Freelance Frontend Developer",
+    company: "Self-employed",
+    desc: "Delivered custom web solutions for businesses across Ethiopia — hotel management systems, university clearance platforms, community voting platforms, and AI-powered tools.",
+    stack: ["React", "Vite", "Tailwind CSS"],
+  },
+  {
+    period: "2022 — 2023",
+    role: "Self-taught Developer",
+    company: "Personal Projects",
+    desc: "Built 6+ real-world projects while mastering React, Next.js, Node.js, and modern frontend development. Completed intensive self-study covering data structures, algorithms, and system design.",
+    stack: ["React", "JavaScript", "CSS3"],
+  },
+];
+
+const certificates = [
+  {
+    name: "Full-Stack Web Development",
+    issuer: "AskualaLink",
+    date: "2026",
+    link: "/screenshots/certificate1.webp",
+  },
+  {
+    name: "Software Engineering & AI Integration",
+    issuer: "Professional Certification",
+    date: "2026",
+    link: "/screenshots/certificate2.webp",
+  },
+];
 
 function PhotoBlob() {
   const [errored, setErrored] = useState(false);
@@ -71,7 +120,7 @@ export default function About() {
 
         {/* Two-column layout */}
         <div className="grid grid-cols-1 gap-14 lg:grid-cols-2">
-          {/* Left column: bio + CTA + timeline */}
+          {/* Left column: bio + CTA + experience + certificates + timeline */}
           <m.div
             variants={fadeUp}
             initial="hidden"
@@ -98,8 +147,119 @@ export default function About() {
               </m.button>
             </Link>
 
+            {/* TASK 1: EXPERIENCE SECTION */}
+            <div className="mt-14">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-xs font-mono font-bold tracking-[0.2em] text-gold uppercase">
+                  EXPERIENCE
+                </span>
+                <div className="h-px flex-1 bg-gradient-to-r from-gold/40 to-transparent" />
+              </div>
+
+              <m.div
+                variants={containerStagger}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                className="relative border-l border-gold/40 pl-6 space-y-8"
+              >
+                {experiences.map((exp, idx) => (
+                  <m.div key={idx} variants={fadeUp} className="relative group">
+                    {/* Gold dot on the timeline */}
+                    <span className="absolute -left-[31px] top-1.5 h-3.5 w-3.5 rounded-full border-2 border-gold bg-gold/20 group-hover:bg-gold transition-colors duration-300" />
+
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                      <span className="text-xs font-mono font-semibold text-gold">
+                        {exp.period}
+                      </span>
+                      <span className="text-xs font-semibold text-gold">
+                        {exp.company}
+                      </span>
+                    </div>
+
+                    <h3 className="font-display text-lg font-bold" style={{ color: 'var(--th-text)' }}>
+                      {exp.role}
+                    </h3>
+
+                    <p className="mt-2 text-xs leading-relaxed" style={{ color: 'var(--th-text-60)' }}>
+                      {exp.desc}
+                    </p>
+
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {exp.stack.map((tech, ti) => (
+                        <span
+                          key={ti}
+                          className="bg-gold/10 text-gold border border-gold/20 text-[10px] font-mono px-2 py-0.5 rounded font-medium"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </m.div>
+                ))}
+              </m.div>
+            </div>
+
+            {/* TASK 2: CERTIFICATES SECTION */}
+            <div className="mt-14">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="text-xs font-mono font-bold tracking-[0.2em] text-gold uppercase">
+                  CERTIFICATES
+                </span>
+                <div className="h-px flex-1 bg-gradient-to-r from-gold/40 to-transparent" />
+              </div>
+
+              <m.div
+                variants={containerStagger}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                {certificates.map((cert, idx) => (
+                  <m.a
+                    key={idx}
+                    variants={fadeUp}
+                    href={cert.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -4 }}
+                    className="group relative rounded-xl border p-4 transition-all duration-300 flex flex-col justify-between"
+                    style={{
+                      backgroundColor: 'var(--th-card)',
+                      borderColor: 'var(--th-line)',
+                    }}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-black transition-colors">
+                          <Award size={18} />
+                        </div>
+                        <span className="text-[10px] font-mono" style={{ color: 'var(--th-text-40)' }}>
+                          {cert.date}
+                        </span>
+                      </div>
+
+                      <h4 className="font-display text-sm font-bold leading-snug transition-colors group-hover:text-gold" style={{ color: 'var(--th-text)' }}>
+                        {cert.name}
+                      </h4>
+
+                      <p className="mt-1 text-xs font-medium text-gold">
+                        {cert.issuer}
+                      </p>
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-line/40 flex items-center justify-between text-xs font-semibold text-gold group-hover:underline">
+                      <span>View Certificate</span>
+                      <ExternalLink size={13} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </div>
+                  </m.a>
+                ))}
+              </m.div>
+            </div>
+
             {/* Process timeline */}
-            <div className="mt-12">
+            <div className="mt-14">
               <p className="mb-6 text-xs font-medium uppercase tracking-[0.25em] text-muted">
                 {a.processLabel}
               </p>
