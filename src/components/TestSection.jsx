@@ -67,11 +67,11 @@ const TestSection = memo(function TestSection({ testData }) {
       {/* LIGHTBOX OVERLAY */}
       {lightboxSrc && (
         <div
-          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto"
           onClick={() => setLightboxSrc(null)}
         >
           <button
-            className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white text-lg transition-colors"
+            className="fixed top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white text-lg transition-colors z-[10000]"
             onClick={() => setLightboxSrc(null)}
             aria-label="Close lightbox"
           >
@@ -80,7 +80,7 @@ const TestSection = memo(function TestSection({ testData }) {
           <img
             src={lightboxSrc}
             alt="Full screenshot"
-            className="max-w-full max-h-[90vh] rounded-xl shadow-2xl border border-white/10 object-contain"
+            className="w-full max-w-3xl rounded-xl shadow-2xl border border-white/10 my-8"
             onClick={(e) => e.stopPropagation()}
           />
         </div>
