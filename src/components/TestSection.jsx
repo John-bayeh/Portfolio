@@ -90,7 +90,7 @@ const TestSection = memo(function TestSection({ testData }) {
       {heroScreenshot && (
         <div className="space-y-2">
           <div
-            className="w-full rounded-xl overflow-hidden border border-line/60 bg-[#080808] cursor-zoom-in group relative"
+            className="w-full rounded-xl overflow-hidden border border-line/60 bg-transparent cursor-zoom-in group relative"
             onClick={() => setLightboxSrc(heroSrc)}
             title="Click to view full size"
           >

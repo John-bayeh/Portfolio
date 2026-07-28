@@ -122,29 +122,12 @@ export default function About() {
           >
             ✕
           </button>
-          <div
-            className="relative max-w-3xl w-full flex flex-col items-center gap-4 my-auto p-4"
+          <img
+            src={activeCert.link}
+            alt={activeCert.name}
+            className="max-w-full max-h-[90vh] rounded-xl shadow-2xl border border-white/20 object-contain my-auto"
             onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={activeCert.link}
-              alt={activeCert.name}
-              className="max-w-full max-h-[80vh] rounded-xl shadow-2xl border border-white/20 object-contain"
-            />
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <span className="text-xs font-mono font-semibold text-gold bg-black/80 px-3 py-1.5 rounded-md border border-gold/30">
-                {activeCert.name}
-              </span>
-              <a
-                href={activeCert.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs font-mono font-semibold text-white bg-gold/20 hover:bg-gold/30 px-3 py-1.5 rounded-md border border-gold/40 flex items-center gap-1.5 transition-colors"
-              >
-                Open Full Size <ExternalLink size={13} />
-              </a>
-            </div>
-          </div>
+          />
         </div>
       )}
 

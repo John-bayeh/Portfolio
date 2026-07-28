@@ -87,7 +87,7 @@ export default function CustomCursor() {
     <>
       {/* Lagging outer ring with velocity stretch */}
       <m.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999]"
+        className="pointer-events-none fixed left-0 top-0 z-[999999]"
         style={{
           x: ringX,
           y: ringY,
@@ -108,7 +108,7 @@ export default function CustomCursor() {
 
       {/* Instant gold dot */}
       <m.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] h-2 w-2 rounded-full bg-gold"
+        className="pointer-events-none fixed left-0 top-0 z-[999999] h-2 w-2 rounded-full bg-gold"
         style={{
           x: dotX,
           y: dotY,
