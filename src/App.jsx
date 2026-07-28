@@ -7,6 +7,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Projects from "./components/Projects";
+import Testimonials from "./components/Testimonials";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import CaseStudyPage from "./pages/CaseStudyPage";
@@ -93,6 +94,7 @@ function HomePage({ isDark, onToggleTheme }) {
     <main>
       <Hero isDark={isDark} onToggleTheme={onToggleTheme} />
       <Projects />
+      <Testimonials />
       <About />
       <Contact />
     </main>
