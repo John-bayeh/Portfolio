@@ -61,11 +61,11 @@ const TestSection = memo(function TestSection({ testData }) {
       {/* SECTION 1 — HERO SCREENSHOT (top) */}
       {heroScreenshot && (
         <div className="space-y-2">
-          <div className="w-full h-[200px] rounded-xl overflow-hidden border border-line/60 bg-[#080808]">
+          <div className="w-full rounded-xl overflow-hidden border border-line/60 bg-[#080808]">
             <img
               src={heroScreenshot.url || heroScreenshot.src || heroScreenshot}
               alt={heroScreenshot.title || "Test Verification Proof"}
-              className="w-full h-full object-cover object-top"
+              className="w-full h-auto block"
               loading="lazy"
             />
           </div>
