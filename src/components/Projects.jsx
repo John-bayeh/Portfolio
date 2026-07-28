@@ -218,13 +218,7 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
   }, [lightboxSrc]);
 
   const handleToggle = () => {
-    const nextState = !isExpanded;
     onToggleExpanded();
-    if (nextState) {
-      setTimeout(() => {
-        rowRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }, 150);
-    }
   };
 
   const { t } = useLanguage();
