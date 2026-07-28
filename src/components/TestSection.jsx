@@ -332,87 +332,165 @@ export default function TestSection({ testData }) {
                 </h4>
               </div>
 
-              {/* Category Test Cases Grid */}
+              {/* Category Test Cases — Swiper on mobile (< md), grid on desktop (md+) */}
               {categoryTestCases.length > 0 && (
-                <m.div
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="show"
-                  className="grid grid-cols-1 gap-3"
-                >
-                  {categoryTestCases.map((tc, idx) => (
-                    <m.div
-                      key={tc.scenario + idx}
-                      variants={itemVariants}
-                      className="bg-[var(--th-card)] border border-line/80 rounded-xl p-4 hover:border-gold/25 transition-all duration-300 shadow-md group relative overflow-hidden"
+                <>
+                  {/* Mobile Swiper (< md) */}
+                  <div className="block md:hidden">
+                    <Swiper
+                      modules={[Pagination]}
+                      slidesPerView={1.1}
+                      spaceBetween={10}
+                      className="w-full pb-1"
                     >
-                      {/* Top Row: Category tag and status badge */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold font-mono tracking-wider text-muted uppercase">
-                            {tc.category}
-                          </span>
-                        </div>
+                      {categoryTestCases.map((tc, idx) => (
+                        <SwiperSlide key={tc.scenario + idx}>
+                          <div className="bg-[var(--th-card)] border border-line/80 rounded-xl p-4 shadow-md h-full flex flex-col justify-between">
+                            {/* Top Row: Category tag and status badge */}
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+                              <span className="text-[10px] font-bold font-mono tracking-wider text-muted uppercase">
+                                {tc.category}
+                              </span>
 
-                        <div className="flex items-center gap-2">
-                          {/* Tool tag */}
-                          <span className="text-[8px] font-mono px-2 py-0.5 rounded border border-line bg-[var(--th-bg)] text-muted">
-                            {tc.tool}
-                          </span>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[8px] font-mono px-2 py-0.5 rounded border border-line bg-[var(--th-bg)] text-muted">
+                                  {tc.tool}
+                                </span>
 
-                          {/* Status Badge */}
-                          {tc.result === "pass" && (
-                            <span className="inline-flex items-center gap-1 bg-[#10b981]/10 border border-[#10b981]/25 text-[#10b981] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
-                              Pass
+                                {tc.result === "pass" && (
+                                  <span className="inline-flex items-center gap-1 bg-[#10b981]/10 border border-[#10b981]/25 text-[#10b981] text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
+                                    Pass
+                                  </span>
+                                )}
+                                {tc.result === "fixed" && (
+                                  <span className="inline-flex items-center gap-1 bg-gold/10 border border-gold/30 text-gold text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase">
+                                    <Wrench className="w-2.5 h-2.5 text-gold shrink-0" />
+                                    Fixed
+                                  </span>
+                                )}
+                                {tc.result === "fail" && (
+                                  <span className="inline-flex items-center gap-1 bg-[#ef4444]/10 border border-[#ef4444]/25 text-[#ef4444] text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase">
+                                    <AlertTriangle className="w-2.5 h-2.5 text-[#ef4444] shrink-0" />
+                                    Fail
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Scenario details */}
+                            <h5 className="text-xs font-semibold group-hover:text-gold transition-colors duration-200 mb-1" style={{ color: 'var(--th-text)' }}>
+                              {tc.scenario}
+                            </h5>
+                            <p className="text-[11px] text-muted leading-relaxed mb-2">
+                              <span className="font-bold opacity-75" style={{ color: 'var(--th-text)' }}>{lbl.expected || "Expected:"}</span> {tc.expected}
+                            </p>
+
+                            {/* Fix notes / Performance notes */}
+                            {tc.fixNote && (
+                              <div className="mt-2 p-2.5 rounded-lg bg-gold/5 border border-gold/10 text-[10px] text-[#cda84b] leading-relaxed flex items-start gap-2">
+                                <Wrench className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
+                                <div>
+                                  <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-gold">{lbl.rootCause || "Root Cause & Resolution:"}</span>
+                                  {tc.fixNote}
+                                </div>
+                              </div>
+                            )}
+
+                            {tc.note && (
+                              <div className="mt-2 p-2.5 rounded-lg bg-blue-500/5 border border-blue-500/10 text-[10px] text-blue-400/90 leading-relaxed flex items-start gap-2">
+                                <Terminal className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                                <div>
+                                  <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-blue-400">{lbl.loadMetrics || "Load Test Metrics:"}</span>
+                                  {tc.note}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </div>
+
+                  {/* Desktop Grid (md+) */}
+                  <m.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="show"
+                    className="hidden md:grid grid-cols-1 lg:grid-cols-2 gap-3"
+                  >
+                    {categoryTestCases.map((tc, idx) => (
+                      <m.div
+                        key={tc.scenario + idx}
+                        variants={itemVariants}
+                        className="bg-[var(--th-card)] border border-line/80 rounded-xl p-4 hover:border-gold/25 transition-all duration-300 shadow-md group relative overflow-hidden flex flex-col justify-between"
+                      >
+                        {/* Top Row: Category tag and status badge */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-2.5">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold font-mono tracking-wider text-muted uppercase">
+                              {tc.category}
                             </span>
-                          )}
-                          {tc.result === "fixed" && (
-                            <span className="inline-flex items-center gap-1 bg-gold/10 border border-gold/30 text-gold text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
-                              <Wrench className="w-2.5 h-2.5 text-gold shrink-0" />
-                              Fixed
-                            </span>
-                          )}
-                          {tc.result === "fail" && (
-                            <span className="inline-flex items-center gap-1 bg-[#ef4444]/10 border border-[#ef4444]/25 text-[#ef4444] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
-                              <AlertTriangle className="w-2.5 h-2.5 text-[#ef4444] shrink-0" />
-                              Fail
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                          </div>
 
-                      {/* Scenario details */}
-                      <h5 className="text-xs font-semibold group-hover:text-gold transition-colors duration-200 mb-1" style={{ color: 'var(--th-text)' }}>
-                        {tc.scenario}
-                      </h5>
-                      <p className="text-[11px] text-muted leading-relaxed mb-2">
-                        <span className="font-bold opacity-75" style={{ color: 'var(--th-text)' }}>{lbl.expected || "Expected:"}</span> {tc.expected}
-                      </p>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[8px] font-mono px-2 py-0.5 rounded border border-line bg-[var(--th-bg)] text-muted">
+                              {tc.tool}
+                            </span>
 
-                      {/* Fix notes / Performance notes */}
-                      {tc.fixNote && (
-                        <div className="mt-2.5 p-3 rounded-lg bg-gold/5 border border-gold/10 text-[10px] text-[#cda84b] leading-relaxed flex items-start gap-2">
-                          <Wrench className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
-                          <div>
-                            <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-gold">{lbl.rootCause || "Root Cause & Resolution:"}</span>
-                            {tc.fixNote}
+                            {tc.result === "pass" && (
+                              <span className="inline-flex items-center gap-1 bg-[#10b981]/10 border border-[#10b981]/25 text-[#10b981] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#10b981] animate-pulse" />
+                                Pass
+                              </span>
+                            )}
+                            {tc.result === "fixed" && (
+                              <span className="inline-flex items-center gap-1 bg-gold/10 border border-gold/30 text-gold text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
+                                <Wrench className="w-2.5 h-2.5 text-gold shrink-0" />
+                                Fixed
+                              </span>
+                            )}
+                            {tc.result === "fail" && (
+                              <span className="inline-flex items-center gap-1 bg-[#ef4444]/10 border border-[#ef4444]/25 text-[#ef4444] text-[9px] font-mono font-bold px-2.5 py-0.5 rounded-full uppercase">
+                                <AlertTriangle className="w-2.5 h-2.5 text-[#ef4444] shrink-0" />
+                                Fail
+                              </span>
+                            )}
                           </div>
                         </div>
-                      )}
 
-                      {tc.note && (
-                        <div className="mt-2.5 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10 text-[10px] text-blue-400/90 leading-relaxed flex items-start gap-2">
-                          <Terminal className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
-                          <div>
-                            <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-blue-400">{lbl.loadMetrics || "Load Test Metrics:"}</span>
-                            {tc.note}
+                        {/* Scenario details */}
+                        <h5 className="text-xs font-semibold group-hover:text-gold transition-colors duration-200 mb-1" style={{ color: 'var(--th-text)' }}>
+                          {tc.scenario}
+                        </h5>
+                        <p className="text-[11px] text-muted leading-relaxed mb-2">
+                          <span className="font-bold opacity-75" style={{ color: 'var(--th-text)' }}>{lbl.expected || "Expected:"}</span> {tc.expected}
+                        </p>
+
+                        {/* Fix notes / Performance notes */}
+                        {tc.fixNote && (
+                          <div className="mt-2.5 p-3 rounded-lg bg-gold/5 border border-gold/10 text-[10px] text-[#cda84b] leading-relaxed flex items-start gap-2">
+                            <Wrench className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
+                            <div>
+                              <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-gold">{lbl.rootCause || "Root Cause & Resolution:"}</span>
+                              {tc.fixNote}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </m.div>
-                  ))}
-                </m.div>
+                        )}
+
+                        {tc.note && (
+                          <div className="mt-2.5 p-3 rounded-lg bg-blue-500/5 border border-blue-500/10 text-[10px] text-blue-400/90 leading-relaxed flex items-start gap-2">
+                            <Terminal className="w-3.5 h-3.5 text-blue-400 shrink-0 mt-0.5" />
+                            <div>
+                              <span className="font-bold uppercase tracking-wider text-[8px] font-mono block mb-0.5 text-blue-400">{lbl.loadMetrics || "Load Test Metrics:"}</span>
+                              {tc.note}
+                            </div>
+                          </div>
+                        )}
+                      </m.div>
+                    ))}
+                  </m.div>
+                </>
               )}
 
               {/* Category Screenshots rendered right inside its category section */}
