@@ -41,6 +41,38 @@ export const translations = {
       processLabel: "My Process",
       yearsExp: "Years Experience",
       projectsShipped: "Projects Shipped",
+      experienceLabel: "Work Experience",
+      experiences: [
+        {
+          period: "Feb 2026 – Present",
+          role: "Full-Stack & AI Developer",
+          company: "Askuala Link",
+          url: "https://www.askualalink.com",
+          desc: "Building full-stack web platforms and developing AI-driven solutions and integrations.",
+        },
+        {
+          period: "2024 – Feb 2026",
+          role: "Web & Software Developer",
+          company: "Independent / Project-Based",
+          url: null,
+          desc: "Engineered and delivered custom web applications, frontend design systems, and full-stack solutions.",
+        },
+      ],
+      certificationsLabel: "Certifications",
+      certifications: [
+        {
+          title: "Full-Stack Web Development",
+          issuer: "Verified Credential",
+          badge: "View Certificate",
+          image: "/screenshots/certificate1.webp",
+        },
+        {
+          title: "Software Engineering & AI",
+          issuer: "Verified Credential",
+          badge: "View Certificate",
+          image: "/screenshots/certificate2.webp",
+        },
+      ],
       steps: [
         { n: "01", label: "SCOPE", desc: "Understand the problem & define the goal." },
         { n: "02", label: "DESIGN", desc: "Wireframe the flow and the interface." },
