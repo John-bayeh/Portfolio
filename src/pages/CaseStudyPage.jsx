@@ -582,7 +582,7 @@ export default function CaseStudyPage() {
                       {project.codeSnippet.language || "javascript"} — {project.codeSnippet.title}
                     </span>
                   </div>
-                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[300px]">
+                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed select-text max-h-[300px] code-scrollbar">
                     <code dangerouslySetInnerHTML={{ __html: highlightCode(project.codeSnippet.code) }} />
                   </pre>
                 </div>
@@ -597,7 +597,7 @@ export default function CaseStudyPage() {
                     <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
                     <span className="ml-3 text-[9px] font-mono text-[#555555]">javascript — implementation.js</span>
                   </div>
-                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[300px]">
+                  <pre className="overflow-x-auto border-l-4 border-gold bg-[#0a0a0a] p-4 font-mono text-[10px] leading-relaxed select-text max-h-[300px] code-scrollbar">
                     <code dangerouslySetInnerHTML={{ __html: highlightCode(project.stages.build.snippet) }} />
                   </pre>
                 </div>
@@ -691,8 +691,8 @@ export default function CaseStudyPage() {
             <div>
               <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-2.5 font-mono">Devices Tested</h3>
               <div className="flex flex-wrap gap-2 text-xs text-[#888888]">
-                {["MacBook Pro (Chrome/Safari)", "iPhone 15 (Mobile)", "iPad Air (Tablet)", "Windows PC (Firefox)"].map((dev, idx) => (
-                  <span key={idx} className="bg-[#151515] border border-[#222222] px-3 py-1.5 rounded-lg text-[10px] whitespace-nowrap">
+                {["MacBook (Chrome/Safari)", "iPhone 15 (Mobile)", "iPad Air (Tablet)", "Windows (Firefox)"].map((dev, idx) => (
+                  <span key={idx} className="bg-[#151515] border border-[#222222] px-3 py-1.5 rounded-lg text-[11px] whitespace-nowrap">
                     {dev}
                   </span>
                 ))}

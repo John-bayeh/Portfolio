@@ -48,9 +48,13 @@ function highlightCode(code) {
   return escaped;
 }
 
-// Category Screenshot Grid Component
+// Category Screenshot Grid/Carousel Component
 const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshots, onSelectImage }) {
+  const [current, setCurrent] = useState(0);
   if (!screenshots || screenshots.length === 0) return null;
+
+  const prev = () => setCurrent((c) => (c - 1 + screenshots.length) % screenshots.length);
+  const next = () => setCurrent((c) => (c + 1) % screenshots.length);
 
   return (
     <div className="mt-4 pt-3 border-t border-line/30">
@@ -60,7 +64,95 @@ const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshot
           Visual Testing Proof ({screenshots.length} Screenshot{screenshots.length > 1 ? "s" : ""})
         </span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+
+      {/* Mobile: carousel (< md) */}
+      <div className="block md:hidden">
+        <div className="relative">
+          {/* Counter */}
+          <span className="absolute top-2 right-2 z-10 text-[9px] font-mono font-bold text-white bg-black/60 px-2 py-0.5 rounded-full">
+            {current + 1} / {screenshots.length}
+          </span>
+
+          {/* Slide */}
+          {(() => {
+            const img = screenshots[current];
+            const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
+              `${img.url} ${img.title || ''} ${img.badge || ''}`
+            );
+            return (
+              <div
+                onClick={() => onSelectImage(img)}
+                className="group relative bg-[var(--th-card)] border border-line hover:border-gold/50 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-md"
+              >
+                <div className={`overflow-hidden bg-[var(--th-bg)] flex items-center justify-center ${isVertical ? 'aspect-[9/16] p-2' : 'aspect-video'}`}>
+                  <img
+                    src={img.url}
+                    alt={img.title || `Test Proof ${current + 1}`}
+                    width={isVertical ? 300 : 400}
+                    height={isVertical ? 533 : 225}
+                    loading="lazy"
+                    className={`w-full h-full transition-transform duration-300 ${isVertical ? 'object-contain rounded-md' : 'object-cover'}`}
+                  />
+                </div>
+                <div className="p-2.5 bg-[var(--th-card)] border-t border-line/30">
+                  <p className="text-[11px] font-bold truncate" style={{ color: 'var(--th-text)' }}>
+                    {img.title}
+                  </p>
+                  {img.badge && (
+                    <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
+                      {img.badge}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Prev / Next arrows */}
+          {screenshots.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); prev(); }}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+                aria-label="Previous screenshot"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); next(); }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+                aria-label="Next screenshot"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Dot indicators */}
+        {screenshots.length > 1 && (
+          <div className="flex items-center justify-center gap-1.5 mt-3">
+            {screenshots.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setCurrent(idx)}
+                aria-label={`Go to screenshot ${idx + 1}`}
+                className={`rounded-full transition-all duration-200 ${
+                  idx === current
+                    ? 'w-4 h-1.5 bg-gold'
+                    : 'w-1.5 h-1.5 bg-[#444]'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: grid (md+) */}
+      <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-3">
         {screenshots.map((img, idx) => {
           const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
             `${img.url} ${img.title || ''} ${img.badge || ''}`
@@ -360,7 +452,7 @@ export default function TestSection({ testData }) {
           </div>
 
           {/* Code content */}
-          <pre className="overflow-x-auto border-l-4 border-gold p-4 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[350px] bg-[var(--th-bg)]" style={{ color: 'var(--th-text)' }}>
+          <pre className="overflow-x-auto border-l-4 border-gold p-4 font-mono text-[10px] leading-relaxed select-text max-h-[350px] bg-[var(--th-bg)] code-scrollbar" style={{ color: 'var(--th-text)' }}>
             <code
               dangerouslySetInnerHTML={{
                 __html: highlightCode(
