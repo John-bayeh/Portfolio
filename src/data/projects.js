@@ -14,12 +14,8 @@ const projects = [
     screenshots: {
       thumbnail: '/screenshots/askualalink-hr/home_mobile.webp',
       design: [
-        '/screenshots/askualalink-hr/home_mobile.webp',
-        '/screenshots/askualalink-hr/mobile_1.webp',
         '/screenshots/askualalink-hr/admin-dashboard.webp',
         '/screenshots/askualalink-hr/admin-employees.webp',
-        '/screenshots/askualalink-hr/mobile_2.webp',
-        '/screenshots/askualalink-hr/mobile_3.webp',
         '/screenshots/askualalink-hr/admin-payroll.webp',
         '/screenshots/askualalink-hr/employee-dashboard.webp',
       ]
@@ -484,10 +480,8 @@ function createNewVersion(formula, changes) {
         screenshots: [
           { src: "/screenshots/Hotel_Master.webp", type: "desktop", caption: "HERO SECTION" },
           { src: "/screenshots/Hotel_Master2.webp", type: "desktop", caption: "SERVICES SHOWCASE" },
-          { src: "/screenshots/Hotel_Master3.webp", type: "desktop", caption: "AMENITIES SECTION" },
           { src: "/screenshots/Hotel_Master4.webp", type: "desktop", caption: "BOOKING FORM" },
           { src: "/screenshots/Hotel_Master5.webp", type: "desktop", caption: "CONTACT SECTION" },
-          { src: "/screenshots/image.webp", type: "desktop", caption: "MOBILE VIEW" },
         ],
       },
       build: {

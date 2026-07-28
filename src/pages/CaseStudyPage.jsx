@@ -2,6 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { m, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Github, ExternalLink, X, ChevronLeft, ChevronRight, FileText, Printer } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 import projects from "../data/projects";
 import extraProjectDetails from "../data/extraProjectDetails";
 import { ARCH_ICONS_MAP } from "../assets/icons/ArchIcons";
@@ -66,6 +70,189 @@ function CaseStudyImage({ src, alt }) {
       onError={() => setError(true)}
       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
     />
+  );
+}
+
+function DesignScreenshotGallery({ project, setLightboxSrc, getPortalLabel }) {
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [showAllModal, setShowAllModal] = useState(false);
+
+  const rawScreenshots = project.screenshots?.design
+    ? project.screenshots.design.map((src) => ({
+        src,
+        type: src.includes("mobile") || src.includes("photo") ? "mobile" : "desktop",
+        caption: getPortalLabel(src),
+      }))
+    : project.screenshots || [];
+
+  if (!rawScreenshots || rawScreenshots.length === 0) {
+    return (
+      <div className="border border-[#222222] rounded-xl overflow-hidden bg-[#0d0d0d] flex items-center justify-center p-8 text-center text-xs text-[#555555] aspect-video">
+        No preview screenshots configured for this design.
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {/* Mobile: Swiper Carousel (< md) */}
+      <div className="block md:hidden">
+        <div className="relative rounded-xl overflow-hidden border border-[#222222] bg-[#0a0a0a] shadow-md">
+          {/* Counter top right */}
+          <span className="absolute top-2.5 right-2.5 z-20 text-[9px] font-mono font-bold text-white bg-black/75 px-2.5 py-0.5 rounded-full border border-white/10">
+            {activeSlide + 1} / {rawScreenshots.length}
+          </span>
+
+          <Swiper
+            modules={[Pagination]}
+            slidesPerView={1}
+            spaceBetween={12}
+            onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
+            className="w-full"
+          >
+            {rawScreenshots.map((item, idx) => {
+              const src = typeof item === "string" ? item : item.src;
+              const isMobile =
+                typeof item === "string"
+                  ? src.includes("mobile") || src.includes("photo")
+                  : item.type === "mobile";
+              const caption =
+                typeof item === "string" ? getPortalLabel(src) : item.caption || getPortalLabel(src);
+
+              return (
+                <SwiperSlide key={idx}>
+                  <div
+                    onClick={() => setLightboxSrc(src)}
+                    className="cursor-pointer flex flex-col h-full"
+                  >
+                    <div
+                      className={`overflow-hidden bg-[#080808] flex items-center justify-center ${
+                        isMobile ? "aspect-[3/4.5]" : "aspect-video"
+                      }`}
+                    >
+                      <CaseStudyImage
+                        src={src}
+                        alt={`${project.name} design screenshot ${idx + 1}`}
+                      />
+                    </div>
+                    <div className="p-2.5 bg-[#0a0a0a] border-t border-[#222222]/60">
+                      <span className="text-[10px] tracking-wider text-muted font-semibold uppercase text-[#aaaaaa]">
+                        {caption}
+                      </span>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+
+          {/* Dots Indicator */}
+          {rawScreenshots.length > 1 && (
+            <div className="flex items-center justify-center gap-1.5 py-2 bg-[#0a0a0a] border-t border-[#222222]/40">
+              {rawScreenshots.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`rounded-full transition-all duration-200 ${
+                    idx === activeSlide
+                      ? "w-4 h-1.5 bg-gold"
+                      : "w-1.5 h-1.5 bg-[#444444]"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* View All Screenshots Button */}
+        {rawScreenshots.length > 1 && (
+          <div className="mt-3 text-center">
+            <button
+              type="button"
+              onClick={() => setShowAllModal(true)}
+              className="inline-flex items-center gap-1.5 border border-gold/40 text-gold hover:bg-gold/10 px-3.5 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition-colors"
+            >
+              View all {rawScreenshots.length} screenshots →
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop: Grid (md+) */}
+      <div className="hidden md:grid grid-cols-2 gap-4">
+        {rawScreenshots.map((item, idx) => {
+          const src = typeof item === "string" ? item : item.src;
+          const isMobile =
+            typeof item === "string"
+              ? src.includes("mobile") || src.includes("photo")
+              : item.type === "mobile";
+          const caption =
+            typeof item === "string" ? getPortalLabel(src) : item.caption || getPortalLabel(src);
+
+          return (
+            <div key={idx} className="group flex flex-col gap-1.5">
+              <div
+                onClick={() => setLightboxSrc(src)}
+                className={`relative border border-[#222222] rounded-xl overflow-hidden bg-[#0a0a0a] cursor-zoom-in group-hover:border-gold/40 transition-all duration-300 shadow-md ${
+                  isMobile ? "aspect-[3/4.5]" : "aspect-video"
+                }`}
+              >
+                <CaseStudyImage
+                  src={src}
+                  alt={`${project.name} design screenshot ${idx + 1}`}
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/75 px-3 py-1 rounded-full border border-white/5">
+                    Expand View
+                  </span>
+                </div>
+              </div>
+              <span className="text-[10px] tracking-wider text-muted font-semibold uppercase text-[#555555]">
+                {caption}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Fullscreen All Screenshots Modal */}
+      {showAllModal && (
+        <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col p-4 sm:p-6">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+            <span className="text-xs font-mono font-bold text-gold uppercase tracking-wider">
+              {project.name} — All Screenshots ({rawScreenshots.length})
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowAllModal(false)}
+              className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto pt-4 space-y-6">
+            {rawScreenshots.map((item, idx) => {
+              const src = typeof item === "string" ? item : item.src;
+              const caption =
+                typeof item === "string" ? getPortalLabel(src) : item.caption || getPortalLabel(src);
+
+              return (
+                <div
+                  key={idx}
+                  className="bg-[#111] border border-white/10 rounded-xl overflow-hidden p-2"
+                >
+                  <img
+                    src={src}
+                    alt={caption}
+                    className="w-full h-auto max-h-[70vh] object-contain mx-auto rounded-lg"
+                  />
+                  <p className="text-xs font-bold text-white text-center mt-2">{caption}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -404,48 +591,17 @@ export default function CaseStudyPage() {
               {project.stages.design.summary}
             </p>
 
-            {/* Screenshots Grid */}
+            {/* Screenshots Section */}
             <div className="mb-8">
               <h3 className="text-xs font-semibold tracking-wider text-gold uppercase mb-4 font-mono">System Interfaces</h3>
-              {(project.screenshots?.length > 0 || project.screenshots?.design?.length > 0) ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {(project.screenshots?.design
-                    ? project.screenshots.design.map(src => ({ src, type: src.includes('mobile') || src.includes('photo') ? 'mobile' : 'desktop', caption: '' }))
-                    : project.screenshots
-                  ).map((item, idx) => {
-                    const src     = typeof item === 'string' ? item : item.src;
-                    const isMobile = (typeof item === 'string')
-                      ? (src.includes('mobile') || src.includes('photo'))
-                      : item.type === 'mobile';
-                    const caption = typeof item === 'string' ? getPortalLabel(src) : (item.caption || getPortalLabel(src));
-                    return (
-                      <div key={idx} className="group flex flex-col gap-1.5">
-                        <div
-                          onClick={() => setLightboxSrc(src)}
-                          className={`relative border border-[#222222] rounded-xl overflow-hidden bg-[#0a0a0a] cursor-zoom-in group-hover:border-gold/40 transition-all duration-300 shadow-md ${
-                            isMobile ? 'aspect-[3/4.5]' : 'aspect-video'
-                          }`}
-                        >
-                          <CaseStudyImage src={src} alt={`${project.name} design screenshot ${idx + 1}`} />
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
-                            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white text-[10px] font-semibold bg-black/75 px-3 py-1 rounded-full border border-white/5">
-                              Expand View
-                            </span>
-                          </div>
-                        </div>
-                        <span className="text-[10px] tracking-wider text-muted font-semibold uppercase text-[#555555]">
-                          {caption}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="border border-[#222222] rounded-xl overflow-hidden bg-[#0d0d0d] flex items-center justify-center p-8 text-center text-xs text-[#555555] aspect-video">
-                  No preview screenshots configured for this design.
-                </div>
-              )}
+              <DesignScreenshotGallery
+                project={project}
+                setLightboxSrc={setLightboxSrc}
+                getPortalLabel={getPortalLabel}
+              />
             </div>
+
+
 
             {/* Colors and Components */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#222222]/40">

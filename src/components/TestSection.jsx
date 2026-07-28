@@ -1,6 +1,10 @@
 import { useState, memo } from "react";
 import { m, AnimatePresence } from "framer-motion";
-import { Play, Cpu, ShieldAlert, CheckCircle2, AlertTriangle, Wrench, HelpCircle, Terminal, FileCode, Image as ImageIcon } from "lucide-react";
+import { Play, Cpu, ShieldAlert, CheckCircle2, AlertTriangle, Wrench, HelpCircle, Terminal, FileCode, Image as ImageIcon, X } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
 import { useLanguage } from "../context/LanguageContext";
 
 // Stagger variants
@@ -50,11 +54,9 @@ function highlightCode(code) {
 
 // Category Screenshot Grid/Carousel Component
 const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshots, onSelectImage }) {
-  const [current, setCurrent] = useState(0);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [showAllModal, setShowAllModal] = useState(false);
   if (!screenshots || screenshots.length === 0) return null;
-
-  const prev = () => setCurrent((c) => (c - 1 + screenshots.length) % screenshots.length);
-  const next = () => setCurrent((c) => (c + 1) % screenshots.length);
 
   return (
     <div className="mt-4 pt-3 border-t border-line/30">
@@ -65,93 +67,89 @@ const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshot
         </span>
       </div>
 
-      {/* Mobile: carousel (< md) */}
+      {/* Mobile: Swiper Carousel (< md) */}
       <div className="block md:hidden">
-        <div className="relative">
-          {/* Counter */}
-          <span className="absolute top-2 right-2 z-10 text-[9px] font-mono font-bold text-white bg-black/60 px-2 py-0.5 rounded-full">
-            {current + 1} / {screenshots.length}
+        <div className="relative rounded-xl overflow-hidden border border-line bg-[var(--th-card)] shadow-md">
+          {/* Counter top right */}
+          <span className="absolute top-2.5 right-2.5 z-20 text-[9px] font-mono font-bold text-white bg-black/75 px-2.5 py-0.5 rounded-full border border-white/10">
+            {activeSlide + 1} / {screenshots.length}
           </span>
 
-          {/* Slide */}
-          {(() => {
-            const img = screenshots[current];
-            const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
-              `${img.url} ${img.title || ''} ${img.badge || ''}`
-            );
-            return (
-              <div
-                onClick={() => onSelectImage(img)}
-                className="group relative bg-[var(--th-card)] border border-line hover:border-gold/50 rounded-xl overflow-hidden cursor-pointer transition-all duration-300 shadow-md"
-              >
-                <div className={`overflow-hidden bg-[var(--th-bg)] flex items-center justify-center ${isVertical ? 'aspect-[9/16] p-2' : 'aspect-video'}`}>
-                  <img
-                    src={img.url}
-                    alt={img.title || `Test Proof ${current + 1}`}
-                    width={isVertical ? 300 : 400}
-                    height={isVertical ? 533 : 225}
-                    loading="lazy"
-                    className={`w-full h-full transition-transform duration-300 ${isVertical ? 'object-contain rounded-md' : 'object-cover'}`}
-                  />
-                </div>
-                <div className="p-2.5 bg-[var(--th-card)] border-t border-line/30">
-                  <p className="text-[11px] font-bold truncate" style={{ color: 'var(--th-text)' }}>
-                    {img.title}
-                  </p>
-                  {img.badge && (
-                    <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
-                      {img.badge}
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })()}
+          <Swiper
+            modules={[Pagination]}
+            slidesPerView={1}
+            spaceBetween={12}
+            onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
+            className="w-full"
+          >
+            {screenshots.map((img, idx) => {
+              const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
+                `${img.url} ${img.title || ''} ${img.badge || ''}`
+              );
+              return (
+                <SwiperSlide key={idx}>
+                  <div
+                    onClick={() => onSelectImage(img)}
+                    className="cursor-pointer flex flex-col h-full"
+                  >
+                    <div className={`overflow-hidden bg-[var(--th-bg)] flex items-center justify-center ${isVertical ? 'aspect-[9/16] p-2' : 'aspect-video'}`}>
+                      <img
+                        src={img.url}
+                        alt={img.title || `Test Proof ${idx + 1}`}
+                        width={isVertical ? 300 : 400}
+                        height={isVertical ? 533 : 225}
+                        loading="lazy"
+                        className={`w-full h-full object-contain ${isVertical ? 'rounded-md' : 'object-cover'}`}
+                      />
+                    </div>
+                    <div className="p-2.5 bg-[var(--th-card)] border-t border-line/30">
+                      <p className="text-[11px] font-bold truncate" style={{ color: 'var(--th-text)' }}>
+                        {img.title}
+                      </p>
+                      {img.badge && (
+                        <span className="inline-block text-[8px] font-mono font-bold uppercase tracking-wider text-gold bg-gold/10 px-1.5 py-0.5 rounded border border-gold/20 mt-1">
+                          {img.badge}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
 
-          {/* Prev / Next arrows */}
+          {/* Dots Indicator */}
           {screenshots.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); prev(); }}
-                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
-                aria-label="Previous screenshot"
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-              </button>
-              <button
-                type="button"
-                onClick={(e) => { e.stopPropagation(); next(); }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
-                aria-label="Next screenshot"
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-              </button>
-            </>
+            <div className="flex items-center justify-center gap-1.5 py-2 bg-[var(--th-card)] border-t border-line/20">
+              {screenshots.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`rounded-full transition-all duration-200 ${
+                    idx === activeSlide
+                      ? 'w-4 h-1.5 bg-gold'
+                      : 'w-1.5 h-1.5 bg-[#444]'
+                  }`}
+                />
+              ))}
+            </div>
           )}
         </div>
 
-        {/* Dot indicators */}
+        {/* View All Screenshots Button */}
         {screenshots.length > 1 && (
-          <div className="flex items-center justify-center gap-1.5 mt-3">
-            {screenshots.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setCurrent(idx)}
-                aria-label={`Go to screenshot ${idx + 1}`}
-                className={`rounded-full transition-all duration-200 ${
-                  idx === current
-                    ? 'w-4 h-1.5 bg-gold'
-                    : 'w-1.5 h-1.5 bg-[#444]'
-                }`}
-              />
-            ))}
+          <div className="mt-3 text-center">
+            <button
+              type="button"
+              onClick={() => setShowAllModal(true)}
+              className="inline-flex items-center gap-1.5 border border-gold/40 text-gold hover:bg-gold/10 px-3.5 py-1.5 rounded-lg text-[10px] font-mono font-bold tracking-wider uppercase transition-colors"
+            >
+              View all {screenshots.length} screenshots →
+            </button>
           </div>
         )}
       </div>
 
-      {/* Desktop: grid (md+) */}
+      {/* Desktop: Grid (md+) */}
       <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-3">
         {screenshots.map((img, idx) => {
           const isVertical = /mobile|iphone|tablet|390px|vertical|portrait/i.test(
@@ -187,6 +185,32 @@ const CategoryScreenshotGrid = memo(function CategoryScreenshotGrid({ screenshot
           );
         })}
       </div>
+
+      {/* Fullscreen All Screenshots Modal */}
+      {showAllModal && (
+        <div className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-md flex flex-col p-4 sm:p-6">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+            <span className="text-xs font-mono font-bold text-gold uppercase tracking-wider">
+              All Screenshots ({screenshots.length})
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowAllModal(false)}
+              className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto pt-4 space-y-6">
+            {screenshots.map((img, idx) => (
+              <div key={idx} className="bg-[#111] border border-white/10 rounded-xl overflow-hidden p-2">
+                <img src={img.url} alt={img.title} className="w-full h-auto max-h-[70vh] object-contain mx-auto rounded-lg" />
+                <p className="text-xs font-bold text-white text-center mt-2">{img.title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 });
