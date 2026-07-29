@@ -350,6 +350,30 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
               </div>
             )}
           </div>
+          {/* Expand chevron — rotates 180° when open */}
+          <div
+            className="shrink-0 ml-2 flex items-center justify-center w-8 h-8 rounded-full border transition-all duration-300"
+            style={{
+              borderColor: isExpanded ? 'var(--color-gold, #C9A84C)' : 'var(--th-line)',
+              backgroundColor: isExpanded ? 'rgba(201,168,76,0.1)' : 'transparent',
+              color: isExpanded ? 'var(--color-gold, #C9A84C)' : 'var(--th-text-40)',
+            }}
+          >
+            <m.svg
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              width={16}
+              height={16}
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 6l4 4 4-4" />
+            </m.svg>
+          </div>
         </div>
       </div>
 
