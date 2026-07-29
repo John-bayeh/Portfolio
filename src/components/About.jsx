@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { m } from "framer-motion";
 import { Link } from "react-scroll";
 import { ArrowUpRight, Award, ExternalLink } from "lucide-react";
@@ -107,16 +107,26 @@ export default function About() {
   const a = t.about;
   const [activeCert, setActiveCert] = useState(null);
 
+  // Preload certificate images so they display instantly on click
+  useEffect(() => {
+    certificates.forEach((cert) => {
+      const img = new Image();
+      img.src = cert.link;
+    });
+  }, []);
+
   return (
     <section id="about" className="px-6 py-24 sm:px-10">
       {/* Certificate Lightbox Overlay */}
       {activeCert && (
         <div
-          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
+          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto backdrop-blur-md"
+          style={{ backgroundColor: 'color-mix(in srgb, var(--th-bg) 94%, transparent)' }}
           onClick={() => setActiveCert(null)}
         >
           <button
-            className="fixed top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white text-lg transition-colors z-[10000]"
+            className="fixed top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center text-lg transition-colors z-[10000] border border-gold/40 text-gold hover:bg-gold hover:text-black"
+            style={{ backgroundColor: 'var(--th-card)' }}
             onClick={() => setActiveCert(null)}
             aria-label="Close Certificate Preview"
           >
@@ -125,7 +135,9 @@ export default function About() {
           <img
             src={activeCert.link}
             alt={activeCert.name}
-            className="max-w-full max-h-[90vh] rounded-xl shadow-2xl border border-white/20 object-contain my-auto"
+            loading="eager"
+            className="max-w-full max-h-[90vh] rounded-xl shadow-2xl object-contain my-auto"
+            style={{ border: '1px solid rgba(201,168,76,0.25)' }}
             onClick={(e) => e.stopPropagation()}
           />
         </div>
