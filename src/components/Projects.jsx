@@ -567,137 +567,124 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
 
                   {/* BUILD TAB */}
                   {activeTab === "BUILD" && (
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       {stages.build?.summary && (
                         <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
                           {stages.build.summary}
                         </m.p>
                       )}
 
-                      <TabContentSwiper
-                        slides={[
-                          ...(extra.build?.architectureDiagram
-                            ? [
-                                {
-                                  label: "🏗️ ARCHITECTURE",
-                                  content: (
-                                    <div>
-                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-3">{lbl.archDiagram || "Architecture Diagram"}</h4>
-                                      <div className="bg-[var(--th-bg)] border border-line/40 rounded-xl p-4 flex flex-col items-center gap-0 overflow-x-auto">
-                                        {extra.build.architectureDiagram.map((node, idx, arr) => (
-                                          <div key={idx} className="flex flex-col items-center w-full max-w-xs">
-                                            {!node.services && (
-                                              <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border w-full justify-center ${
-                                                node.primary ? "bg-gold/10 border-gold/40" : "bg-[var(--th-card)] border-line/40"
-                                              }`}>
-                                                {node.iconKey && <ArchIcon iconKey={node.iconKey} size={18} />}
-                                                <div className="text-center">
-                                                  <div className="font-mono font-bold text-[10px]" style={{ color: node.primary ? 'var(--color-role, #C9A84C)' : 'var(--th-text)' }}>
-                                                    {node.label}
-                                                  </div>
-                                                  {node.sub && (
-                                                    <div className="text-[8px] mt-0.5 font-mono" style={{ color: 'var(--th-text-60)' }}>{node.sub}</div>
-                                                  )}
-                                                </div>
-                                              </div>
-                                            )}
-                                            {!node.services && idx < arr.length - 1 && !arr[idx + 1]?.services && (
-                                              <div className="flex flex-col items-center my-1">
-                                                <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
-                                                <svg width="7" height="5" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" /></svg>
-                                              </div>
-                                            )}
-                                            {node.services && (
-                                              <div className="flex flex-col items-center w-full">
-                                                <div className="flex flex-col items-center my-1">
-                                                  <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
-                                                  <svg width="7" height="5" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" /></svg>
-                                                </div>
-                                                <div className="flex flex-wrap justify-center gap-1.5 w-full">
-                                                  {node.services.map((svc, si) => (
-                                                    <div key={si} className="flex items-center gap-1.5 bg-[var(--th-card)] border border-line/40 rounded-lg px-2.5 py-1.5 flex-1 min-w-[90px]">
-                                                      {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={15} />}
-                                                      <div>
-                                                        <div className="text-[9px] font-mono font-semibold" style={{ color: 'var(--th-text)' }}>{svc.label}</div>
-                                                        <div className="text-[7px] font-mono" style={{ color: 'var(--th-text-60)' }}>{svc.sub}</div>
-                                                      </div>
-                                                    </div>
-                                                  ))}
-                                                </div>
-                                              </div>
-                                            )}
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  ),
-                                },
-                              ]
-                            : []),
-                          ...(codeSnippet || stages.build?.snippet
-                            ? [
-                                {
-                                  label: "💻 CODE SNIPPET",
-                                  content: (
-                                    <div className="space-y-2">
-                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono">
-                                        {codeSnippet ? codeSnippet.title : (lbl.implSnippet || "Implementation Snippet")}
-                                      </h4>
-                                      <div className="rounded-lg border border-line/40 overflow-hidden">
-                                        <div className="flex items-center justify-between bg-[var(--th-bg)] border-b border-line/30 px-3 py-2">
-                                          <div className="flex items-center gap-1.5">
-                                            <span className="w-2 h-2 rounded-full bg-[#FF5F56]" />
-                                            <span className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
-                                            <span className="w-2 h-2 rounded-full bg-[#27C93F]" />
-                                            <span className="ml-2 text-[8px] font-mono text-muted">
-                                              {codeSnippet ? (codeSnippet.language || "javascript") : "javascript"}
-                                            </span>
-                                          </div>
-                                          <span className="text-[7px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">
-                                            {codeSnippet ? (codeSnippet.language || "js") : "js"}
-                                          </span>
+                      {/* 1. Architecture Diagram & Code Snippet Grid */}
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        {/* Architecture Diagram */}
+                        {extra.build?.architectureDiagram && (
+                          <m.div variants={tabItemVariants} className="space-y-2">
+                            <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">
+                              {lbl.archDiagram || "Architecture Diagram"}
+                            </h4>
+                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-xl p-4 flex flex-col items-center gap-0 overflow-x-auto min-h-[220px] justify-center">
+                              {extra.build.architectureDiagram.map((node, idx, arr) => (
+                                <div key={idx} className="flex flex-col items-center w-full max-w-xs">
+                                  {!node.services && (
+                                    <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border w-full justify-center ${
+                                      node.primary ? "bg-gold/10 border-gold/40" : "bg-[var(--th-card)] border-line/40"
+                                    }`}>
+                                      {node.iconKey && <ArchIcon iconKey={node.iconKey} size={18} />}
+                                      <div className="text-center">
+                                        <div className="font-mono font-bold text-[10px]" style={{ color: node.primary ? 'var(--color-role, #C9A84C)' : 'var(--th-text)' }}>
+                                          {node.label}
                                         </div>
-                                        <pre className="overflow-x-auto border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed select-text max-h-[220px] code-scrollbar" style={{ color: 'var(--th-text)' }}>
-                                          <code dangerouslySetInnerHTML={{ __html: highlightCode(codeSnippet ? codeSnippet.code : stages.build.snippet) }} />
-                                        </pre>
+                                        {node.sub && (
+                                          <div className="text-[8px] mt-0.5 font-mono" style={{ color: 'var(--th-text-60)' }}>{node.sub}</div>
+                                        )}
                                       </div>
                                     </div>
-                                  ),
-                                },
-                              ]
-                            : []),
-                          ...(extra.build?.techDecisions && extra.build.techDecisions.length > 0
-                            ? [
-                                {
-                                  label: "⚡ TECH DECISIONS",
-                                  content: (
-                                    <div className="space-y-2">
-                                      <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono mb-2">{lbl.techDecisions || "Key Technical Decisions"}</h4>
-                                      <div className="space-y-1.5">
-                                        {extra.build.techDecisions.map((decision, idx) => (
-                                          <div key={idx} className="flex items-start gap-2.5 bg-[var(--th-bg)] border border-line/30 hover:border-gold/20 rounded-lg px-3 py-2">
-                                            <div className="w-4 h-4 rounded bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
-                                              <span className="text-gold text-[7px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
+                                  )}
+                                  {!node.services && idx < arr.length - 1 && !arr[idx + 1]?.services && (
+                                    <div className="flex flex-col items-center my-1">
+                                      <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
+                                      <svg width="7" height="5" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" /></svg>
+                                    </div>
+                                  )}
+                                  {node.services && (
+                                    <div className="flex flex-col items-center w-full">
+                                      <div className="flex flex-col items-center my-1">
+                                        <div className="w-px h-3 bg-line" style={{ backgroundColor: 'var(--th-line)' }} />
+                                        <svg width="7" height="5" viewBox="0 0 8 6" fill="none"><path d="M4 6L0 0H8L4 6Z" fill="var(--th-muted)" /></svg>
+                                      </div>
+                                      <div className="flex flex-wrap justify-center gap-1.5 w-full">
+                                        {node.services.map((svc, si) => (
+                                          <div key={si} className="flex items-center gap-1.5 bg-[var(--th-card)] border border-line/40 rounded-lg px-2.5 py-1.5 flex-1 min-w-[90px]">
+                                            {svc.iconKey && <ArchIcon iconKey={svc.iconKey} size={15} />}
+                                            <div>
+                                              <div className="text-[9px] font-mono font-semibold" style={{ color: 'var(--th-text)' }}>{svc.label}</div>
+                                              <div className="text-[7px] font-mono" style={{ color: 'var(--th-text-60)' }}>{svc.sub}</div>
                                             </div>
-                                            <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                                              <span className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{decision.choice}</span>
-                                              <span className="text-[9px] text-muted leading-relaxed">{decision.reason}</span>
-                                            </div>
-                                            {decision.badge && (
-                                              <span className="ml-auto shrink-0 text-[7px] font-mono font-semibold px-1.5 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
-                                                {decision.badge}
-                                              </span>
-                                            )}
                                           </div>
                                         ))}
                                       </div>
                                     </div>
-                                  ),
-                                },
-                              ]
-                            : []),
-                        ]}
-                      />
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          </m.div>
+                        )}
+
+                        {/* Code Snippet */}
+                        {(codeSnippet || stages.build?.snippet) && (
+                          <m.div variants={tabItemVariants} className="space-y-2">
+                            <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono mb-2">
+                              {codeSnippet ? codeSnippet.title : (lbl.implSnippet || "Implementation Snippet")}
+                            </h4>
+                            <div className="rounded-xl border border-line/40 overflow-hidden">
+                              <div className="flex items-center justify-between bg-[var(--th-bg)] border-b border-line/30 px-3 py-2">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-2 h-2 rounded-full bg-[#FF5F56]" />
+                                  <span className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
+                                  <span className="w-2 h-2 rounded-full bg-[#27C93F]" />
+                                  <span className="ml-2 text-[8px] font-mono text-muted">
+                                    {codeSnippet ? (codeSnippet.language || "javascript") : "javascript"}
+                                  </span>
+                                </div>
+                                <span className="text-[7px] font-mono text-gold bg-gold/10 px-2 py-0.5 rounded border border-gold/20">
+                                  {codeSnippet ? (codeSnippet.language || "js") : "js"}
+                                </span>
+                              </div>
+                              <pre className="overflow-x-auto border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed select-text max-h-[220px] code-scrollbar" style={{ color: 'var(--th-text)' }}>
+                                <code dangerouslySetInnerHTML={{ __html: highlightCode(codeSnippet ? codeSnippet.code : stages.build.snippet) }} />
+                              </pre>
+                            </div>
+                          </m.div>
+                        )}
+                      </div>
+
+                      {/* 2. Key Technical Decisions */}
+                      {extra.build?.techDecisions && extra.build.techDecisions.length > 0 && (
+                        <m.div variants={tabItemVariants} className="space-y-2 pt-2 border-t border-line/30">
+                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase font-mono mb-2">
+                            {lbl.techDecisions || "Key Technical Decisions"}
+                          </h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {extra.build.techDecisions.map((decision, idx) => (
+                              <div key={idx} className="flex items-start gap-2.5 bg-[var(--th-bg)] border border-line/30 hover:border-gold/20 rounded-lg px-3 py-2">
+                                <div className="w-4 h-4 rounded bg-gold/10 border border-gold/20 flex items-center justify-center shrink-0 mt-0.5">
+                                  <span className="text-gold text-[7px] font-bold font-mono">{String(idx + 1).padStart(2, "0")}</span>
+                                </div>
+                                <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                                  <span className="text-[10px] font-semibold" style={{ color: 'var(--th-text)' }}>{decision.choice}</span>
+                                  <span className="text-[9px] text-muted leading-relaxed">{decision.reason}</span>
+                                </div>
+                                {decision.badge && (
+                                  <span className="ml-auto shrink-0 text-[7px] font-mono font-semibold px-1.5 py-0.5 rounded border border-gold/20 text-gold/70 bg-gold/5 uppercase tracking-wider self-start">
+                                    {decision.badge}
+                                  </span>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </m.div>
+                      )}
                     </div>
                   )}
 
