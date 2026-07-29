@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { LazyMotion, domAnimation } from "framer-motion";
 import { LanguageProvider } from "./context/LanguageContext";
@@ -7,10 +7,12 @@ import ScrollProgress from "./components/ScrollProgress";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Projects from "./components/Projects";
-import Testimonials from "./components/Testimonials";
-import About from "./components/About";
-import Contact from "./components/Contact";
 import CaseStudyPage from "./pages/CaseStudyPage";
+
+// Code-split below-the-fold sections for maximum initial page load speed
+const Testimonials = lazy(() => import("./components/Testimonials"));
+const About = lazy(() => import("./components/About"));
+const Contact = lazy(() => import("./components/Contact"));
 
 
 // Theme palettes — applied as CSS custom properties on the root element
@@ -94,9 +96,11 @@ function HomePage({ isDark, onToggleTheme }) {
     <main>
       <Hero isDark={isDark} onToggleTheme={onToggleTheme} />
       <Projects />
-      <Testimonials />
-      <About />
-      <Contact />
+      <Suspense fallback={<div className="py-12 text-center text-xs text-gold/40">Loading...</div>}>
+        <Testimonials />
+        <About />
+        <Contact />
+      </Suspense>
     </main>
   );
 }

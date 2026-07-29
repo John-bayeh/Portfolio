@@ -238,7 +238,6 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
     { id: "DESIGN", name: tabLabels.design || "DESIGN" },
     { id: "BUILD", name: tabLabels.build || "BUILD" },
     { id: "TEST", name: tabLabels.test || "TEST" },
-    { id: "SHIP", name: tabLabels.ship || "SHIP" },
   ];
 
   return (
@@ -400,16 +399,16 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
               </button>
 
               {/* Navigation Tabs */}
-              <div className="flex border-b border-line gap-5 mb-5 pb-2 overflow-x-auto no-scrollbar max-w-[calc(100%-24px)]">
+              <div className="flex border-b border-line gap-1.5 sm:gap-5 mb-5 pb-2 overflow-x-auto no-scrollbar w-full max-w-full">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`text-[10px] sm:text-xs font-semibold tracking-wider pb-1 transition-all border-b-2 ${
+                    className={`text-[11px] sm:text-xs font-semibold tracking-wider px-2 sm:px-3 pb-1.5 transition-all border-b-2 shrink-0 ${
                       activeTab === tab.id
                         ? "border-gold text-gold"
-                        : "border-transparent text-[#555555] hover:text-[#888]"
+                        : "border-transparent text-[var(--th-text-60)] hover:text-gold/80"
                     }`}
                   >
                     {tab.name}
@@ -712,90 +711,6 @@ const ProjectRow = memo(function ProjectRow({ project, isExpanded, onToggleExpan
                       )}
                       <m.div variants={tabItemVariants}>
                         <TestSection testData={extra.test} />
-                      </m.div>
-                    </div>
-                  )}
-
-                  {/* SHIP TAB — Includes Lighthouse Scores & 1-line Tested Devices */}
-                  {activeTab === "SHIP" && (
-                    <div className="space-y-4">
-                      {stages.ship?.summary && (
-                        <m.p variants={tabItemVariants} className="text-xs text-muted mb-2">
-                          {stages.ship.summary}
-                        </m.p>
-                      )}
-
-                      {/* 1-Line Tested Devices & Browsers */}
-                      <m.div variants={tabItemVariants} className="p-3 bg-[var(--th-bg)] border border-line/40 rounded-lg text-xs font-mono text-[var(--th-text-60)]">
-                        <span className="text-gold font-bold">Tested on Desktop, Tablet, Mobile — Chrome, Firefox, Edge</span>
-                      </m.div>
-
-                      {/* Lighthouse Scores */}
-                      {extra.ship?.lighthouse && (
-                        <m.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.lighthouseMetrics || "Lighthouse Audit Metrics"}</h4>
-                          <div className="flex flex-wrap gap-4">
-                            <LighthouseCircle label="Performance" score={extra.ship.lighthouse.performance} />
-                            <LighthouseCircle label="Accessibility" score={extra.ship.lighthouse.accessibility} />
-                            <LighthouseCircle label="Best Practices" score={extra.ship.lighthouse.bestPractices} />
-                            <LighthouseCircle label="SEO" score={extra.ship.lighthouse.seo} />
-                          </div>
-                        </m.div>
-                      )}
-
-                      {extra.ship?.deploymentStack && (
-                        <m.div variants={tabItemVariants}>
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase mb-2">{lbl.deployEnv || "Deployment Environment"}</h4>
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.frontend || "Frontend"}</div>
-                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.frontend}</div>
-                            </div>
-                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.backend || "Backend"}</div>
-                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.backend}</div>
-                            </div>
-                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.database || "Database"}</div>
-                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.database}</div>
-                            </div>
-                            <div className="bg-[var(--th-bg)] border border-line/40 rounded-lg p-2.5">
-                              <div className="text-[8px] text-muted uppercase tracking-wider mb-0.5">{lbl.infraHost || "Infrastructure Host"}</div>
-                              <div className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>{extra.ship.deploymentStack.host}</div>
-                            </div>
-                          </div>
-                        </m.div>
-                      )}
-
-                      {extra.ship?.deployConfig && (
-                        <m.div variants={tabItemVariants} className="space-y-1">
-                          <h4 className="text-[10px] font-semibold tracking-widest text-gold uppercase">{lbl.deployPipeline || "Deployment Pipeline Configuration"}</h4>
-                          <pre className="overflow-x-auto rounded-lg border-l-4 border-gold bg-[var(--th-bg)] p-3.5 font-mono text-[10px] leading-relaxed no-scrollbar select-text max-h-[160px] border border-line/40">
-                            <code className="text-muted" style={{ color: 'var(--th-text-60)' }}>{extra.ship.deployConfig}</code>
-                          </pre>
-                        </m.div>
-                      )}
-
-                      <m.div variants={tabItemVariants} className="flex flex-wrap items-center justify-between gap-4 border-t border-line/30 pt-3">
-                        <div className="flex items-center gap-5 text-[11px] text-muted font-mono">
-                          <div>
-                            <span className="font-semibold text-gold uppercase">{lbl.version || "Version:"}</span> v1.0.0
-                          </div>
-                          <div>
-                            <span className="font-semibold text-gold uppercase">{lbl.date || "Date:"}</span> Dec {year}
-                          </div>
-                        </div>
-
-                        {live && (
-                          <a
-                            href={live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 bg-gold text-[#080808] px-4 py-2 rounded-full text-[11px] font-semibold hover:bg-gold/80 transition-colors"
-                          >
-                            {lbl.liveDemo || "Live Demo"} <ArrowUpRight size={13} />
-                          </a>
-                        )}
                       </m.div>
                     </div>
                   )}
