@@ -97,7 +97,7 @@ export default function CustomCursor() {
         }}
       >
         <m.div
-          className="rounded-full border border-gold/70"
+          className="rounded-full border border-gold/70 cursor-ring"
           style={{
             width: 36,
             height: 36,
@@ -108,7 +108,7 @@ export default function CustomCursor() {
 
       {/* Instant gold dot */}
       <m.div
-        className="pointer-events-none fixed left-0 top-0 z-[999999] h-2 w-2 rounded-full bg-gold"
+        className="pointer-events-none fixed left-0 top-0 z-[999999] h-2 w-2 rounded-full bg-gold cursor-dot"
         style={{
           x: dotX,
           y: dotY,

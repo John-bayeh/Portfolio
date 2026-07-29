@@ -96,6 +96,22 @@ body {
   }
 }
 
+/* ─── Light-mode cursor: make ring and dot visible on white backgrounds ───── */
+html.light .cursor-ring {
+  border-color: rgba(0, 0, 0, 0.55) !important;
+}
+html.light .cursor-dot {
+  background-color: #111111 !important;
+}
+
+/* ─── Certificate lightbox overlay background ─────────────────────────────── */
+.cert-lightbox-bg {
+  background-color: rgba(245, 242, 235, 0.97);
+}
+html.light .cert-lightbox-bg {
+  background-color: rgba(255, 255, 255, 0.97);
+}
+
 /* Project card clip-path hover reveal */
 .card-reveal {
   clip-path: circle(0% at 80% 0%);

@@ -24,7 +24,7 @@ const containerStagger = {
 const experiences = [
   {
     period: "2024 — Present",
-    role: "Lead Frontend Developer",
+    role: "Fullstack Web Developer",
     company: "AskualaLink",
     desc: "Built and led the frontend architecture of AskualaLink HR — a full-scale enterprise HR management platform serving attendance tracking, payroll automation, AI-powered recruitment, and multi-role portals.",
     stack: ["Next.js", "Tailwind CSS", "Node.js"],
@@ -48,13 +48,13 @@ const experiences = [
 const certificates = [
   {
     name: "Full-Stack Web Development",
-    issuer: "AskualaLink",
+    issuer: "Future Interns",
     date: "2026",
     link: "/screenshots/certificate1.webp",
   },
   {
     name: "Claude Code in Action",
-    issuer: "Professional Certification",
+    issuer: "Claude",
     date: "2026",
     link: "/screenshots/certificate2.webp",
   },
@@ -120,8 +120,7 @@ export default function About() {
       {/* Certificate Lightbox Overlay */}
       {activeCert && (
         <div
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto backdrop-blur-md"
-          style={{ backgroundColor: 'color-mix(in srgb, var(--th-bg) 94%, transparent)' }}
+          className="fixed inset-0 z-[9999] cert-lightbox-bg flex items-center justify-center p-4 overflow-y-auto backdrop-blur-md"
           onClick={() => setActiveCert(null)}
         >
           <button

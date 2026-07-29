@@ -43,7 +43,7 @@ export default function Testimonials() {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-1 gap-6 md:grid-cols-3"
+          className="grid grid-cols-1 gap-6 md:grid-cols-2 max-w-3xl"
         >
           {testimonials.map((item) => (
             <m.div
@@ -74,19 +74,19 @@ export default function Testimonials() {
               </div>
 
               {/* Author footer */}
-              <div className="mt-8 pt-4 border-t flex items-center gap-3.5" style={{ borderColor: "var(--th-line)" }}>
+              <div className="mt-8 pt-4 border-t flex items-center gap-4" style={{ borderColor: "var(--th-line)" }}>
                 {/* Avatar with Initials */}
-                <div className="w-10 h-10 rounded-full bg-gold/15 border border-gold/40 flex items-center justify-center font-display font-bold text-xs text-gold shrink-0">
+                <div className="w-11 h-11 rounded-full bg-gold/15 border border-gold/40 flex items-center justify-center font-display font-bold text-sm text-gold shrink-0">
                   {item.initials}
                 </div>
-                <div className="flex flex-col text-left overflow-hidden">
-                  <span className="font-display text-sm font-bold truncate" style={{ color: "var(--th-text)" }}>
+                <div className="flex flex-col text-left">
+                  <span className="font-display text-sm font-bold" style={{ color: "var(--th-text)" }}>
                     {item.name}
                   </span>
-                  <span className="text-[11px] font-medium leading-snug line-clamp-2 text-gold">
+                  <span className="text-xs font-semibold leading-snug mt-0.5 text-gold">
                     {item.role}
                   </span>
-                  <span className="text-[10px] font-mono mt-0.5 truncate" style={{ color: "var(--th-text-40)" }}>
+                  <span className="text-[11px] font-mono mt-0.5" style={{ color: "var(--th-text-60)" }}>
                     {item.company}
                   </span>
                 </div>
