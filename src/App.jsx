@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Projects from "./components/Projects";
 import CaseStudyPage from "./pages/CaseStudyPage";
+import ChatBot from "./components/ChatBot";
 
 // Code-split below-the-fold sections for maximum initial page load speed
 const Testimonials = lazy(() => import("./components/Testimonials"));
@@ -141,6 +142,7 @@ function App() {
               <Route path="/" element={<HomePage isDark={isDark} onToggleTheme={toggleTheme} />} />
               <Route path="/projects/:id" element={<CaseStudyPage />} />
             </Routes>
+            <ChatBot />
           </div>
         </LanguageProvider>
       </BrowserRouter>

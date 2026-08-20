@@ -220,8 +220,47 @@ html.light .cert-lightbox-bg {
   color: var(--th-muted) !important;
 }
 
-[style*="F8F5F0"] .text-white {
-  color: var(--th-text) !important;
+/* ─── Chatbot Fixed Dark Theme Lock ───────────────────────────────────────── */
+[style*="F8F5F0"] #chatbot-window {
+  background-color: #0D0D0D !important;
+  border-color: #222222 !important;
+  color: #ffffff !important;
+}
+[style*="F8F5F0"] #chatbot-window .bg-\[\#111111\] {
+  background-color: #111111 !important;
+}
+[style*="F8F5F0"] #chatbot-window .bg-\[\#181818\] {
+  background-color: #181818 !important;
+}
+[style*="F8F5F0"] #chatbot-window .bg-\[\#222222\] {
+  background-color: #222222 !important;
+}
+[style*="F8F5F0"] #chatbot-window .text-white {
+  color: #ffffff !important;
+}
+[style*="F8F5F0"] #chatbot-window .text-\[\#888888\] {
+  color: #888888 !important;
+}
+[style*="F8F5F0"] #chatbot-window .text-\[\#777777\] {
+  color: #777777 !important;
+}
+[style*="F8F5F0"] #chatbot-window .text-\[\#666666\] {
+  color: #666666 !important;
+}
+[style*="F8F5F0"] #chatbot-window .text-\[\#E0E0E0\] {
+  color: #E0E0E0 !important;
+}
+[style*="F8F5F0"] #chatbot-window .border-\[\#222222\] {
+  border-color: #222222 !important;
+}
+[style*="F8F5F0"] #chatbot-window .border-\[\#262626\] {
+  border-color: #262626 !important;
+}
+[style*="F8F5F0"] #chatbot-window .border-\[\#333333\] {
+  border-color: #333333 !important;
+}
+[style*="F8F5F0"] #chatbot-window .border-\[\#1f1f1f\] {
+  border-color: #1f1f1f !important;
 }
 
 /* ─── Global Print Styles ─────────────────────────────────────────────────── */

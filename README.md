@@ -16,6 +16,7 @@ A high-performance, responsive portfolio web application featuring interactive p
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Animations & Motion**: [Framer Motion](https://www.framer.com/motion/) (with LazyMotion feature optimization)
 - **Routing**: [React Router DOM v6](https://reactrouter.com/)
+- **AI Integration**: [Groq SDK](https://groq.com/) (`groq/compound-mini`, `openai/gpt-oss-20b`)
 - **Icons & UI**: [Lucide React](https://lucide.dev/), Custom SVG Architecture Icons, [Swiper](https://swiperjs.com/)
 
 ### Infrastructure & Containerization
@@ -34,7 +35,27 @@ A high-performance, responsive portfolio web application featuring interactive p
   - **Implementation Snippets**: Code previews with syntax highlighting.
   - **Technical Decisions**: Numbered badges and engineering rationale.
 - **Certificate Lightbox Preview**: Instant eager-loaded certificate viewer modal.
+- **AI Floating Chatbot ("Bobo")**: Integrated Groq-powered AI assistant (`src/components/ChatBot.jsx`) providing instant answers on projects, tech stack, and availability with quick reply chips, resilient model fallbacks, and custom gold aesthetic.
 - **100% Mobile Responsive**: Customized layouts for mobile, tablet, and desktop viewports.
+
+---
+
+## AI Chatbot Setup
+
+The portfolio includes an AI chatbot powered by [Groq API](https://groq.com/).
+
+### 1. Environment Variable Configuration
+Create a `.env.local` file in the root directory:
+```env
+VITE_GROQ_API_KEY=gsk_your_groq_api_key_here
+```
+*(Note: Obtain your free API key from [https://console.groq.com](https://console.groq.com))*
+
+### 2. Customizing AI Knowledge & Prompt
+To update project information, skills, or guidelines taught to the chatbot, edit:
+```
+src/data/chatbot-context.js
+```
 
 ---
 
@@ -45,3 +66,73 @@ This repository contains a production-ready, multi-stage `Dockerfile` and `nginx
 ### 1. Build the Docker Image
 ```bash
 docker build -t portfolio .
+```
+
+### 2. Run the Container
+```bash
+docker run -d -p 8080:80 --name portfolio-container portfolio
+```
+
+Access the running containerized application at `http://localhost:8080`.
+
+### 3. Stop / Manage Container
+```bash
+# View running container
+docker ps
+
+# View live container logs
+docker logs portfolio-container
+
+# Stop container
+docker stop portfolio-container
+```
+
+---
+
+## Local Development
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/John-bayeh/Portfolio-new.git
+   cd Portfolio-new
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+   Open `http://localhost:5173` in your browser.
+
+4. Build for production:
+   ```bash
+   npm run build
+   ```
+
+---
+
+## Lighthouse & Performance Scores
+
+- Accessibility: 100 / 100
+- Best Practices: 100 / 100
+- SEO: 100 / 100
+- Layout Shift (CLS): 0.017 (Near Zero)
+
+---
+
+## Author
+
+**Yohannes Bayeh**  
+- **Website**: [yohannesbayeh.vercel.app](https://yohannesbayeh.vercel.app/)
+- **GitHub**: [@John-bayeh](https://github.com/John-bayeh)
+- **Location**: Bahir Dar, Ethiopia
