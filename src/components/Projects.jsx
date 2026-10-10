@@ -11,6 +11,7 @@ import { useLanguage } from "../context/LanguageContext";
 import extraProjectDetails from "../data/extraProjectDetails";
 import { ARCH_ICONS_MAP } from "../assets/icons/ArchIcons";
 import TestSection from "./TestSection";
+import ProjectMetrics from "./projects/ProjectMetrics";
 
 function ArchIcon({ iconKey, size = 18 }) {
   const Component = ARCH_ICONS_MAP[iconKey];
@@ -758,6 +759,9 @@ export default function Projects() {
           </h2>
           <p className="mt-2 text-sm" style={{ color: 'var(--th-text-60)' }}>{p.subtitle}</p>
         </div>
+
+        {/* Startup-Grade Engineering Metrics & Stats Banner */}
+        <ProjectMetrics />
 
         {/* Vertical list container with Framer Motion stagger */}
         <m.div

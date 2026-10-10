@@ -163,15 +163,22 @@ export default function Hero() {
             </Link>
           </div>
 
-          {/* Floating badge: tech stack */}
+          {/* Floating badges: interactive tech stack */}
           <m.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-8 inline-block rounded-xl border px-4 py-2 text-xs backdrop-blur-sm"
-            style={{ borderColor: 'var(--th-line)', background: 'var(--th-card)', color: 'var(--th-text-60)' }}
+            className="mt-8 flex flex-wrap items-center gap-2"
           >
-            React · Next.js · Node.js
+            {["React 19", "Next.js", "Node.js", "TypeScript", "Groq AI"].map((tech) => (
+              <span
+                key={tech}
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--th-line)] bg-[var(--th-card)] px-3.5 py-1.5 text-xs font-mono font-medium text-[var(--th-text-60)] transition-all duration-300 hover:border-gold hover:text-gold hover:shadow-md hover:shadow-gold/20"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                {tech}
+              </span>
+            ))}
           </m.div>
         </div>
 
