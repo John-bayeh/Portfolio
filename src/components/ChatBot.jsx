@@ -1,14 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MessageSquare, X, Send, Bot, Sparkles, User, RefreshCw } from 'lucide-react'
-import Groq from 'groq-sdk'
-import { SYSTEM_PROMPT } from '../data/chatbot-context'
-
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY || '',
-  dangerouslyAllowBrowser: true,
-})
 
 const QUICK_REPLIES = [
   'What are your projects?',
@@ -68,52 +60,26 @@ export default function ChatBot() {
     setLoading(true)
 
     try {
-      const apiKey = import.meta.env.VITE_GROQ_API_KEY
-      if (!apiKey || apiKey === 'your_groq_api_key_here') {
-        throw new Error('Groq API Key is not configured. Please add VITE_GROQ_API_KEY to your environment variables.')
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: updatedMessages.map((m) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to process AI response.')
       }
 
-      // Map conversation history for Groq completion format
-      const groqHistory = updatedMessages.map((m) => ({
-        role: m.role,
-        content: m.content,
-      }))
-
-      // Array of active Groq models to try in sequence for resilience
-      const candidateModels = [
-        'groq/compound-mini',
-        'groq/compound',
-        'openai/gpt-oss-20b',
-        'openai/gpt-oss-120b',
-        'qwen/qwen3.6-27b',
-      ]
-
-      let replyContent = null
-      let lastError = null
-
-      for (const model of candidateModels) {
-        try {
-          const completion = await groq.chat.completions.create({
-            model: model,
-            messages: [
-              { role: 'system', content: SYSTEM_PROMPT },
-              ...groqHistory,
-            ],
-            max_tokens: 300,
-            temperature: 0.7,
-          })
-          replyContent = completion.choices[0]?.message?.content
-          if (replyContent) break
-        } catch (err) {
-          console.warn(`Groq model ${model} failed, trying next...`, err.message)
-          lastError = err
-        }
-      }
-
-      if (!replyContent) {
-        throw lastError || new Error('No response generated from Groq models.')
-      }
-
+      const replyContent = data.reply
       const aiTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 
       setMessages((prev) => [
@@ -129,9 +95,9 @@ export default function ChatBot() {
       console.error('ChatBot API Error:', error)
       const errorTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       let fallbackText = "I don't have that information, but you can reach Yohannes directly at yohannesbayeh41@gmail.com or WhatsApp: +251 96 329 3185. He responds within 24 hours."
-      
-      if (error?.message?.includes('API Key')) {
-        fallbackText = "⚠️ Groq API key is missing or invalid. Please configure VITE_GROQ_API_KEY in .env.local to activate full AI responses."
+
+      if (error?.message?.includes('API Key') || error?.message?.includes('missing')) {
+        fallbackText = "⚠️ Groq API key is missing or invalid. Please configure GROQ_API_KEY in environment variables."
       }
 
       setMessages((prev) => [

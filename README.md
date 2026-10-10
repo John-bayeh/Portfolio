@@ -47,7 +47,7 @@ The portfolio includes an AI chatbot powered by [Groq API](https://groq.com/).
 ### 1. Environment Variable Configuration
 Create a `.env.local` file in the root directory:
 ```env
-VITE_GROQ_API_KEY=gsk_your_groq_api_key_here
+GROQ_API_KEY=gsk_your_groq_api_key_here
 ```
 *(Note: Obtain your free API key from [https://console.groq.com](https://console.groq.com))*
 
