@@ -9,6 +9,7 @@ import Hero from "./components/Hero";
 import Projects from "./components/Projects";
 import CaseStudyPage from "./pages/CaseStudyPage";
 import ChatBot from "./components/ChatBot";
+import SEOHead from "./components/SEOHead";
 
 // Code-split below-the-fold sections for maximum initial page load speed
 const Testimonials = lazy(() => import("./components/Testimonials"));
@@ -95,6 +96,11 @@ const LIGHT = {
 function HomePage({ isDark, onToggleTheme }) {
   return (
     <main>
+      <SEOHead
+        title="Yohannes Bayeh — Frontend Developer & AI Engineer"
+        description="Crafting fast, polished web interfaces. Frontend Developer based in Bahir Dar, Ethiopia."
+        url="https://yohannes-bayeh.vercel.app/"
+      />
       <Hero isDark={isDark} onToggleTheme={onToggleTheme} />
       <Projects />
       <Suspense fallback={<div className="py-12 text-center text-xs text-gold/40">Loading...</div>}>

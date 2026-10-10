@@ -11,6 +11,7 @@ import extraProjectDetails from "../data/extraProjectDetails";
 import { ARCH_ICONS_MAP } from "../assets/icons/ArchIcons";
 import TestSection from "../components/TestSection";
 import { useLanguage } from "../context/LanguageContext";
+import SEOHead from "../components/SEOHead";
 
 function ArchIcon({ iconKey, size = 22 }) {
   const Component = ARCH_ICONS_MAP[iconKey];
@@ -475,8 +476,19 @@ export default function CaseStudyPage() {
     );
   }
 
+  const seoTitle = project ? `${project.name} — Case Study | Yohannes Bayeh` : "Case Study | Yohannes Bayeh";
+  const seoDesc = project ? (project.subtitle || project.description || `Explore the interactive case study for ${project.name} built by Yohannes Bayeh.`) : "Interactive project case study by Yohannes Bayeh.";
+  const seoImage = project?.image ? (project.image.startsWith("http") ? project.image : `https://yohannes-bayeh.vercel.app${project.image}`) : undefined;
+  const seoUrl = `https://yohannes-bayeh.vercel.app/projects/${id}`;
+
   return (
     <main className="min-h-screen bg-[var(--th-bg)] selection:bg-gold/30 selection:text-gold pt-20 pb-16 px-4 sm:px-6 lg:px-8 overflow-x-hidden" style={{ color: 'var(--th-text)' }}>
+      <SEOHead
+        title={seoTitle}
+        description={seoDesc}
+        image={seoImage}
+        url={seoUrl}
+      />
       {/* Back Button */}
       <div className="max-w-6xl mx-auto mb-8">
         <Link
