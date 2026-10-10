@@ -50,6 +50,7 @@ export default function Contact() {
 
   // "idle" | "sending" | "sent" | "error"
   const [status, setStatus] = useState("idle");
+  const [lastSubmitTime, setLastSubmitTime] = useState(0);
 
   const cards = [
     {
@@ -92,15 +93,40 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
-    setStatus("sending");
+
+    // 1. Throttling Check (Prevent spamming within 10 seconds)
+    const now = Date.now();
+    if (now - lastSubmitTime < 10000 && lastSubmitTime !== 0) {
+      return;
+    }
 
     const data = new FormData(form);
+
+    // 2. Honeypot Anti-Bot Trap Check
+    const honeypot = data.get("website_url");
+    if (honeypot) {
+      // Silently drop bot submission
+      setStatus("sent");
+      form.reset();
+      return;
+    }
+
+    setStatus("sending");
+    setLastSubmitTime(now);
+
     const senderName = (data.get("name") || "Someone").toString().trim();
+    const senderEmail = (data.get("email") || "").toString().trim();
+    const senderMessage = (data.get("message") || "").toString().trim();
+
+    if (!senderEmail || !senderMessage) {
+      setStatus("error");
+      return;
+    }
 
     const payload = new FormData();
     payload.append("Name", senderName);
-    payload.append("Email", data.get("email") || "");
-    payload.append("Message", data.get("message") || "");
+    payload.append("Email", senderEmail);
+    payload.append("Message", senderMessage);
     payload.append(
       "Submitted",
       new Date().toLocaleString("en-GB", {
@@ -109,7 +135,7 @@ export default function Contact() {
       })
     );
     payload.append("_subject", `New portfolio message from ${senderName}`);
-    payload.append("_replyto", data.get("email") || "");
+    payload.append("_replyto", senderEmail);
 
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
@@ -200,7 +226,6 @@ export default function Contact() {
         </m.h2>
 
         <div className="mt-14 grid grid-cols-1 gap-14 lg:grid-cols-2">
-          {/* Contact form */}
           <m.form
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 24 }}
@@ -209,6 +234,16 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
+            {/* Honeypot field for bot trapping */}
+            <div style={{ display: "none" }} aria-hidden="true">
+              <input
+                type="text"
+                name="website_url"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
             <Field label={c.fieldName} name="name" />
             <Field label={c.fieldEmail} name="email" type="email" />
             <Field label={c.fieldMessage} name="message" textarea />
